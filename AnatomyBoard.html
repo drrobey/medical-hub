@@ -5,32 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NeuroAnatomy Hub</title>
     
+    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- Load React, ReactDOM, and Babel -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     
+    <!-- Load Icons (FontAwesome) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         /* Custom Page Transition Animations */
-        @keyframes slideInRight {
-            0% { transform: translateX(60px); opacity: 0; }
-            100% { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes slideInLeft {
-            0% { transform: translateX(-60px); opacity: 0; }
-            100% { transform: translateX(0); opacity: 1; }
-        }
+        @keyframes slideInRight { 0% { transform: translateX(60px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+        @keyframes slideInLeft { 0% { transform: translateX(-60px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
         .slide-forward { animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .slide-backward { animation: slideInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
         /* Tab Content & Section Enter Animation */
-        @keyframes fadeSlideUp {
-            0% { opacity: 0; transform: translateY(15px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeSlideUp { 0% { opacity: 0; transform: translateY(15px); } 100% { opacity: 1; transform: translateY(0); } }
         .animate-in { animation: fadeSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     </style>
 </head>
@@ -59,9 +53,9 @@
             <>
               <div key={currentView} className={direction === 'forward' ? 'slide-forward' : 'slide-backward'}>
                 {currentView === 'dashboard' ? (
-                  <Dashboard onSelectGuide={() => navigateTo('module1')} onBackToPortal={backToPortal} />
+                  <Dashboard onSelectGuide={(topicId) => navigateTo(topicId)} onBackToPortal={backToPortal} />
                 ) : (
-                  <AnatomyTopicGuide onBack={() => navigateTo('dashboard')} />
+                  <AnatomyTopicGuide topic={currentView} onBack={() => navigateTo('dashboard')} />
                 )}
               </div>
               
@@ -106,9 +100,10 @@
                   </h2>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {/* Placeholder Module Card */}
+                    
+                    {/* Cerebellum Module Card */}
                     <div 
-                      onClick={onSelectGuide}
+                      onClick={() => onSelectGuide('cerebellum')}
                       className="relative overflow-hidden rounded-2xl border-2 p-6 transition-all duration-300 ease-out flex flex-col h-full transform cursor-pointer hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.02] hover:border-red-500 group bg-red-50 border-red-200"
                     >
                       <div className="bg-white w-16 h-16 rounded-2xl shadow-sm flex items-center justify-center mb-6 shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
@@ -122,6 +117,24 @@
                          Open Review
                       </button>
                     </div>
+
+                    {/* Cranial Nerves Module Card */}
+                    <div 
+                      onClick={() => onSelectGuide('cranial_nerves')}
+                      className="relative overflow-hidden rounded-2xl border-2 p-6 transition-all duration-300 ease-out flex flex-col h-full transform cursor-pointer hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.02] hover:border-red-500 group bg-red-50 border-red-200"
+                    >
+                      <div className="bg-white w-16 h-16 rounded-2xl shadow-sm flex items-center justify-center mb-6 shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+                        <i className="fa-solid fa-network-wired text-2xl text-red-500"></i>
+                      </div>
+                      <h3 className="text-xl font-bold mb-2 text-slate-900">Columns of Cranial Nerve Nuclei</h3>
+                      <p className="text-slate-600 mb-8 line-clamp-2 flex-1">
+                        Sensory/motor pathways, Edinger Westphal, Nucleus Ambiguus, and pharyngeal arches.
+                      </p>
+                      <button className="w-full py-3 px-4 bg-white/50 hover:bg-white text-slate-800 border border-slate-300 font-semibold rounded-xl transition-all duration-200 transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 mt-auto shadow-sm">
+                         Open Review
+                      </button>
+                    </div>
+
                   </div>
                 </main>
               </div>
@@ -129,15 +142,61 @@
           );
         }
 
+        // --- Content Databases ---
+        const contentDB = {
+          cerebellum: {
+            title: "Cerebellum",
+            shortEssays: [
+              { q: "Where is the cerebellum located anatomically in relation to the cerebrum and the brainstem?", a: "The cerebellum lies in the posterior cranial fossa. It is located inferior to the cerebrum (separated by the tentorium cerebelli) and posterior to the pons and medulla, separated from the brainstem by the fourth ventricle." },
+              { q: "Describe the structural significance of the horizontal fissure.", a: "The horizontal fissure is a deep groove located along the margin of the cerebellum. Its primary purpose is to separate the superior surface of the cerebellum from the inferior surface." },
+              { q: "Which structures are housed in the anterior and posterior cerebellar notches?", a: "The anterior notch lodges the pons and the medulla. The posterior notch lodges the falx cerebelli." },
+              { q: "Identify the three anatomical lobes and the fissures that delineate them.", a: "The three lobes are the Anterior, Posterior, and Flocculonodular. The Fissura prima separates the anterior and posterior lobes, while the posterolateral fissure separates the posterior lobe from the flocculonodular lobe." },
+              { q: "What is the functional role of the Archicerebellum and what are its primary connections?", a: "The Archicerebellum is concerned with equilibrium. Its connections are primarily vestibular, and it is formed by the two flocculi and the nodule." },
+              { q: "Name the specific deep nuclei associated with the Paleocerebellum.", a: "The Paleocerebellum is associated with the fastigial nucleus (vermal part) as well as the globose and emboliform nuclei (paravermal parts)." },
+              { q: "Identify the three primary arteries supplying the cerebellum and their parent vessels.", a: "The Superior Cerebellar Artery (SCA) and Anterior Inferior Cerebellar Artery (AICA) both branch from the basilar artery. The Posterior Inferior Cerebellar Artery (PICA) branches from the vertebral artery." },
+              { q: "Compare the primary fiber types found in the Inferior vs. Superior Cerebellar Peduncles.", a: "The Inferior Cerebellar Peduncle (ICP) is formed mostly of afferent fibers (bringing information in). Conversely, the Superior Cerebellar Peduncle (SCP) is formed mostly of efferent fibers (sending information out)." },
+              { q: "What is the \"vallecula\" and what structure does it contain?", a: "The vallecula is a deep groove present on the inferior surface of the cerebellum. It lies between the two cerebellar hemispheres and contains the inferior vermis." },
+              { q: "Describe the pathway and destination of fibers traveling through the Middle Cerebellar Peduncle.", a: "The Middle Cerebellar Peduncle (MCP) contains cortico-ponto-cerebellar fibers. It is the largest peduncle and serves as the bridge connecting the cerebellum to the pons." }
+            ],
+            longEssays: [
+              { title: "Compare and contrast the functional divisions of the cerebellum.", answer: "The cerebellum is divided into three functional zones: the Archicerebellum, Paleocerebellum, and Neocerebellum. The Archicerebellum is the most primitive part, consisting of the flocculonodular lobe; it connects to the vestibular system and is strictly responsible for maintaining equilibrium. The Paleocerebellum comprises the vermis and paravermal regions of the hemispheres. It functions in the coordination of movement and proprioception by receiving spinal (spinocerebellar) input and a \"copy\" of the motor plan from the motor cortex. It utilizes the fastigial, globose, and emboliform nuclei to regulate trunk and distal limb muscles. Finally, the Neocerebellum consists of the lateral hemispheres and is the most phylogenetically recent. It connects to the cerebral cortex via the dentate nucleus and the cortico-ponto-cerebellar pathway, focusing on the planning and programming of complex movements." },
+              { title: "Detail the connectivity of the Cerebellar Peduncles and their role in motor control.", answer: "The three pairs of peduncles act as the communication highways of the cerebellum. The Inferior Cerebellar Peduncle (ICP) primarily handles sensory input (afferents) from the medulla and spinal cord, such as the posterior spinocerebellar tract, to provide the cerebellum with real-time data on body position. The Middle Cerebellar Peduncle (MCP) is the largest and exclusively carries cortico-ponto-cerebellar fibers, conveying intended motor commands from the cerebrum to the cerebellum. The Superior Cerebellar Peduncle (SCP) is the main output (efferent) pathway to the midbrain. Through fibers like the dentato-thalamic tract, the cerebellum sends corrected motor instructions back to the cerebral cortex via the thalamus, or to the red nucleus (cerebello-rubral), allowing for the refinement of motor activity." },
+              { title: "Discuss the vascularization of the cerebellum and the consequences of localized venous drainage.", answer: "The cerebellum receives its arterial blood from three sources: the SCA and AICA (from the basilar artery) and the PICA (from the vertebral artery). The SCA serves the superior surface, while the AICA and PICA serve the inferior surface. Venous drainage is complex, involving both superior and inferior cerebellar veins. The superior veins drain into the straight and transverse sinuses, as well as the great cerebral vein. The inferior veins drain into a wider array of sinuses, including the straight, sigmoid, occipital, and inferior petrosal sinuses. This extensive venous network ensures that blood is efficiently returned to the systemic circulation, but it also means that vascular issues in several different dural sinuses could potentially impact cerebellar drainage." }
+            ]
+          },
+          cranial_nerves: {
+            title: "Columns of Cranial Nerve Nuclei",
+            shortEssays: [
+              { q: "Which cranial nerves are classified as purely sensory, and what are their primary roles?", a: "The purely sensory nerves are the Olfactory (I), Optic (II), and Vestibulocochlear (VIII). CN VIII specifically contains cochlear nuclei for hearing and vestibular nuclei for balance, located at the ponto-medullary junction." },
+              { q: "Describe the location and function of the Edinger Westphal Nucleus.", a: "This is the parasympathetic nucleus (GVE) of the Oculomotor nerve located in the midbrain. Its fibers relay in the ciliary ganglion to supply the ciliary muscle and the sphincter pupillae for ocular control." },
+              { q: "Explain the unique anatomical course of the Trochlear nerve (CN IV) fibers.", a: "The fibers of the Trochlear nerve arise from a nucleus in the midbrain at the level of the inferior colliculus. Uniquely, these fibers cross and emerge from the dorsal surface of the midbrain to supply the opposite superior oblique muscle." },
+              { q: "How many nuclei are associated with the Trigeminal nerve, and what are their specific sensory functions?", a: "CN V has three sensory nuclei (GSA): the Main sensory nucleus for crude touch, the Spinal nucleus for pain and temperature, and the Mesencephalic nucleus for proprioception. It also has one motor nucleus (SVE) for the muscles of mastication." },
+              { q: "What pharyngeal arch derivatives are supplied by the motor nucleus of the Facial nerve (CN VII)?", a: "The motor nucleus (SVE) of CN VII supplies muscles developed from the 2nd pharyngeal arch. These include the muscles of facial expression, platysma, posterior belly of digastric, stylohyoid, and stapedius." },
+              { q: "Identify the specific salivary glands supplied by CN VII and CN IX and their respective parasympathetic nuclei.", a: "CN VII originates from the Superior salivatory nucleus (GVE) to supply the submandibular and sublingual glands. CN IX originates from the Inferior salivatory nucleus (GVE) to supply the parotid gland via the otic ganglion." },
+              { q: "What is the functional significance of the Nucleus Ambiguus, and which nerves share it?", a: "The Nucleus Ambiguus is a motor nucleus (SVE) shared by CN IX, X, and XI. It supplies the muscles of the palate, pharynx, and larynx, which are derived from the 3rd, 4th, and 6th pharyngeal arches." },
+              { q: "Describe the dual origin of the Accessory nerve (CN XI).", a: "CN XI consists of a spinal part originating from the upper five cervical segments of the spinal cord and a cranial part originating from the lower Nucleus Ambiguus. The spinal part supplies the sternomastoid and trapezius, while the cranial part joins the vagus nerve." },
+              { q: "Which muscles are supplied by the Hypoglossal nerve (CN XII), and what is the one exception?", a: "The Hypoglossal nerve (CN XII) supplies all the intrinsic and extrinsic muscles of the tongue. The only exception is the palatoglossus muscle, which is supplied by the vagus/accessory complex." },
+              { q: "Explain the clinical difference between upper and lower motor neuron lesions regarding the Facial nerve.", a: "In an upper motor neuron lesion (UMNL), the upper face is spared because its motor nucleus receives bilateral cortico-nuclear fibers, while the lower face is affected because it receives only contralateral fibers. A lower motor neuron lesion would affect both the upper and lower face." }
+            ],
+            longEssays: [
+              { title: "Cortico-nuclear Innervation and Clinical Implications of UMNLs", answer: "The standard organization of the motor nuclei of cranial nerves is the receipt of bilateral cortico-nuclear tract innervation. This provides a redundancy that protects function in the event of unilateral cortical damage. However, there are two critical exceptions to this rule: the portion of the facial nucleus that innervates the lower face and the portion of the hypoglossal nucleus that innervates the genioglossus muscle. These specific regions receive only contralateral cortico-nuclear fibers.\n\nIn the case of the Facial nerve (VII), the motor nucleus is divided into dorsal and ventral parts. The dorsal part, supplying the upper face, receives bilateral input, meaning an UMNL on one side will not paralyze the forehead or eye-closing muscles. Conversely, the ventral part, supplying the lower face, receives only contralateral input. Therefore, an UMNL results in paralysis of the muscles of the lower face on the side opposite the lesion. Similarly, for the Hypoglossal nerve (XII), the portion of the nucleus innervating the genioglossus muscle receives only contralateral fibers. An UMNL would therefore lead to weakness or deviation of the tongue toward the side opposite the lesion. These exceptions make these two nerves uniquely liable to observable deficits during UMNL clinical presentations." },
+              { title: "Functional Organization of the Mixed Cranial Nerves", answer: "Mixed cranial nerves are defined by their complex roles, necessitating four distinct nuclei to handle different functional modalities: General Somatic Afferent (GSA), Special Visceral Afferent (SVA), General Visceral Efferent (GVE), and Special Visceral Efferent (SVE).\n\nFor the Glossopharyngeal (IX) and Vagus (X) nerves, sharing central nuclei is a key organizational feature. Both nerves utilize the Nucleus Ambiguus (SVE) to provide motor innervation to the muscles of the 3rd arch (IX - stylopharyngeus) and the 4th/6th arches (X - palate, pharynx, larynx). They also share the Nucleus Solitarius for visceral functions; for CN IX, it processes taste from the posterior tongue (SVA), and for CN X, it processes taste from the epiglottis and general visceral sensations (GVA) from the thoracic and abdominal organs. Finally, both contribute to the Spinal Nucleus of the Trigeminal (GSA) to relay general sensations from the oropharynx, ear, and respiratory tract. This sharing of nuclei ensures that specific types of information (like taste or visceral motor control) are processed in specialized, consolidated brainstem centers regardless of which peripheral nerve carries the signal." }
+            ]
+          }
+        };
+
         // --- Study Guide Component (The Mobile-Responsive UI) ---
-        function AnatomyTopicGuide({ onBack }) {
-          const [activeTab, setActiveTab] = useState('short_essay');
+        function AnatomyTopicGuide({ topic, onBack }) {
+          const [activeTab, setActiveTab] = useState('summary'); // Set summary as the new default tab
           const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
           const [openShortIndex, setOpenShortIndex] = useState(null);
           const [openLongIndex, setOpenLongIndex] = useState(0);
 
-          // The 3 required tabs
+          const currentData = contentDB[topic];
+
+          // Added the 'summary' tab to the navigation
           const tabs = [
+            { id: 'summary', label: 'Topic Summary', icon: <i className="fa-solid fa-layer-group flex items-center justify-center"></i> },
             { id: 'short_essay', label: 'Short Essay', icon: <i className="fa-solid fa-file-lines flex items-center justify-center"></i> },
             { id: 'long_essay', label: 'Long Essay', icon: <i className="fa-solid fa-book-open flex items-center justify-center"></i> },
             { id: 'glossary', label: 'Glossary & Mnemonics', icon: <i className="fa-solid fa-bookmark flex items-center justify-center"></i> },
@@ -154,7 +213,7 @@
                   </button>
                   <div className="flex items-center gap-2 font-bold text-lg">
                     <i className="fa-solid fa-brain text-red-300"></i>
-                    <span>Cerebellum Review</span>
+                    <span>NeuroAnatomy Review</span>
                   </div>
                 </div>
                 <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="w-8 h-8 flex items-center justify-center transition-transform duration-300 active:scale-90">
@@ -182,7 +241,7 @@
                 <div className="hidden md:flex items-center gap-3 p-6 border-b border-red-800">
                   <i className="fa-solid fa-brain text-2xl text-red-300"></i>
                   <div>
-                    <h1 className="font-bold text-xl leading-tight">Cerebellum</h1>
+                    <h1 className="font-bold text-xl leading-tight">NeuroAnatomy</h1>
                     <span className="text-red-300 text-xs uppercase tracking-wider font-semibold">Study Guide</span>
                   </div>
                 </div>
@@ -211,8 +270,8 @@
                   </ul>
                 </div>
                 
-                <div className="p-4 border-t border-red-800 text-xs text-red-400 text-center">
-                  Topic: Cerebellum
+                <div className="p-4 border-t border-red-800 text-xs text-red-400 text-center font-bold">
+                  Topic: {currentData.title}
                 </div>
               </nav>
 
@@ -220,28 +279,215 @@
               <main className="flex-1 p-4 md:p-8 overflow-y-auto w-full max-w-5xl mx-auto">
                 <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-10 min-h-[80vh]">
                   
+                  {activeTab === 'summary' && (
+                    <div className="space-y-8 animate-in">
+                      <div className="border-b border-slate-200 pb-4">
+                        <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                          <i className="fa-solid fa-layer-group text-red-600"></i> Topic Summary
+                        </h2>
+                        <p className="text-slate-600 mt-2">Comprehensive overview and core principles for {currentData.title}.</p>
+                      </div>
+
+                      {topic === 'cerebellum' && (
+                        <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 text-center text-slate-500 italic">
+                          Summary content for Cerebellum is coming soon. Please explore the Essay and Glossary tabs!
+                        </div>
+                      )}
+
+                      {topic === 'cranial_nerves' && (
+                        <>
+                          {/* Part I: Functional Classification */}
+                          <div>
+                            <h3 className="text-2xl font-bold text-slate-800 mb-4 border-b pb-2">Part I: Functional Classification and General Principles</h3>
+                            
+                            <div className="grid md:grid-cols-2 gap-6 mb-6">
+                              <div className="bg-red-50 p-5 rounded-xl border border-red-100">
+                                <h4 className="font-bold text-red-900 mb-2">Distribution & Rule of Thumb</h4>
+                                <p className="text-slate-700 text-sm mb-3">There are 12 pairs of cranial nerves. Most attach to the brainstem with nuclei of origin within it, except the <strong>Olfactory (I)</strong> and <strong>Optic (II)</strong> nerves.</p>
+                                <div className="bg-white p-3 rounded shadow-sm border border-red-200 text-sm text-red-800 font-medium">
+                                  <i className="fa-solid fa-circle-exclamation mr-2"></i> Every mixed cranial nerve is associated with exactly four nuclei.
+                                </div>
+                              </div>
+
+                              <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                                <h4 className="font-bold text-slate-800 mb-3">Classification by Modality</h4>
+                                <ul className="space-y-2 text-sm text-slate-700">
+                                  <li className="flex justify-between items-center border-b pb-1">
+                                    <span className="font-semibold text-blue-700">Purely Sensory</span>
+                                    <span className="bg-slate-100 px-2 py-1 rounded font-mono text-xs">I, II, VIII</span>
+                                  </li>
+                                  <li className="flex justify-between items-center border-b pb-1">
+                                    <span className="font-semibold text-emerald-700">Purely Motor</span>
+                                    <span className="bg-slate-100 px-2 py-1 rounded font-mono text-xs">III, IV, VI, XI, XII</span>
+                                  </li>
+                                  <li className="flex justify-between items-center pb-1">
+                                    <span className="font-semibold text-purple-700">Mixed (Both)</span>
+                                    <span className="bg-slate-100 px-2 py-1 rounded font-mono text-xs">V, VII, IX, X</span>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+
+                            <div className="mb-8">
+                              <h4 className="font-bold text-slate-800 mb-3">Common Nuclei and Sharing Patterns</h4>
+                              <div className="grid md:grid-cols-3 gap-4">
+                                <div className="bg-white border-l-4 border-indigo-500 p-4 rounded shadow-sm">
+                                  <div className="font-bold text-indigo-900 mb-1">Nucleus Solitarius</div>
+                                  <div className="text-xs font-bold text-slate-400 mb-2">SVA & GVA</div>
+                                  <p className="text-xs text-slate-600">Shared by <strong>CN VII, IX, X</strong>. Receives taste (SVA) and visceral sensation (GVA).</p>
+                                </div>
+                                <div className="bg-white border-l-4 border-rose-500 p-4 rounded shadow-sm">
+                                  <div className="font-bold text-rose-900 mb-1">Nucleus Ambiguus</div>
+                                  <div className="text-xs font-bold text-slate-400 mb-2">SVE</div>
+                                  <p className="text-xs text-slate-600">Shared by <strong>CN IX, X, XI</strong>. Motor fibers to muscles of palate, pharynx, larynx.</p>
+                                </div>
+                                <div className="bg-white border-l-4 border-teal-500 p-4 rounded shadow-sm">
+                                  <div className="font-bold text-teal-900 mb-1">Spinal Nucleus of Trigeminal</div>
+                                  <div className="text-xs font-bold text-slate-400 mb-2">GSA</div>
+                                  <p className="text-xs text-slate-600">Shared by <strong>CN V, VII, IX, X</strong>. Processes general somatic sensation (pain, temp, touch).</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Part II: Detailed Review */}
+                          <div>
+                            <h3 className="text-2xl font-bold text-slate-800 mb-4 border-b pb-2">Part II: Detailed Review of Cranial Nerves III - XII</h3>
+                            
+                            <div className="grid md:grid-cols-2 gap-6">
+                              {/* CN III */}
+                              <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:border-red-300 transition-colors">
+                                <h4 className="font-bold text-lg text-red-800 mb-3 border-b pb-2">Oculomotor Nerve (CN III)</h4>
+                                <ul className="space-y-3 text-sm text-slate-700">
+                                  <li><strong className="text-slate-900">Motor Nucleus (GSE):</strong> Located in the midbrain (level of superior colliculus). Supplies all extra-ocular muscles EXCEPT superior oblique & lateral rectus.</li>
+                                  <li><strong className="text-slate-900">Edinger Westphal Nucleus (GVE):</strong> Parasympathetic. Fibers relay in ciliary ganglion → supply ciliary muscle & sphincter pupillae.</li>
+                                </ul>
+                              </div>
+
+                              {/* CN IV */}
+                              <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:border-red-300 transition-colors">
+                                <h4 className="font-bold text-lg text-red-800 mb-3 border-b pb-2">Trochlear Nerve (CN IV)</h4>
+                                <ul className="space-y-3 text-sm text-slate-700">
+                                  <li><strong className="text-slate-900">Characteristics:</strong> Purely motor.</li>
+                                  <li><strong className="text-slate-900">Nucleus (GSE):</strong> Midbrain (level of inferior colliculus).</li>
+                                  <li><strong className="text-slate-900">Supply:</strong> Superior oblique muscle ONLY.</li>
+                                  <li><strong className="text-red-700">Unique Feature:</strong> Fibers cross and emerge from the DORSAL surface of the midbrain.</li>
+                                </ul>
+                              </div>
+
+                              {/* CN V */}
+                              <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:border-red-300 transition-colors md:col-span-2">
+                                <h4 className="font-bold text-lg text-red-800 mb-3 border-b pb-2">Trigeminal Nerve (CN V)</h4>
+                                <p className="text-sm font-semibold text-slate-600 mb-3">Mixed nerve; 1 motor and 3 sensory nuclei.</p>
+                                <div className="grid md:grid-cols-2 gap-4">
+                                  <div className="bg-slate-50 p-3 rounded">
+                                    <strong className="text-slate-900 text-sm block mb-1">Motor Nucleus (SVE):</strong>
+                                    <p className="text-xs text-slate-700">Located in cranial pons. Supplies 1st pharyngeal arch (mastication, tensor palate, tensor tympani, ant. digastric, mylohyoid).</p>
+                                  </div>
+                                  <div className="bg-slate-50 p-3 rounded">
+                                    <strong className="text-slate-900 text-sm block mb-1">Sensory Nuclei (GSA):</strong>
+                                    <ul className="text-xs text-slate-700 space-y-1 list-disc list-inside">
+                                      <li><strong>Main Sensory:</strong> Pons; crude touch (head/face).</li>
+                                      <li><strong>Spinal Nucleus:</strong> Pons to upper cervical; pain & temp. Also gets GSA from VII, IX, X.</li>
+                                      <li><strong>Mesencephalic:</strong> Pons to midbrain; proprioception (pseudounipolar 1st-order neurons).</li>
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* CN VI */}
+                              <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:border-red-300 transition-colors">
+                                <h4 className="font-bold text-lg text-red-800 mb-3 border-b pb-2">Abducent Nerve (CN VI)</h4>
+                                <ul className="space-y-3 text-sm text-slate-700">
+                                  <li><strong className="text-slate-900">Characteristics:</strong> Purely motor.</li>
+                                  <li><strong className="text-slate-900">Nucleus (GSE):</strong> Pons, deep to medial eminence in the floor of 4th ventricle.</li>
+                                  <li><strong className="text-slate-900">Supply:</strong> Lateral rectus muscle ONLY.</li>
+                                </ul>
+                              </div>
+
+                              {/* CN VII */}
+                              <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:border-red-300 transition-colors">
+                                <h4 className="font-bold text-lg text-red-800 mb-3 border-b pb-2">Facial Nerve (CN VII)</h4>
+                                <p className="text-xs font-semibold text-slate-600 mb-2">Mixed nerve; 2 motor and 2 sensory nuclei.</p>
+                                <ul className="space-y-2 text-xs text-slate-700">
+                                  <li><strong className="text-slate-900">Motor Nucleus (SVE):</strong> Caudal pons. Fibers loop around abducent nucleus (facial colliculus). Supplies 2nd pharyngeal arch (facial expression, platysma, post. digastric, stylohyoid, stapedius).</li>
+                                  <li><strong className="text-slate-900">Parasympathetic (GVE):</strong> Superior salivatory nucleus (submandibular & sublingual glands).</li>
+                                  <li><strong className="text-slate-900">Sensory (SVA/GSA):</strong> Nucleus Solitarius (taste ant. 2/3 tongue/palate) & Spinal Nucleus V (general sensation concha of ear).</li>
+                                </ul>
+                              </div>
+
+                              {/* CN VIII */}
+                              <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:border-red-300 transition-colors">
+                                <h4 className="font-bold text-lg text-red-800 mb-3 border-b pb-2">Vestibulocochlear Nerve (CN VIII)</h4>
+                                <ul className="space-y-3 text-sm text-slate-700">
+                                  <li><strong className="text-slate-900">Characteristics:</strong> Purely sensory (SSA).</li>
+                                  <li><strong className="text-slate-900">Location:</strong> Ponto-medullary junction.</li>
+                                  <li><strong className="text-slate-900">Cochlear Nuclei:</strong> Dorsal & ventral (hearing).</li>
+                                  <li><strong className="text-slate-900">Vestibular Nuclei:</strong> Medial, lateral, superior, inferior (balance).</li>
+                                </ul>
+                              </div>
+
+                              {/* CN IX */}
+                              <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:border-red-300 transition-colors">
+                                <h4 className="font-bold text-lg text-red-800 mb-3 border-b pb-2">Glossopharyngeal Nerve (CN IX)</h4>
+                                <p className="text-xs font-semibold text-slate-600 mb-2">Mixed nerve; 2 motor and 2 sensory nuclei.</p>
+                                <ul className="space-y-2 text-xs text-slate-700">
+                                  <li><strong className="text-slate-900">Parasympathetic (GVE):</strong> Inferior salivatory nucleus (parotid gland via otic ganglion).</li>
+                                  <li><strong className="text-slate-900">Motor Nucleus (SVE):</strong> Nucleus Ambiguus (stylopharyngeus - 3rd arch).</li>
+                                  <li><strong className="text-slate-900">Sensory (SVA/GSA):</strong> Nucleus Solitarius (taste post. 1/3 tongue) & Spinal Nucleus V (general sensation oropharynx, post. 1/3 tongue, middle ear).</li>
+                                </ul>
+                              </div>
+
+                              {/* CN X */}
+                              <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:border-red-300 transition-colors">
+                                <h4 className="font-bold text-lg text-red-800 mb-3 border-b pb-2">Vagus Nerve (CN X)</h4>
+                                <p className="text-xs font-semibold text-slate-600 mb-2">Mixed nerve; 2 motor and 2 sensory nuclei.</p>
+                                <ul className="space-y-2 text-xs text-slate-700">
+                                  <li><strong className="text-slate-900">Parasympathetic (GVE):</strong> Dorsal vagal nucleus (CVS, resp, GIT to midgut).</li>
+                                  <li><strong className="text-slate-900">Motor Nucleus (SVE):</strong> Nucleus Ambiguus (4th/6th arches - palate, pharynx, larynx).</li>
+                                  <li><strong className="text-slate-900">Sensory (SVA/GVA/GSA):</strong> Nucleus Solitarius (taste epiglottis, visceral sensation) & Spinal Nucleus V (auricular branch).</li>
+                                </ul>
+                              </div>
+
+                              {/* CN XI & XII */}
+                              <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:border-red-300 transition-colors md:col-span-2">
+                                <div className="grid md:grid-cols-2 gap-6">
+                                  <div>
+                                    <h4 className="font-bold text-lg text-red-800 mb-3 border-b pb-2">Accessory Nerve (CN XI)</h4>
+                                    <ul className="space-y-2 text-sm text-slate-700">
+                                      <li><strong className="text-slate-900">Spinal Part:</strong> Originates from spinal nucleus (C1-C5). Supplies sternomastoid & trapezius.</li>
+                                      <li><strong className="text-slate-900">Cranial Part:</strong> Originates from lower Nucleus Ambiguus. Joins vagus to supply palate, pharynx, larynx.</li>
+                                    </ul>
+                                  </div>
+                                  <div>
+                                    <h4 className="font-bold text-lg text-red-800 mb-3 border-b pb-2">Hypoglossal Nerve (CN XII)</h4>
+                                    <ul className="space-y-2 text-sm text-slate-700">
+                                      <li><strong className="text-slate-900">Characteristics:</strong> Purely motor.</li>
+                                      <li><strong className="text-slate-900">Nucleus (GSE):</strong> Medulla, deep to hypoglossal trigone.</li>
+                                      <li><strong className="text-slate-900">Supply:</strong> All intrinsic/extrinsic tongue muscles <strong className="text-red-700">EXCEPT palatoglossus</strong>.</li>
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
+
+                            </div>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  )}
+
                   {activeTab === 'short_essay' && (
                     <div className="space-y-6 animate-in">
                       <div className="border-b border-slate-200 pb-4">
                         <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
                           <i className="fa-solid fa-file-lines text-red-600"></i> Short Essay
                         </h2>
-                        <p className="text-slate-600 mt-2">Targeted, high-yield written responses.</p>
+                        <p className="text-slate-600 mt-2">Targeted, high-yield written responses for {currentData.title}.</p>
                       </div>
                       
                       <div className="space-y-3">
-                        {[
-                          { q: "Where is the cerebellum located anatomically in relation to the cerebrum and the brainstem?", a: "The cerebellum lies in the posterior cranial fossa. It is located inferior to the cerebrum (separated by the tentorium cerebelli) and posterior to the pons and medulla, separated from the brainstem by the fourth ventricle." },
-                          { q: "Describe the structural significance of the horizontal fissure.", a: "The horizontal fissure is a deep groove located along the margin of the cerebellum. Its primary purpose is to separate the superior surface of the cerebellum from the inferior surface." },
-                          { q: "Which structures are housed in the anterior and posterior cerebellar notches?", a: "The anterior notch lodges the pons and the medulla. The posterior notch lodges the falx cerebelli." },
-                          { q: "Identify the three anatomical lobes and the fissures that delineate them.", a: "The three lobes are the Anterior, Posterior, and Flocculonodular. The Fissura prima separates the anterior and posterior lobes, while the posterolateral fissure separates the posterior lobe from the flocculonodular lobe." },
-                          { q: "What is the functional role of the Archicerebellum and what are its primary connections?", a: "The Archicerebellum is concerned with equilibrium. Its connections are primarily vestibular, and it is formed by the two flocculi and the nodule." },
-                          { q: "Name the specific deep nuclei associated with the Paleocerebellum.", a: "The Paleocerebellum is associated with the fastigial nucleus (vermal part) as well as the globose and emboliform nuclei (paravermal parts)." },
-                          { q: "Identify the three primary arteries supplying the cerebellum and their parent vessels.", a: "The Superior Cerebellar Artery (SCA) and Anterior Inferior Cerebellar Artery (AICA) both branch from the basilar artery. The Posterior Inferior Cerebellar Artery (PICA) branches from the vertebral artery." },
-                          { q: "Compare the primary fiber types found in the Inferior vs. Superior Cerebellar Peduncles.", a: "The Inferior Cerebellar Peduncle (ICP) is formed mostly of afferent fibers (bringing information in). Conversely, the Superior Cerebellar Peduncle (SCP) is formed mostly of efferent fibers (sending information out)." },
-                          { q: "What is the \"vallecula\" and what structure does it contain?", a: "The vallecula is a deep groove present on the inferior surface of the cerebellum. It lies between the two cerebellar hemispheres and contains the inferior vermis." },
-                          { q: "Describe the pathway and destination of fibers traveling through the Middle Cerebellar Peduncle.", a: "The Middle Cerebellar Peduncle (MCP) contains cortico-ponto-cerebellar fibers. It is the largest peduncle and serves as the bridge connecting the cerebellum to the pons." }
-                        ].map((item, idx) => (
+                        {currentData.shortEssays.map((item, idx) => (
                           <div key={idx} className="border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:border-red-300 transition-all duration-300">
                             <button
                               onClick={() => setOpenShortIndex(openShortIndex === idx ? null : idx)}
@@ -275,11 +521,7 @@
                       </div>
                       
                       <div className="flex flex-col gap-4">
-                        {[
-                          { title: "Compare and contrast the functional divisions of the cerebellum.", answer: "The cerebellum is divided into three functional zones: the Archicerebellum, Paleocerebellum, and Neocerebellum. The Archicerebellum is the most primitive part, consisting of the flocculonodular lobe; it connects to the vestibular system and is strictly responsible for maintaining equilibrium. The Paleocerebellum comprises the vermis and paravermal regions of the hemispheres. It functions in the coordination of movement and proprioception by receiving spinal (spinocerebellar) input and a \"copy\" of the motor plan from the motor cortex. It utilizes the fastigial, globose, and emboliform nuclei to regulate trunk and distal limb muscles. Finally, the Neocerebellum consists of the lateral hemispheres and is the most phylogenetically recent. It connects to the cerebral cortex via the dentate nucleus and the cortico-ponto-cerebellar pathway, focusing on the planning and programming of complex movements." },
-                          { title: "Detail the connectivity of the Cerebellar Peduncles and their role in motor control.", answer: "The three pairs of peduncles act as the communication highways of the cerebellum. The Inferior Cerebellar Peduncle (ICP) primarily handles sensory input (afferents) from the medulla and spinal cord, such as the posterior spinocerebellar tract, to provide the cerebellum with real-time data on body position. The Middle Cerebellar Peduncle (MCP) is the largest and exclusively carries cortico-ponto-cerebellar fibers, conveying intended motor commands from the cerebrum to the cerebellum. The Superior Cerebellar Peduncle (SCP) is the main output (efferent) pathway to the midbrain. Through fibers like the dentato-thalamic tract, the cerebellum sends corrected motor instructions back to the cerebral cortex via the thalamus, or to the red nucleus (cerebello-rubral), allowing for the refinement of motor activity." },
-                          { title: "Discuss the vascularization of the cerebellum and the consequences of localized venous drainage.", answer: "The cerebellum receives its arterial blood from three sources: the SCA and AICA (from the basilar artery) and the PICA (from the vertebral artery). The SCA serves the superior surface, while the AICA and PICA serve the inferior surface. Venous drainage is complex, involving both superior and inferior cerebellar veins. The superior veins drain into the straight and transverse sinuses, as well as the great cerebral vein. The inferior veins drain into a wider array of sinuses, including the straight, sigmoid, occipital, and inferior petrosal sinuses. This extensive venous network ensures that blood is efficiently returned to the systemic circulation, but it also means that vascular issues in several different dural sinuses could potentially impact cerebellar drainage." }
-                        ].map((essay, idx) => (
+                        {currentData.longEssays.map((essay, idx) => (
                           <div key={idx} className={`border rounded-xl overflow-hidden transition-all duration-300 ${openLongIndex === idx ? 'border-red-300 shadow-md ring-1 ring-red-100' : 'border-slate-200 hover:border-red-200 hover:shadow-md'}`}>
                             <button 
                               className={`w-full text-left p-5 flex justify-between items-start gap-4 transition-colors duration-200 active:bg-red-100/50 ${openLongIndex === idx ? 'bg-red-50' : 'bg-white hover:bg-slate-50'}`}
@@ -304,78 +546,172 @@
                     </div>
                   )}
 
+                  {/* GLOSSARY RENDERING DYNAMICALLY BASED ON TOPIC */}
                   {activeTab === 'glossary' && (
                     <div className="space-y-8 animate-in">
                       <div className="border-b border-slate-200 pb-4">
                         <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
                           <i className="fa-solid fa-bookmark text-red-600"></i> Glossary & Mnemonics
                         </h2>
-                        <p className="text-slate-600 mt-2">Key terms, buzzwords, and memory hooks for the Cerebellum.</p>
+                        <p className="text-slate-600 mt-2">Key terms, buzzwords, and memory hooks for {currentData.title}.</p>
                       </div>
 
-                      {/* Golden Buzzwords */}
-                      <div>
-                        <h3 className="text-xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
-                          <i className="fa-solid fa-bolt text-red-600"></i> Golden Buzzwords
-                        </h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                          {[
-                            { term: '"Motor Copy"', def: 'The Paleocerebellum receives a duplicate of the motor plan from the cortex.' },
-                            { term: '"Planning and Programming"', def: 'The hallmark function of the Neocerebellum.' },
-                            { term: '"Equilibrium"', def: 'The hallmark function of the Archicerebellum.' },
-                            { term: '"Largest Peduncle"', def: 'Refers to the Middle Cerebellar Peduncle (MCP).' }
-                          ].map((item, idx) => (
-                            <div key={idx} className="bg-white border border-slate-200 p-4 rounded-lg shadow-sm hover:border-red-300 hover:shadow-md transition-all">
-                              <strong className="text-red-800 block mb-1 text-lg">{item.term}</strong>
-                              <p className="text-slate-600 text-sm">{item.def}</p>
+                      {topic === 'cerebellum' && (
+                        <>
+                          {/* Cerebellum Glossary */}
+                          <div>
+                            <h3 className="text-xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
+                              <i className="fa-solid fa-bolt text-red-600"></i> Golden Buzzwords
+                            </h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                              {[
+                                { term: '"Motor Copy"', def: 'The Paleocerebellum receives a duplicate of the motor plan from the cortex.' },
+                                { term: '"Planning and Programming"', def: 'The hallmark function of the Neocerebellum.' },
+                                { term: '"Equilibrium"', def: 'The hallmark function of the Archicerebellum.' },
+                                { term: '"Largest Peduncle"', def: 'Refers to the Middle Cerebellar Peduncle (MCP).' }
+                              ].map((item, idx) => (
+                                <div key={idx} className="bg-white border border-slate-200 p-4 rounded-lg shadow-sm hover:border-red-300 hover:shadow-md transition-all">
+                                  <strong className="text-red-800 block mb-1 text-lg">{item.term}</strong>
+                                  <p className="text-slate-600 text-sm">{item.def}</p>
+                                </div>
+                              ))}
                             </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="grid md:grid-cols-2 gap-8 pt-4 border-t border-slate-200">
-                        {/* Mnemonics */}
-                        <div className="bg-red-50 rounded-xl p-6 border border-red-200 shadow-sm">
-                          <h3 className="text-xl font-bold text-red-900 mb-4 flex items-center gap-2">
-                            <i className="fa-solid fa-brain"></i> High-Yield Mnemonics
-                          </h3>
-                          <div className="space-y-4">
-                            {[
-                              { title: 'Arteries (S-A-P)', desc: 'Superior, Anterior Inferior, Posterior Inferior (SCA, AICA, PICA).' },
-                              { title: 'Peduncle Connections (M-P-M)', desc: 'Medulla (Inferior), Pons (Middle), Midbrain (Superior).' },
-                              { title: 'Functional Order (A-P-N)', desc: 'Archi (Oldest), Paleo (Middle), Neo (Newest).' },
-                              { title: 'Deep Nuclei (Don\'t Eat Greasy Foods)', desc: 'Dentate, Emboliform, Globose, Fastigial (ordered lateral to medial).' }
-                            ].map((item, idx) => (
-                              <div key={idx} className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-red-500">
-                                <div className="font-bold text-red-900 text-lg mb-1">{item.title}</div>
-                                <p className="text-slate-700 text-sm">{item.desc}</p>
-                              </div>
-                            ))}
                           </div>
-                        </div>
-
-                        {/* Key Terms */}
-                        <div>
-                          <h3 className="text-xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
-                            <i className="fa-solid fa-list text-slate-600"></i> Key Terms and "Hooks"
-                          </h3>
-                          <div className="flex flex-col gap-3">
-                            {[
-                              { term: 'Dentate Nucleus', def: 'The deep nucleus associated with the Neocerebellum and the planning of movement.' },
-                              { term: 'Fastigial Nucleus', def: 'The deep nucleus associated with the vermal part of the Paleocerebellum and trunk muscles.' },
-                              { term: 'Fissura Prima', def: 'The "First Fissure"; the primary landmark on the superior surface.' },
-                              { term: 'Paravermal Part', def: 'The portion of the cerebellar hemisphere immediately adjacent to the vermis; connected to distal limb muscles.' },
-                              { term: 'Tentorium Cerebelli', def: 'The "tent" of dura mater that roofs over the cerebellum.' },
-                              { term: 'VLN (Ventral Lateral Nucleus)', def: 'The specific part of the thalamus that receives cerebellar outputs via the SCP.' }
-                            ].map((item, idx) => (
-                              <div key={idx} className="border border-slate-200 p-3 rounded-lg bg-white hover:border-red-300 transition-colors">
-                                <h4 className="font-bold text-red-800 mb-1">{item.term}</h4>
-                                <p className="text-slate-600 text-sm">{item.def}</p>
+                          <div className="grid md:grid-cols-2 gap-8 pt-4 border-t border-slate-200">
+                            <div className="bg-red-50 rounded-xl p-6 border border-red-200 shadow-sm">
+                              <h3 className="text-xl font-bold text-red-900 mb-4 flex items-center gap-2">
+                                <i className="fa-solid fa-brain"></i> High-Yield Mnemonics
+                              </h3>
+                              <div className="space-y-4">
+                                {[
+                                  { title: 'Arteries (S-A-P)', desc: 'Superior, Anterior Inferior, Posterior Inferior (SCA, AICA, PICA).' },
+                                  { title: 'Peduncle Connections (M-P-M)', desc: 'Medulla (Inferior), Pons (Middle), Midbrain (Superior).' },
+                                  { title: 'Functional Order (A-P-N)', desc: 'Archi (Oldest), Paleo (Middle), Neo (Newest).' },
+                                  { title: 'Deep Nuclei (Don\'t Eat Greasy Foods)', desc: 'Dentate, Emboliform, Globose, Fastigial (ordered lateral to medial).' }
+                                ].map((item, idx) => (
+                                  <div key={idx} className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-red-500">
+                                    <div className="font-bold text-red-900 text-lg mb-1">{item.title}</div>
+                                    <p className="text-slate-700 text-sm">{item.desc}</p>
+                                  </div>
+                                ))}
                               </div>
-                            ))}
+                            </div>
+                            <div>
+                              <h3 className="text-xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
+                                <i className="fa-solid fa-list text-slate-600"></i> Key Terms and "Hooks"
+                              </h3>
+                              <div className="flex flex-col gap-3">
+                                {[
+                                  { term: 'Dentate Nucleus', def: 'The deep nucleus associated with the Neocerebellum and the planning of movement.' },
+                                  { term: 'Fastigial Nucleus', def: 'The deep nucleus associated with the vermal part of the Paleocerebellum and trunk muscles.' },
+                                  { term: 'Fissura Prima', def: 'The "First Fissure"; the primary landmark on the superior surface.' },
+                                  { term: 'Paravermal Part', def: 'The portion of the cerebellar hemisphere immediately adjacent to the vermis; connected to distal limb muscles.' },
+                                  { term: 'Tentorium Cerebelli', def: 'The "tent" of dura mater that roofs over the cerebellum.' },
+                                  { term: 'VLN (Ventral Lateral Nucleus)', def: 'The specific part of the thalamus that receives cerebellar outputs via the SCP.' }
+                                ].map((item, idx) => (
+                                  <div key={idx} className="border border-slate-200 p-3 rounded-lg bg-white hover:border-red-300 transition-colors">
+                                    <h4 className="font-bold text-red-800 mb-1">{item.term}</h4>
+                                    <p className="text-slate-600 text-sm">{item.def}</p>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
+                        </>
+                      )}
+
+                      {topic === 'cranial_nerves' && (
+                        <>
+                          {/* Cranial Nerves Glossary */}
+                          <div>
+                            <h3 className="text-xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
+                              <i className="fa-solid fa-sitemap text-red-600"></i> Functional Column Key (Buzzwords)
+                            </h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                              {[
+                                { term: 'GSE', full: 'General Somatic Efferent', def: 'Motor to skeletal muscles (eye, tongue).' },
+                                { term: 'GVE', full: 'General Visceral Efferent', def: 'Parasympathetic motor to glands/smooth muscle.' },
+                                { term: 'SVE', full: 'Special Visceral Efferent', def: 'Motor to muscles of pharyngeal arches.' },
+                                { term: 'GSA', full: 'General Somatic Afferent', def: 'General sensation (touch, pain, temp).' },
+                                { term: 'SVA', full: 'Special Visceral Afferent', def: 'Special senses (taste).' },
+                                { term: 'GVA', full: 'General Visceral Afferent', def: 'Sensation from internal organs/viscera.' },
+                                { term: 'SSA', full: 'Special Somatic Afferent', def: 'Special senses (hearing, balance).' }
+                              ].map((item, idx) => (
+                                <div key={idx} className="bg-white border border-slate-200 p-4 rounded-lg shadow-sm hover:border-red-300 hover:shadow-md transition-all">
+                                  <div className="flex items-center justify-between mb-1">
+                                    <strong className="text-red-800 text-lg">{item.term}</strong>
+                                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wide">{item.full}</span>
+                                  </div>
+                                  <p className="text-slate-600 text-sm">{item.def}</p>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="grid md:grid-cols-2 gap-8 pt-4 border-t border-slate-200">
+                            
+                            <div className="space-y-8">
+                              <div className="bg-red-50 rounded-xl p-6 border border-red-200 shadow-sm">
+                                <h3 className="text-xl font-bold text-red-900 mb-4 flex items-center gap-2">
+                                  <i className="fa-solid fa-brain"></i> Mnemonics for Shared Nuclei
+                                </h3>
+                                <div className="space-y-4">
+                                  {[
+                                    { title: '"The Solo Seven, Nine, and Ten"', desc: 'Nucleus Solitarius is shared by CN VII, IX, and X (SVA/GVA - Taste/Visceral).' },
+                                    { title: '"Ambi-swallow 9, 10, 11"', desc: 'Nucleus Ambiguus is shared by CN IX, X, and XI (SVE - Motor to throat/palate).' },
+                                    { title: '"The Sensory Spine 5, 7, 9, 10"', desc: 'Spinal Nucleus of Trigeminal is shared by CN V, VII, IX, and X (GSA - General sensation).' }
+                                  ].map((item, idx) => (
+                                    <div key={idx} className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-red-500">
+                                      <div className="font-bold text-red-900 text-lg mb-1">{item.title}</div>
+                                      <p className="text-slate-700 text-sm">{item.desc}</p>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+
+                              <div>
+                                <h3 className="text-xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
+                                  <i className="fa-solid fa-bone text-slate-600"></i> Pharyngeal Arch Associations
+                                </h3>
+                                <div className="flex flex-col gap-3">
+                                  {[
+                                    { arch: '1st Arch', def: 'CN V (Mastication).' },
+                                    { arch: '2nd Arch', def: 'CN VII (Facial expression).' },
+                                    { arch: '3rd Arch', def: 'CN IX (Stylopharyngeus).' },
+                                    { arch: '4th & 6th Arches', def: 'CN X (Palate, Pharynx, Larynx).' }
+                                  ].map((item, idx) => (
+                                    <div key={idx} className="border border-slate-200 p-3 rounded-lg bg-white flex items-center gap-4">
+                                      <span className="font-bold text-red-800 whitespace-nowrap">{item.arch}</span>
+                                      <span className="text-slate-600 text-sm">{item.def}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+
+                            <div>
+                              <h3 className="text-xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
+                                <i className="fa-solid fa-list text-slate-600"></i> Key Entities
+                              </h3>
+                              <div className="flex flex-col gap-3">
+                                {[
+                                  { term: 'Facial Colliculus', def: 'An elevation in the floor of the 4th ventricle formed by CN VII fibers looping around the CN VI nucleus.' },
+                                  { term: 'Hypoglossal Trigone', def: 'The area in the floor of the 4th ventricle overlying the hypoglossal nucleus.' },
+                                  { term: 'Edinger Westphal Nucleus', def: 'The "Golden Buzzword" for parasympathetic control of the pupil and lens.' },
+                                  { term: 'Nucleus Ambiguus', def: 'The "Golden Buzzword" for swallowing and vocalization (muscles of the palate, pharynx, larynx).' }
+                                ].map((item, idx) => (
+                                  <div key={idx} className="border border-slate-200 p-3 rounded-lg bg-white hover:border-red-300 transition-colors">
+                                    <h4 className="font-bold text-red-800 mb-1">{item.term}</h4>
+                                    <p className="text-slate-600 text-sm">{item.def}</p>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+
+                          </div>
+                        </>
+                      )}
+
                     </div>
                   )}
 
