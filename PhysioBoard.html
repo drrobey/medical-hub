@@ -126,17 +126,41 @@
 
           const tabs = view === 'sleep' ? sleepTabs : reticularTabs;
           const [activeTab, setActiveTab] = useState(tabs[0].id);
+          const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
           
           const moduleTitle = view === 'sleep' ? 'Sleep & Arousal' : 'Functions of Reticular Formation & Electrical Activity of Brain';
 
           return (
-            <div className="min-h-screen bg-slate-50 flex">
-              {/* Fixed Vertical Sidebar (Emerald-950 instead of Purple) */}
-              <div className="w-72 fixed inset-y-0 left-0 bg-emerald-950 flex flex-col shadow-2xl z-30">
-                {/* 1. Header Section */}
-                <div className="p-6 border-b border-emerald-800/50">
-                  <button onClick={onBack} className="text-emerald-300 hover:text-white font-semibold flex items-center gap-2 mb-8 transition-colors text-sm">
-                    <Icon name="arrow-left" /> Back to Dashboard
+            <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row font-sans text-slate-800">
+              
+              {/* 1. The Mobile Header (Hidden on Desktop) */}
+              <div className="md:hidden bg-emerald-950 text-white p-4 flex justify-between items-center shadow-md sticky top-0 z-40">
+                <div className="flex items-center gap-3">
+                  <button onClick={onBack} className="p-1 hover:bg-emerald-800 rounded transition-all duration-200 active:scale-90 w-8 h-8 flex items-center justify-center group">
+                    <Icon name="arrow-left" className="transition-transform duration-300 group-hover:-translate-x-1" />
+                  </button>
+                  <div className="flex items-center gap-2 font-bold text-lg">
+                    <Icon name={view === 'sleep' ? 'bed' : 'bolt'} className="text-emerald-300" />
+                    <span className="truncate max-w-[200px]">NeuroPhysio Review</span>
+                  </div>
+                </div>
+                <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="w-8 h-8 flex items-center justify-center transition-transform duration-300 active:scale-90">
+                  <div className={`transition-transform duration-300 ${isMobileMenuOpen ? 'rotate-90 scale-110' : 'rotate-0'}`}>
+                    {isMobileMenuOpen ? <Icon name="xmark" className="text-xl" /> : <Icon name="bars" className="text-xl" />}
+                  </div>
+                </button>
+              </div>
+
+              {/* 2. The Sidebar Navigation (Hidden on mobile unless toggled open) */}
+              <nav className={`
+                ${isMobileMenuOpen ? 'flex' : 'hidden'} 
+                md:flex flex-col w-full md:w-72 bg-emerald-950 text-white shadow-xl
+                fixed md:sticky top-[72px] md:top-0 h-[calc(100vh-72px)] md:h-screen overflow-y-auto z-30 transition-all duration-300
+              `}>
+                {/* Desktop Header Section */}
+                <div className="hidden md:block p-6 border-b border-emerald-800/50">
+                  <button onClick={onBack} className="text-emerald-300 hover:text-white font-semibold flex items-center gap-2 mb-8 transition-colors text-sm group">
+                    <Icon name="arrow-left" className="transition-transform duration-300 group-hover:-translate-x-1" /> Back to Dashboard
                   </button>
                   
                   <div className="flex items-center gap-3">
@@ -150,70 +174,73 @@
                   </div>
                 </div>
 
-                {/* 2. Navigation List Section */}
-                <div className="flex-1 overflow-y-auto p-4 py-6">
+                {/* Navigation List Section */}
+                <div className="flex-1 overflow-y-auto p-4 py-2 md:py-6">
                   <h2 className="text-[11px] font-bold text-emerald-600 uppercase tracking-widest mb-4 px-3">Study Navigation</h2>
-                  <nav className="flex flex-col gap-1.5">
+                  <ul className="flex flex-col gap-1.5">
                     {tabs.map(tab => {
                       const isActive = activeTab === tab.id;
                       return (
-                        <button
-                          key={tab.id}
-                          onClick={() => { setActiveTab(tab.id); window.scrollTo(0, 0); }}
-                          className={`flex items-center gap-3 px-4 py-3.5 rounded-xl text-left text-sm font-semibold transition-all duration-300 ease-in-out group ${
-                            isActive 
-                              ? 'bg-emerald-500 text-white shadow-md transform scale-[1.02]' 
-                              : 'text-emerald-100 hover:bg-emerald-800/50 hover:text-white hover:scale-[1.01]'
-                          }`}
-                        >
-                          <Icon 
-                            name={tab.icon} 
-                            className={`text-lg transition-colors duration-300 ${
-                              isActive ? 'text-white' : 'text-emerald-400 group-hover:text-emerald-300'
-                            }`} 
-                          />
-                          {tab.label}
-                        </button>
+                        <li key={tab.id}>
+                          <button
+                            onClick={() => { 
+                              setActiveTab(tab.id); 
+                              setIsMobileMenuOpen(false); // Close menu on mobile after clicking
+                              window.scrollTo(0, 0); 
+                            }}
+                            className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-left text-sm font-semibold transition-all duration-200 ease-in-out group ${
+                              isActive 
+                                ? 'bg-emerald-500 text-white shadow-md transform md:scale-[1.02]' 
+                                : 'text-emerald-100 hover:bg-emerald-800/50 hover:text-white hover:translate-x-1'
+                            }`}
+                          >
+                            <Icon 
+                              name={tab.icon} 
+                              className={`w-5 text-center text-lg transition-colors duration-300 ${
+                                isActive ? 'text-white' : 'text-emerald-400 group-hover:text-emerald-300'
+                              }`} 
+                            />
+                            {tab.label}
+                          </button>
+                        </li>
                       );
                     })}
-                  </nav>
+                  </ul>
                 </div>
 
-                {/* 3. Footer Section */}
-                <div className="p-6 border-t border-emerald-800/50">
+                {/* Footer Section */}
+                <div className="p-6 border-t border-emerald-800/50 hidden md:block">
                   <p className="text-emerald-400 text-xs leading-relaxed font-medium">
                     Comprehensive Review:<br/>
                     <span className="text-white font-bold">{moduleTitle}</span>
                   </p>
                 </div>
-              </div>
+              </nav>
 
-              {/* Main Content Area (Offset by the 72px sidebar width) */}
-              <div className="ml-72 flex-1 min-w-0">
-                <div className="max-w-5xl mx-auto px-8 py-10 animate-in">
-                  <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-8 md:p-12 min-h-[800px]">
-                    {view === 'action-potentials' && (
-                      <>
-                        {activeTab === 'mechanisms' && <MechanismsTab />}
-                        {activeTab === 'clinical' && <ClinicalTab />}
-                        {activeTab === 'traps' && <ExamTrapsTab />}
-                        {activeTab === 'rapid' && <RapidFireTab />}
-                        {activeTab === 'flashcards' && <FlashcardsTab />}
-                        {activeTab === 'essay' && <EssayTab />}
-                        {activeTab === 'glossary' && <GlossaryTab />}
-                      </>
-                    )}
-                    {view === 'sleep' && (
-                      <>
-                        {activeTab === 'short' && <SleepShortTab />}
-                        {activeTab === 'long' && <SleepLongTab />}
-                        {activeTab === 'traps' && <SleepTrapsTab />}
-                        {activeTab === 'keywords' && <SleepKeywordsTab />}
-                      </>
-                    )}
-                  </div>
+              {/* 3. Main Content Area */}
+              <main className="flex-1 p-4 md:p-8 overflow-y-auto w-full max-w-5xl mx-auto">
+                <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 md:p-12 min-h-[800px] animate-in">
+                  {view === 'action-potentials' && (
+                    <>
+                      {activeTab === 'mechanisms' && <MechanismsTab />}
+                      {activeTab === 'clinical' && <ClinicalTab />}
+                      {activeTab === 'traps' && <ExamTrapsTab />}
+                      {activeTab === 'rapid' && <RapidFireTab />}
+                      {activeTab === 'flashcards' && <FlashcardsTab />}
+                      {activeTab === 'essay' && <EssayTab />}
+                      {activeTab === 'glossary' && <GlossaryTab />}
+                    </>
+                  )}
+                  {view === 'sleep' && (
+                    <>
+                      {activeTab === 'short' && <SleepShortTab />}
+                      {activeTab === 'long' && <SleepLongTab />}
+                      {activeTab === 'traps' && <SleepTrapsTab />}
+                      {activeTab === 'keywords' && <SleepKeywordsTab />}
+                    </>
+                  )}
                 </div>
-              </div>
+              </main>
             </div>
           );
         }
