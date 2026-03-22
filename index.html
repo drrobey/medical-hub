@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Hub Portal</title>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Load React, ReactDOM, and Babel -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Load Icons (FontAwesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        @keyframes fadeInScale {
+            0% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes slideInRight {
+            0% { transform: translateX(60px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideInLeft {
+            0% { transform: translateX(-60px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+        .animate-portal { animation: fadeInScale 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .slide-forward { animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .slide-backward { animation: slideInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    </style>
+</head>
+<body class="bg-slate-900 text-white font-sans min-h-screen overflow-x-hidden">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // --- Icons ---
+        const Brain = ({className}) => <i className={`fa-solid fa-brain ${className}`}></i>;
+        const Eye = ({className}) => <i className={`fa-solid fa-eye ${className}`}></i>;
+        const Flask = ({className}) => <i className={`fa-solid fa-flask ${className}`}></i>;
+        const Stomach = ({className}) => <i className={`fa-solid fa-stomach ${className}`}></i>;
+        const Apple = ({className}) => <i className={`fa-solid fa-apple-whole ${className}`}></i>;
+        const Droplet = ({className}) => <i className={`fa-solid fa-droplet ${className}`}></i>;
+        const Lock = ({className}) => <i className={`fa-solid fa-lock ${className}`}></i>;
+        const ArrowRight = ({className}) => <i className={`fa-solid fa-arrow-right ${className}`}></i>;
+        const ArrowLeft = ({className}) => <i className={`fa-solid fa-arrow-left ${className}`}></i>;
+        const GraduationCap = ({className}) => <i className={`fa-solid fa-graduation-cap ${className}`}></i>;
+        const Pills = ({className}) => <i className={`fa-solid fa-pills ${className}`}></i>;
+        const Bolt = ({className}) => <i className={`fa-solid fa-bolt ${className}`}></i>;
+
+        function App() {
+            // Check the URL hash on load to determine if we should start inside the CNS module
+            const [currentView, setCurrentView] = useState(window.location.hash === '#cns' ? 'cns' : 'systems'); 
+            const [direction, setDirection] = useState('forward');
+
+            // Listen for hash changes so the back button works smoothly
+            useEffect(() => {
+                const handleHashChange = () => {
+                    if (window.location.hash === '#cns') {
+                        setCurrentView('cns');
+                        setDirection('forward');
+                    } else {
+                        setCurrentView('systems');
+                        setDirection('backward');
+                    }
+                };
+                window.addEventListener('hashchange', handleHashChange);
+                return () => window.removeEventListener('hashchange', handleHashChange);
+            }, []);
+
+            const navigateTo = (view) => {
+                setDirection(view === 'systems' ? 'backward' : 'forward');
+                if (view === 'cns') {
+                    window.location.hash = 'cns';
+                } else {
+                    window.location.hash = '';
+                }
+                setCurrentView(view);
+            };
+
+            return (
+                <div className="min-h-screen flex flex-col items-center justify-center p-6 relative">
+                    <div className="w-full max-w-6xl z-10">
+                        <div key={currentView} className={direction === 'forward' ? 'slide-forward' : 'slide-backward'}>
+                            {currentView === 'systems' ? (
+                                <SystemsDashboard onSelectCNS={() => navigateTo('cns')} />
+                            ) : (
+                                <CNSDashboard onBack={() => navigateTo('systems')} />
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Footer / Watermark */}
+                    <footer className="absolute bottom-6 text-center w-full text-slate-500 text-xs tracking-widest uppercase z-0 pointer-events-none">
+                        <p>Built for Academic Excellence • Dr. Zeyad Robey • Ain Shams University</p>
+                    </footer>
+                </div>
+            );
+        }
+
+        function SystemsDashboard({ onSelectCNS }) {
+            const systems = [
+                {
+                    id: 'cns',
+                    title: 'CNS Module',
+                    desc: 'Central Nervous System: Pharmacology, Physiology, Pathology, and Anatomy.',
+                    icon: <Brain className="text-4xl text-blue-500" />,
+                    bgIcon: <Brain />,
+                    colorClass: 'hover:border-blue-500 hover:shadow-blue-500/10',
+                    active: true
+                },
+                {
+                    id: 'endocrine',
+                    title: 'Endocrine Module',
+                    desc: 'Hormonal regulation, metabolic pathways, and glandular pathologies.',
+                    icon: <Flask className="text-4xl text-purple-500" />,
+                    bgIcon: <Flask />,
+                    colorClass: 'hover:border-purple-500 hover:shadow-purple-500/10',
+                    active: false
+                },
+                {
+                    id: 'special-sense',
+                    title: 'Special Sense Module',
+                    desc: 'Ophthalmology, Otolaryngology, and sensory receptor physiology.',
+                    icon: <Eye className="text-4xl text-teal-500" />,
+                    bgIcon: <Eye />,
+                    colorClass: 'hover:border-teal-500 hover:shadow-teal-500/10',
+                    active: false
+                },
+                {
+                    id: 'git',
+                    title: 'GIT Module',
+                    desc: 'Gastrointestinal tract, digestion, absorption, and hepatic functions.',
+                    icon: <Apple className="text-4xl text-emerald-500" />,
+                    bgIcon: <Apple />,
+                    colorClass: 'hover:border-emerald-500 hover:shadow-emerald-500/10',
+                    active: false
+                },
+                {
+                    id: 'urogenital',
+                    title: 'Urogenital Module',
+                    desc: 'Renal physiology, urinary pathologies, and reproductive systems.',
+                    icon: <Droplet className="text-4xl text-rose-500" />,
+                    bgIcon: <Droplet />,
+                    colorClass: 'hover:border-rose-500 hover:shadow-rose-500/10',
+                    active: false
+                }
+            ];
+
+            return (
+                <div className="animate-portal space-y-12">
+                    <header className="text-center space-y-4 pt-8">
+                        <div className="inline-block bg-blue-600 p-4 rounded-3xl shadow-2xl shadow-blue-500/20 mb-4">
+                            <GraduationCap className="text-4xl text-white" />
+                        </div>
+                        <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-white">
+                            Medical Hub <span className="text-blue-500">Portal</span>
+                        </h1>
+                        <p className="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto">
+                            Select a body system module to begin your specialized clinical review.
+                        </p>
+                    </header>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-24">
+                        {systems.map((sys) => (
+                            <div 
+                                key={sys.id}
+                                onClick={() => sys.active && onSelectCNS()}
+                                className={`
+                                    group relative overflow-hidden bg-slate-800 border border-slate-700 rounded-3xl p-8 transition-all duration-300
+                                    ${sys.active ? `cursor-pointer hover:shadow-2xl hover:-translate-y-2 ${sys.colorClass}` : 'opacity-80 grayscale-[0.2] cursor-not-allowed'}
+                                `}
+                            >
+                                {!sys.active && (
+                                    <div className="absolute top-6 right-6 bg-slate-700/50 p-3 rounded-full flex items-center justify-center z-20 backdrop-blur-sm">
+                                        <Lock className="text-slate-400 text-sm" />
+                                    </div>
+                                )}
+
+                                <div className="relative z-10">
+                                    <div className="w-20 h-20 bg-slate-900/50 rounded-2xl flex items-center justify-center mb-6 shadow-inner group-hover:scale-110 transition-transform">
+                                        {sys.icon}
+                                    </div>
+                                    <h2 className="text-2xl font-bold mb-2 text-white">{sys.title}</h2>
+                                    <p className="text-slate-400 mb-8 text-sm leading-relaxed min-h-[3rem]">
+                                        {sys.desc}
+                                    </p>
+                                    
+                                    {sys.active ? (
+                                        <div className="flex items-center text-blue-500 font-bold gap-2">
+                                            Open Module <ArrowRight className="group-hover:translate-x-2 transition-transform" />
+                                        </div>
+                                    ) : (
+                                        <div className="flex items-center text-slate-500 font-bold gap-2">
+                                            Coming Soon
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Background Decoration */}
+                                <div className="absolute -right-8 -bottom-8 text-slate-700/20 text-9xl transform rotate-12 pointer-events-none group-hover:text-current opacity-10 transition-colors">
+                                    {sys.bgIcon}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+
+        function CNSDashboard({ onBack }) {
+            return (
+                <div className="max-w-4xl mx-auto space-y-12">
+                    <header className="flex flex-col md:flex-row items-center justify-between gap-6 border-b border-slate-700 pb-8 pt-8">
+                        <div>
+                            <button onClick={onBack} className="text-slate-400 hover:text-white font-bold flex items-center gap-2 mb-4 transition-colors">
+                                <ArrowLeft /> Back to Systems
+                            </button>
+                            <h1 className="text-4xl md:text-5xl font-black text-white flex items-center gap-4">
+                                <Brain className="text-blue-500" /> CNS Module
+                            </h1>
+                            <p className="text-slate-400 mt-2 text-lg">Select your specialized subject hub.</p>
+                        </div>
+                    </header>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pb-24">
+                        {/* Pharmacology Hub Link */}
+                        <a href="PharmaBoard.html" className="group relative overflow-hidden bg-slate-800 border border-slate-700 rounded-3xl p-8 transition-all duration-300 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/20 hover:-translate-y-2 block">
+                            <div className="relative z-10">
+                                <div className="w-16 h-16 bg-blue-600/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                    <Pills className="text-3xl text-blue-500" />
+                                </div>
+                                <h2 className="text-2xl font-bold mb-2 text-white flex items-center gap-2">Neuro-Pharmacology</h2>
+                                <p className="text-slate-400 mb-6 text-sm leading-relaxed">
+                                    In-depth review of Anxiolytics, Antidepressants, and Epilepsy medications with VIP clinical notes.
+                                </p>
+                                <div className="flex items-center text-blue-500 font-bold gap-2">
+                                    Enter Pharma Hub <ArrowRight className="group-hover:translate-x-2 transition-transform" />
+                                </div>
+                            </div>
+                        </a>
+
+                        {/* Physiology Hub Link */}
+                        <a href="PhysioBoard.html" className="group relative overflow-hidden bg-slate-800 border border-slate-700 rounded-3xl p-8 transition-all duration-300 hover:border-emerald-500 hover:shadow-2xl hover:shadow-emerald-500/20 hover:-translate-y-2 block">
+                            <div className="relative z-10">
+                                <div className="w-16 h-16 bg-emerald-600/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                    <Bolt className="text-3xl text-emerald-500" />
+                                </div>
+                                <h2 className="text-2xl font-bold mb-2 text-white flex items-center gap-2">Neuro-Physiology</h2>
+                                <p className="text-slate-400 mb-6 text-sm leading-relaxed">
+                                    Study action potentials, synaptic transmission, sensory pathways, and the autonomic nervous system.
+                                </p>
+                                <div className="flex items-center text-emerald-500 font-bold gap-2">
+                                    Enter Physio Hub <ArrowRight className="group-hover:translate-x-2 transition-transform" />
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

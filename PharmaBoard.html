@@ -1,0 +1,2691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroPharm Hub</title>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Load React, ReactDOM, and Babel -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Load Icons (FontAwesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Custom Page Transition Animations */
+        @keyframes slideInRight {
+            0% { transform: translateX(60px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideInLeft {
+            0% { transform: translateX(-60px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+        .slide-forward {
+            animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .slide-backward {
+            animation: slideInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Tab Content & Section Enter Animation */
+        @keyframes fadeSlideUp {
+            0% { opacity: 0; transform: translateY(15px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-in {
+            animation: fadeSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 overflow-x-hidden">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        // --- Icon Component Wrappers (Replaces lucide-react) ---
+        const BookOpen = ({className}) => <i className={`fa-solid fa-book-open flex items-center justify-center ${className}`}></i>;
+        const List = ({className}) => <i className={`fa-solid fa-list-ul flex items-center justify-center ${className}`}></i>;
+        const Activity = ({className}) => <i className={`fa-solid fa-chart-line flex items-center justify-center ${className}`}></i>;
+        const Pill = ({className}) => <i className={`fa-solid fa-pills flex items-center justify-center ${className}`}></i>;
+        const Shield = ({className}) => <i className={`fa-solid fa-shield-halved flex items-center justify-center ${className}`}></i>;
+        const HelpCircle = ({className}) => <i className={`fa-solid fa-circle-question flex items-center justify-center ${className}`}></i>;
+        const FileText = ({className}) => <i className={`fa-solid fa-file-lines flex items-center justify-center ${className}`}></i>;
+        const Bookmark = ({className}) => <i className={`fa-solid fa-bookmark flex items-center justify-center ${className}`}></i>;
+        const Menu = ({className}) => <i className={`fa-solid fa-bars flex items-center justify-center ${className}`}></i>;
+        const X = ({className}) => <i className={`fa-solid fa-xmark flex items-center justify-center ${className}`}></i>;
+        const ChevronDown = ({className}) => <i className={`fa-solid fa-chevron-down flex items-center justify-center ${className}`}></i>;
+        const ChevronUp = ({className}) => <i className={`fa-solid fa-chevron-up flex items-center justify-center ${className}`}></i>;
+        const Brain = ({className}) => <i className={`fa-solid fa-brain flex items-center justify-center ${className}`}></i>;
+        const Zap = ({className}) => <i className={`fa-solid fa-bolt flex items-center justify-center ${className}`}></i>;
+        const ArrowLeft = ({className}) => <i className={`fa-solid fa-arrow-left flex items-center justify-center ${className}`}></i>;
+        const Library = ({className}) => <i className={`fa-solid fa-book-bookmark flex items-center justify-center ${className}`}></i>;
+        const Clock = ({className}) => <i className={`fa-regular fa-clock flex items-center justify-center ${className}`}></i>;
+        const Lock = ({className}) => <i className={`fa-solid fa-lock flex items-center justify-center ${className}`}></i>;
+        const AlertTriangle = ({className}) => <i className={`fa-solid fa-triangle-exclamation flex items-center justify-center ${className}`}></i>;
+        const CheckCircle = ({className}) => <i className={`fa-solid fa-circle-check flex items-center justify-center ${className}`}></i>;
+        const HeartPulse = ({className}) => <i className={`fa-solid fa-heart-pulse flex items-center justify-center ${className}`}></i>;
+        const Home = ({className}) => <i className={`fa-solid fa-house flex items-center justify-center ${className}`}></i>;
+
+        // --- Main App Component ---
+        function App() {
+          const [currentView, setCurrentView] = useState('dashboard');
+          const [direction, setDirection] = useState('forward');
+
+          const navigateTo = (view) => {
+            if (view === 'dashboard') {
+              setDirection('backward');
+            } else {
+              setDirection('forward');
+            }
+            setCurrentView(view);
+          };
+
+          const backToPortal = () => {
+              window.location.href = 'index.html#cns';
+          };
+
+          let content;
+          if (currentView === 'anxiolytics') {
+            content = <AnxiolyticsStudyGuide onBack={() => navigateTo('dashboard')} />;
+          } else if (currentView === 'antidepressants') {
+            content = <AntidepressantsStudyGuide onBack={() => navigateTo('dashboard')} />;
+          } else if (currentView === 'epilepsy') {
+            content = <EpilepsyStudyGuide onBack={() => navigateTo('dashboard')} />;
+          } else {
+            content = <Dashboard onSelectGuide={navigateTo} onBackToPortal={backToPortal} />;
+          }
+
+          return (
+            <>
+              <div key={currentView} className={direction === 'forward' ? 'slide-forward' : 'slide-backward'}>
+                {content}
+              </div>
+              
+              {/* Persistent Watermark */}
+              <div className="fixed bottom-2 right-3 text-right text-[10px] md:text-xs text-slate-400/50 font-medium pointer-events-none z-50 select-none">
+                <div>Dr.Zeyad Robey</div>
+                <div>Ain Shams University</div>
+              </div>
+            </>
+          );
+        }
+
+        function Dashboard({ onSelectGuide, onBackToPortal }) {
+          const guides = [
+            {
+              id: 'anxiolytics',
+              title: 'Anxiolytics & Sedative-Hypnotics',
+              description: 'Pharmacology, classification, and clinical applications of CNS depressants.',
+              status: 'active',
+              icon: <Brain className="text-2xl text-blue-500" />,
+              color: 'bg-blue-50 border-blue-200'
+            },
+            {
+              id: 'antidepressants',
+              title: 'Antidepressants & Mood Stabilizers',
+              description: 'SSRIs, SNRIs, TCAs, MAOIs, mechanisms of action, and clinical guidelines.',
+              status: 'active',
+              icon: <Activity className="text-2xl text-emerald-500" />,
+              color: 'bg-emerald-50 border-emerald-200'
+            },
+            {
+              id: 'epilepsy',
+              title: 'Epilepsy & Migraines',
+              description: 'AED mechanisms, seizure classifications, status epilepticus, and migraine management.',
+              status: 'active',
+              icon: <Zap className="text-2xl text-purple-500" />,
+              color: 'bg-purple-50 border-purple-200'
+            }
+          ];
+
+          return (
+            <div className="min-h-screen bg-slate-100 font-sans text-slate-800 p-6 md:p-12">
+              <div className="max-w-6xl mx-auto space-y-8 animate-in fade-in duration-500">
+                
+                <button 
+                  onClick={onBackToPortal}
+                  className="group flex items-center gap-2 text-slate-500 hover:text-blue-600 font-bold transition-all"
+                >
+                  <Home className="group-hover:-translate-y-1 transition-transform" /> 
+                  <span className="text-sm uppercase tracking-wider">Back to CNS Module</span>
+                </button>
+
+                <header className="flex items-center justify-between pb-6 border-b border-slate-200">
+                  <div className="flex items-center gap-4">
+                    <div className="bg-blue-600 p-3 rounded-xl shadow-lg w-12 h-12 flex items-center justify-center text-white text-xl">
+                      <Library />
+                    </div>
+                    <div>
+                      <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">NeuroPharm Hub</h1>
+                      <p className="text-slate-500 font-medium mt-1">Pharmacology Subject Dashboard</p>
+                    </div>
+                  </div>
+                </header>
+
+                <main>
+                  <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+                    <BookOpen className="text-blue-600" />
+                    Available Study Modules
+                  </h2>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {guides.map((guide) => (
+                      <div 
+                        key={guide.id}
+                        onClick={() => guide.status === 'active' && onSelectGuide(guide.id)}
+                        className={`
+                          relative overflow-hidden rounded-2xl border-2 p-6 transition-all duration-300 ease-out flex flex-col h-full transform
+                          ${guide.color}
+                          ${guide.status === 'active' 
+                            ? 'cursor-pointer hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.02] hover:border-current group' 
+                            : 'opacity-75 grayscale-[0.5] cursor-not-allowed'}
+                        `}
+                      >
+                        {guide.status === 'locked' && (
+                          <div className="absolute top-4 right-4 bg-slate-200 p-2 rounded-full w-8 h-8 flex items-center justify-center">
+                            <Lock className="text-sm text-slate-500" />
+                          </div>
+                        )}
+                        
+                        <div className={`bg-white w-16 h-16 rounded-2xl shadow-sm flex items-center justify-center mb-6 shrink-0 transition-transform duration-300 ${guide.status === 'active' ? 'group-hover:scale-110 group-hover:rotate-3' : ''}`}>
+                          {guide.icon}
+                        </div>
+                        
+                        <h3 className={`text-xl font-bold mb-2 ${guide.status === 'active' ? 'text-slate-900' : 'text-slate-600'}`}>
+                          {guide.title}
+                        </h3>
+                        <p className="text-slate-600 mb-8 line-clamp-2 flex-1">
+                          {guide.description}
+                        </p>
+                        
+                        {guide.status === 'active' ? (
+                          <button className="w-full py-3 px-4 bg-white/50 hover:bg-white text-slate-800 border border-slate-300 font-semibold rounded-xl transition-all duration-200 transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 mt-auto shadow-sm">
+                            Open Review
+                          </button>
+                        ) : (
+                          <div className="w-full py-3 px-4 bg-slate-200 text-slate-500 font-semibold rounded-xl flex items-center justify-center gap-2 mt-auto">
+                            <Clock /> Coming Soon
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </main>
+              </div>
+            </div>
+          );
+        }
+
+        // ==========================================
+        // 1. ANXIOLYTICS & SEDATIVE-HYPNOTICS
+        // ==========================================
+
+        function AnxiolyticsStudyGuide({ onBack }) {
+          const [activeTab, setActiveTab] = useState('classification');
+          const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+          const tabs = [
+            { id: 'classification', label: 'Classification', icon: <List /> },
+            { id: 'receptor', label: 'GABA Receptor', icon: <Activity /> },
+            { id: 'barbiturates', label: 'Barbiturates', icon: <Zap /> },
+            { id: 'bzds', label: 'Benzodiazepines', icon: <Pill /> },
+            { id: 'alternatives', label: 'Alternative Agents', icon: <Shield /> },
+            { id: 'quiz', label: 'Flashcard Quiz', icon: <HelpCircle /> },
+            { id: 'essays', label: 'Essay Review', icon: <FileText /> },
+            { id: 'glossary', label: 'Glossary & Mnemonics', icon: <Bookmark /> },
+          ];
+
+          return (
+            <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row font-sans text-slate-800">
+              
+              {/* Mobile Header */}
+              <div className="md:hidden bg-blue-900 text-white p-4 flex justify-between items-center shadow-md z-20">
+                <div className="flex items-center gap-3">
+                  <button onClick={onBack} className="p-1 hover:bg-blue-800 rounded transition-all duration-200 active:scale-90 w-8 h-8 flex items-center justify-center group">
+                    <ArrowLeft className="transition-transform duration-300 group-hover:-translate-x-1" />
+                  </button>
+                  <div className="flex items-center gap-2 font-bold text-lg">
+                    <Brain className="text-blue-300" />
+                    <span>NeuroPharm Review</span>
+                  </div>
+                </div>
+                <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="w-8 h-8 flex items-center justify-center transition-transform duration-300 active:scale-90">
+                  <div className={`transition-transform duration-300 ${isMobileMenuOpen ? 'rotate-90 scale-110' : 'rotate-0'}`}>
+                    {isMobileMenuOpen ? <X /> : <Menu />}
+                  </div>
+                </button>
+              </div>
+
+              {/* Sidebar Navigation */}
+              <nav className={`
+                ${isMobileMenuOpen ? 'flex' : 'hidden'} 
+                md:flex flex-col w-full md:w-72 bg-blue-900 text-white shadow-xl
+                fixed md:sticky top-0 h-screen overflow-y-auto z-10 transition-all duration-300
+              `}>
+                <div className="p-4 border-b border-blue-800 flex items-center justify-between">
+                  <button 
+                    onClick={onBack}
+                    className="flex items-center gap-2 text-blue-300 hover:text-white hover:bg-blue-800 px-3 py-2 rounded-lg transition-all duration-200 transform hover:-translate-x-1 active:scale-95 text-sm font-semibold w-full group"
+                  >
+                    <ArrowLeft className="transition-transform duration-300 group-hover:-translate-x-1" /> Back to Dashboard
+                  </button>
+                </div>
+                <div className="hidden md:flex items-center gap-3 p-6 border-b border-blue-800">
+                  <Brain className="text-2xl text-blue-300" />
+                  <div>
+                    <h1 className="font-bold text-xl leading-tight">NeuroPharm</h1>
+                    <span className="text-blue-300 text-xs uppercase tracking-wider font-semibold">Study Guide</span>
+                  </div>
+                </div>
+                
+                <div className="p-4 flex-1">
+                  <p className="text-blue-400 text-xs font-bold mb-4 uppercase tracking-wider px-2">Exam Modules</p>
+                  <ul className="space-y-1">
+                    {tabs.map((tab) => (
+                      <li key={tab.id}>
+                        <button
+                          onClick={() => {
+                            setActiveTab(tab.id);
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className={`w-full flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200 transform hover:translate-x-2 active:scale-95 text-left group
+                            ${activeTab === tab.id 
+                              ? 'bg-blue-600 text-white shadow-md' 
+                              : 'text-blue-200 hover:bg-blue-800 hover:text-white'
+                            }`}
+                        >
+                          <span className={`w-5 h-5 flex items-center justify-center transition-transform duration-300 ${activeTab === tab.id ? 'scale-110' : 'group-hover:scale-110'}`}>{tab.icon}</span>
+                          <span className="font-medium">{tab.label}</span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                
+                <div className="p-4 border-t border-blue-800 text-xs text-blue-400 text-center">
+                  Comprehensive Review: Anxiolytics & Sedative-Hypnotics
+                </div>
+              </nav>
+
+              {/* Main Content Area */}
+              <main className="flex-1 p-4 md:p-8 overflow-y-auto w-full max-w-5xl mx-auto">
+                <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-10 min-h-[80vh]">
+                  {activeTab === 'classification' && <AnxClassificationView />}
+                  {activeTab === 'receptor' && <AnxReceptorView />}
+                  {activeTab === 'barbiturates' && <AnxBarbituratesView />}
+                  {activeTab === 'bzds' && <AnxBenzodiazepinesView />}
+                  {activeTab === 'alternatives' && <AnxAlternativesView />}
+                  {activeTab === 'quiz' && <AnxQuizView />}
+                  {activeTab === 'essays' && <AnxEssaysView />}
+                  {activeTab === 'glossary' && <AnxGlossaryView />}
+                </div>
+              </main>
+            </div>
+          );
+        }
+
+        function AnxClassificationView() {
+          return (
+            <div className="space-y-8 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <List className="text-blue-600 text-3xl" />
+                  I. Classification of Sedative-Hypnotic Drugs
+                </h2>
+                <p className="text-slate-600 mt-2 text-lg">
+                  Primarily utilized for the treatment of anxiety and insomnia. Classified into three major categories based on mechanism of action.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-bold text-slate-800 mb-4 bg-blue-50 p-2 rounded-md inline-block">Primary Mechanisms of Action</h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse text-left">
+                    <thead>
+                      <tr className="bg-slate-100 border-b-2 border-slate-300">
+                        <th className="p-4 font-bold text-slate-700">Category</th>
+                        <th className="p-4 font-bold text-slate-700">Drug Class / Examples</th>
+                        <th className="p-4 font-bold text-slate-700">Specific Mechanism</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-200">
+                      <tr className="hover:bg-slate-50 transition-colors">
+                        <td className="p-4 font-semibold text-blue-700">I. Facilitating GABA Action</td>
+                        <td className="p-4">Barbiturates, Benzodiazepines (BZDs), Z-hypnotics (e.g., Zolpidem), Alcohol</td>
+                        <td className="p-4">Potentiate the inhibitory neurotransmitter GABA at the GABA<sub>A</sub> receptor.</td>
+                      </tr>
+                      <tr className="hover:bg-slate-50 transition-colors">
+                        <td className="p-4 font-semibold text-blue-700">II. 5-HT₁A Agonists</td>
+                        <td className="p-4">Buspirone</td>
+                        <td className="p-4">Partial agonist at the 5-HT₁A serotonin receptor.</td>
+                      </tr>
+                      <tr className="hover:bg-slate-50 transition-colors">
+                        <td className="p-4 font-semibold text-blue-700">III. Melatonin Agonists</td>
+                        <td className="p-4">Ramelteon</td>
+                        <td className="p-4">Agonist at MT₁ and MT₂ receptors.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div className="bg-slate-100 rounded-xl p-6 border border-slate-200">
+                <h3 className="text-lg font-bold text-slate-800 mb-4 border-b border-slate-300 pb-2">Supplementary Drugs with Sedative-Hypnotic Effects</h3>
+                <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <li className="flex items-start gap-2">
+                    <span className="w-2 h-2 rounded-full bg-blue-500 mt-2 shrink-0"></span>
+                    <div>
+                      <strong className="text-slate-800">Antidepressants:</strong> Mirtazapine, Tricyclic Antidepressants (TCA) such as Amitriptyline.
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-2 h-2 rounded-full bg-blue-500 mt-2 shrink-0"></span>
+                    <div>
+                      <strong className="text-slate-800">Antipsychotics:</strong> Quetiapine, Clozapine, Olanzapine.
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-2 h-2 rounded-full bg-blue-500 mt-2 shrink-0"></span>
+                    <div>
+                      <strong className="text-slate-800">Antihistamines:</strong> Diphenhydramine.
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-2 h-2 rounded-full bg-blue-500 mt-2 shrink-0"></span>
+                    <div>
+                      <strong className="text-slate-800">Beta-Blockers:</strong> Propranolol (used to reduce tachycardia and tremors associated with anxiety).
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          );
+        }
+
+        function AnxReceptorView() {
+          return (
+            <div className="space-y-8 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <Activity className="text-indigo-600 text-3xl" />
+                  II. The GABA<sub>A</sub> Receptor-Chloride Ion Channel Complex
+                </h2>
+                <p className="text-slate-600 mt-2 text-lg">
+                  The primary target for many sedative-hypnotics. Structure is critical for distinguishing CNS interactions.
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="bg-indigo-50 rounded-xl p-6 border border-indigo-100 shadow-sm">
+                  <h3 className="text-xl font-bold text-indigo-900 mb-4">Receptor Structure</h3>
+                  <ul className="space-y-3 text-slate-700">
+                    <li><strong>Composition:</strong> A pentameric structure formed by three types of subunits: two alpha (α), two beta (β), and one gamma (γ).</li>
+                    <li><strong>GABA Binding Site:</strong> Located at the interface between the α and β subunits.</li>
+                    <li><strong>BZD Binding Site:</strong> Located on the γ subunit or an area on the α subunit regulated by γ.</li>
+                    <li><strong>Barbiturate Binding Site:</strong> Located near the chloride (Cl⁻) channel, distinct from the BZD site.</li>
+                  </ul>
+                </div>
+
+                <div className="bg-emerald-50 rounded-xl p-6 border border-emerald-100 shadow-sm">
+                  <h3 className="text-xl font-bold text-emerald-900 mb-4">Subunit Functionality</h3>
+                  <p className="text-slate-700 mb-3 italic">The specific alpha subunit determines the clinical effect:</p>
+                  <div className="space-y-4">
+                    <div className="bg-white p-3 rounded border border-emerald-200 flex items-center gap-3">
+                      <div className="bg-emerald-500 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg">α₁</div>
+                      <div>Associated with <strong className="text-emerald-800">sedation and hypnosis</strong>.</div>
+                    </div>
+                    <div className="bg-white p-3 rounded border border-emerald-200 flex items-center gap-3">
+                      <div className="bg-emerald-500 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg">α₂</div>
+                      <div>Associated with <strong className="text-emerald-800">anxiolytic and muscle relaxation</strong> actions.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-slate-800 text-white rounded-xl p-6 shadow-md mt-6">
+                <h3 className="text-xl font-bold mb-4 border-b border-slate-600 pb-2 text-blue-300">Mechanisms of Inhibition</h3>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 className="text-lg font-bold text-white flex items-center gap-2 mb-2">
+                      <Zap className="text-yellow-400" /> GABA<sub>A</sub> Receptors
+                    </h4>
+                    <p className="text-slate-300 text-sm leading-relaxed">
+                      Mediate <strong>postsynaptic neuronal inhibition</strong>. When GABA binds, it opens the Cl⁻ channel, leading to an influx of chloride ions. This causes hyperpolarization, which inhibits neuronal firing.
+                    </p>
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-bold text-white flex items-center gap-2 mb-2">
+                      <Activity className="text-green-400" /> GABA<sub>B</sub> Receptors
+                    </h4>
+                    <p className="text-slate-300 text-sm leading-relaxed">
+                      <strong>Metabotropic (G-protein linked)</strong> receptors. Provide presynaptic inhibition by inhibiting Ca²⁺ influx and postsynaptic inhibition by increasing K⁺ efflux, both leading to hyperpolarization.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        function AnxBarbituratesView() {
+          return (
+            <div className="space-y-8 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <Zap className="text-red-500 text-3xl" />
+                  III. Barbiturates: Pharmacology and Risks
+                </h2>
+                <p className="text-slate-600 mt-2 text-lg">
+                  Powerful CNS depressants largely replaced by Benzodiazepines due to high toxicity and lack of safety.
+                </p>
+              </div>
+
+              <div className="bg-red-50 border-l-4 border-red-500 p-5 rounded-r-xl">
+                <h3 className="text-xl font-bold text-red-900 mb-2">Mechanism and Effects</h3>
+                <p className="text-slate-800">
+                  Barbiturates increase the <strong>duration</strong> of GABA receptor opening, and at high concentrations, possess <strong>direct GABA-mimetic effects</strong>. They also inhibit glutamate receptors (AMPA-R) and can block sodium (Na⁺) channels.
+                </p>
+              </div>
+
+              <h3 className="text-2xl font-bold text-slate-800 mt-8 mb-4">Clinical Disadvantages</h3>
+              <div className="grid md:grid-cols-2 gap-4">
+                {[
+                  { title: "Narrow Therapeutic Index", desc: "Small margin between a therapeutic dose and a toxic dose." },
+                  { title: "No Specific Antidote", desc: "Unlike BZDs, there is no pharmacological agent to reverse barbiturate toxicity." },
+                  { title: "Enzyme Induction", desc: "They induce hepatic enzymes, leading to significant drug-drug interactions." },
+                  { title: "Acute Porphyria", desc: "Can precipitate attacks in susceptible patients by inducing ALA synthetase." }
+                ].map((item, i) => (
+                  <div key={i} className="bg-white border border-slate-200 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                    <h4 className="font-bold text-red-700 flex items-center gap-2">
+                      <X className="w-4 h-4" /> {item.title}
+                    </h4>
+                    <p className="text-slate-600 text-sm mt-1">{item.desc}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="bg-slate-100 p-6 rounded-xl border border-slate-200">
+                <h4 className="font-bold text-slate-800 mb-2">Dose-Dependent Depression Progression:</h4>
+                <div className="flex flex-wrap items-center gap-2 text-sm md:text-base font-medium text-slate-700">
+                  <span className="bg-white px-3 py-1 rounded shadow-sm">Sedation</span>
+                  <span className="text-slate-400">→</span>
+                  <span className="bg-white px-3 py-1 rounded shadow-sm">Hypnosis</span>
+                  <span className="text-slate-400">→</span>
+                  <span className="bg-white px-3 py-1 rounded shadow-sm">Anesthesia</span>
+                  <span className="text-slate-400">→</span>
+                  <span className="bg-white px-3 py-1 rounded shadow-sm border border-orange-300 text-orange-700">Coma</span>
+                  <span className="text-slate-400">→</span>
+                  <span className="bg-white px-3 py-1 rounded shadow-sm border border-red-300 text-red-700">Respiratory Depression</span>
+                  <span className="text-slate-400">→</span>
+                  <span className="bg-slate-800 px-3 py-1 rounded shadow-sm text-white">Death</span>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-bold text-slate-800 mb-4 border-b pb-2">Classification by Duration</h3>
+                <ul className="space-y-3">
+                  <li className="flex items-center gap-4 bg-white p-3 rounded border">
+                    <span className="w-24 font-bold text-slate-500 uppercase text-sm tracking-wide">Long-acting</span>
+                    <span className="font-medium text-slate-800">Phenobarbital</span>
+                    <span className="text-slate-500 text-sm italic ml-auto">(used as an antiepileptic)</span>
+                  </li>
+                  <li className="flex items-center gap-4 bg-white p-3 rounded border">
+                    <span className="w-24 font-bold text-slate-500 uppercase text-sm tracking-wide">Short-acting</span>
+                    <span className="font-medium text-slate-800">Pentobarbital, Secobarbital</span>
+                  </li>
+                  <li className="flex items-center gap-4 bg-white p-3 rounded border">
+                    <span className="w-24 font-bold text-slate-500 uppercase text-sm tracking-wide">Ultrashort</span>
+                    <span className="font-medium text-slate-800">Thiopental</span>
+                    <span className="text-slate-500 text-sm italic ml-auto">(used as an IV anesthetic)</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          );
+        }
+
+        function AnxBenzodiazepinesView() {
+          const actions = [
+            { action: "Anxiolytic", target: "Potentiates GABA in the limbic system.", uses: "Anxiety disorders, Panic disorders." },
+            { action: "Sedative/Hypnotic", target: "Potentiates GABA in the brainstem reticular formation.", uses: "Insomnia, Nightmares, Night terrors." },
+            { action: "Anesthetic", target: "Potentiates narcotics; induces amnesia.", uses: "Conscious sedation, Pre-anesthesia, Midazolam adjunct." },
+            { action: "Anticonvulsant", target: "Antiepileptic properties.", uses: "Epilepsy; Diazepam is 1st line for Status Epilepticus." },
+            { action: "Muscle Relaxant", target: "Acts at spinal/supraspinal levels.", uses: "Muscle spasticity (trauma, inflammation, CP, MS)." },
+            { action: "Withdrawal Aid", target: "Potentiates GABA to replace alcohol.", uses: "Alcohol withdrawal (Diazepam smooths withdrawal)." },
+          ];
+
+          return (
+            <div className="space-y-8 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <Pill className="text-blue-500 text-3xl" />
+                  IV. Benzodiazepines (BZDs)
+                </h2>
+                <p className="text-slate-600 mt-2 text-lg">
+                  The most widely used anxiolytics and sedative-hypnotics due to their superior safety profile compared to barbiturates.
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-4">
+                <div className="bg-blue-50 p-4 rounded-xl text-center border border-blue-100">
+                  <div className="text-xs font-bold uppercase tracking-wider text-blue-500 mb-1">Long-acting</div>
+                  <div className="text-sm text-blue-800 mb-2">&gt; 20 hours</div>
+                  <div className="font-bold text-slate-800">Diazepam (prototype)<br/>Clonazepam</div>
+                </div>
+                <div className="bg-blue-50 p-4 rounded-xl text-center border border-blue-100">
+                  <div className="text-xs font-bold uppercase tracking-wider text-blue-500 mb-1">Intermediate</div>
+                  <div className="text-sm text-blue-800 mb-2">6–20 hours</div>
+                  <div className="font-bold text-slate-800">Alprazolam<br/>Lorazepam, Bromazepam</div>
+                </div>
+                <div className="bg-blue-50 p-4 rounded-xl text-center border border-blue-100">
+                  <div className="text-xs font-bold uppercase tracking-wider text-blue-500 mb-1">Ultrashort-acting</div>
+                  <div className="text-sm text-blue-800 mb-2">&lt; 6 hours</div>
+                  <div className="font-bold text-slate-800">Midazolam</div>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-block">Pharmacological Actions and Uses</h3>
+                <div className="overflow-x-auto shadow-sm rounded-lg border border-slate-200">
+                  <table className="w-full text-left bg-white">
+                    <thead className="bg-slate-50">
+                      <tr>
+                        <th className="p-3 font-bold text-slate-700 border-b">Action</th>
+                        <th className="p-3 font-bold text-slate-700 border-b">Physiological Target</th>
+                        <th className="p-3 font-bold text-slate-700 border-b">Clinical Uses</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {actions.map((row, idx) => (
+                        <tr key={idx} className="hover:bg-blue-50/50 transition-colors">
+                          <td className="p-3 font-semibold text-blue-700 align-top">{row.action}</td>
+                          <td className="p-3 text-sm text-slate-700 align-top">{row.target}</td>
+                          <td className="p-3 text-sm text-slate-800 align-top">{row.uses}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div className="bg-orange-50 rounded-xl p-6 border border-orange-200">
+                <h3 className="text-xl font-bold text-orange-900 mb-4 flex items-center gap-2">
+                  <Shield /> Adverse Effects and Toxicity
+                </h3>
+                <ul className="space-y-3 text-slate-800">
+                  <li><strong>Side Effects:</strong> Drowsiness, confusion, anterograde amnesia, ataxia (increased fall risk in elderly), and additive CNS depression with alcohol.</li>
+                  <li><strong>Withdrawal:</strong> Can cause rebound insomnia; requires gradual tapering.</li>
+                  <li><strong>Toxicity:</strong> Usually characterized by prolonged sleep; respiratory/cardiovascular depression is rare unless combined with other depressants.</li>
+                  <li className="bg-orange-100 p-3 rounded border border-orange-300 inline-block w-full mt-2">
+                    <strong>Antidote:</strong> <span className="font-bold text-orange-800 text-lg">Flumazenil</span> (a competitive BZD receptor antagonist).
+                  </li>
+                </ul>
+              </div>
+            </div>
+          );
+        }
+
+        function AnxAlternativesView() {
+          return (
+            <div className="space-y-8 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <Shield className="text-teal-600 text-3xl" />
+                  V. Selective and Alternative Agents
+                </h2>
+                <p className="text-slate-600 mt-2 text-lg">
+                  Modern therapeutics focusing on targeted symptom relief with fewer side effects.
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-1 gap-6">
+                {/* Z-Hypnotics */}
+                <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+                  <div className="absolute top-0 right-0 bg-teal-100 text-teal-800 px-3 py-1 font-bold text-sm rounded-bl-lg">Selective Hypnotic</div>
+                  <h3 className="text-2xl font-bold text-slate-800 mb-2">Z-Hypnotics <span className="text-lg font-normal text-slate-500">(Zolpidem, Eszopiclone)</span></h3>
+                  <p className="text-slate-600 mb-4 italic">Non-BZDs that act selectively on the BZ₁ receptor (α₁ subunit) for hypnosis.</p>
+                  <div className="bg-teal-50 p-4 rounded-lg">
+                    <h4 className="font-bold text-teal-900 mb-2">Advantages over BZDs:</h4>
+                    <ul className="list-disc list-inside space-y-1 text-slate-700 text-sm">
+                      <li>Rapid onset</li>
+                      <li>Less cognitive impairment</li>
+                      <li>Less "hangover" effect</li>
+                      <li>Less suppression of REM sleep</li>
+                      <li>Lower tolerance/dependence</li>
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Ramelteon */}
+                <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+                  <div className="absolute top-0 right-0 bg-purple-100 text-purple-800 px-3 py-1 font-bold text-sm rounded-bl-lg">Melatonin Agonist</div>
+                  <h3 className="text-2xl font-bold text-slate-800 mb-2">Ramelteon</h3>
+                  <div className="space-y-3 mt-4 text-slate-700">
+                    <p><strong>Mechanism:</strong> Agonist at MT₁ and MT₂ receptors in the brain.</p>
+                    <p><strong>Use:</strong> Reduces latency to sleep; useful for patients who have difficulty falling asleep.</p>
+                    <p><strong>Safety:</strong> Minimal abuse potential; no withdrawal symptoms or rebound insomnia.</p>
+                  </div>
+                </div>
+
+                {/* Buspirone */}
+                <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+                  <div className="absolute top-0 right-0 bg-orange-100 text-orange-800 px-3 py-1 font-bold text-sm rounded-bl-lg">Selective Anxiolytic</div>
+                  <h3 className="text-2xl font-bold text-slate-800 mb-2">Buspirone</h3>
+                  <div className="space-y-3 mt-4 text-slate-700">
+                    <p><strong>Mechanism:</strong> Partial agonist at 5-HT₁A receptors.</p>
+                    <p><strong>Distinctions:</strong> Unlike BZDs, it has NO sedative, hypnotic, anticonvulsant, or muscle relaxant properties.</p>
+                    <div className="bg-orange-50 border border-orange-200 p-3 rounded text-orange-900 text-sm">
+                      <strong>Disadvantages:</strong> Delayed onset of action (2 weeks); ineffective for acute insomnia or panic attacks.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        function AnxQuizView() {
+          const [openIndex, setOpenIndex] = useState(null);
+
+          const questions = [
+            {
+              q: "How does the binding site of a barbiturate differ from that of a benzodiazepine on the GABA_A receptor?",
+              a: "Barbiturates bind near the chloride ion channel (distinct from the BZD site). The BZD site is located on the γ subunit or an area of the α subunit regulated by the γ subunit."
+            },
+            {
+              q: "Explain the functional difference between the α₁ and α₂ subunits of the GABA_A receptor.",
+              a: "The α₁ subunit is primarily associated with sedative and hypnotic effects. The α₂ subunit mediates anxiolytic and muscle relaxation actions."
+            },
+            {
+              q: "Why are benzodiazepines considered safer than barbiturates for clinical use?",
+              a: "BZDs have a much wider therapeutic index and a specific competitive antagonist (Flumazenil) for overdose. Barbiturates lack an antidote, cause direct GABA-mimetic effects, and can cause fatal respiratory depression at high doses."
+            },
+            {
+              q: "What is the clinical significance of 'enzyme induction' in the context of barbiturate use?",
+              a: "Barbiturates induce hepatic microsomal enzymes, accelerating the metabolism of themselves and co-administered drugs. This causes significant drug-drug interactions and necessitates dosage adjustments."
+            },
+            {
+              q: "Which benzodiazepine is considered the first-line treatment for Status Epilepticus?",
+              a: "Diazepam. It is valued for its rapid anticonvulsant action in emergency situations."
+            },
+            {
+              q: "Describe the 'hangover' effect associated with certain sedative-hypnotics.",
+              a: "It refers to residual drowsiness, mental impairment, and motor depression experienced the day following drug intake, occurring when a drug's effects persist beyond the intended sleep period."
+            },
+            {
+              q: "What are the specific advantages of Z-hypnotics like Zolpidem over traditional benzodiazepines?",
+              a: "More rapid onset, less suppression of REM sleep, fewer 'hangover' effects, less cognitive impairment, and a lower potential for tolerance and dependence."
+            },
+            {
+              q: "How does the onset of action for Buspirone differ from that of Benzodiazepines?",
+              a: "BZDs provide rapid relief for anxiety, while Buspirone has a significantly delayed onset, typically taking about two weeks of consistent use to achieve a therapeutic effect."
+            },
+            {
+              q: "In what clinical scenario is Ramelteon particularly useful, and why?",
+              a: "Useful for patients who have difficulty falling asleep (sleep latency) because it is a melatonin receptor agonist. It has minimal abuse potential and no rebound insomnia upon discontinuation."
+            },
+            {
+              q: "What are the symptoms of benzodiazepine withdrawal, and how can they be mitigated?",
+              a: "Symptoms include rebound insomnia, anxiety, and irritability. Mitigate by avoiding long-term use (> 4-6 weeks) and ensuring a gradual withdrawal process rather than abrupt cessation."
+            }
+          ];
+
+          return (
+            <div className="space-y-6 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <HelpCircle className="text-rose-500 text-3xl" />
+                  VI. Quick Recall Quiz
+                </h2>
+                <p className="text-slate-600 mt-2">
+                  Test your knowledge. Click on a question to reveal the answer. Active recall is the best way to memorize!
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                {questions.map((item, idx) => (
+                  <div key={idx} className="border border-slate-200 rounded-lg overflow-hidden shadow-sm hover:border-rose-300 transition-all duration-300 hover:shadow-md">
+                    <button
+                      onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
+                      className="w-full text-left p-4 bg-white hover:bg-rose-50/50 flex justify-between items-center focus:outline-none transition-colors duration-200 active:bg-rose-100/50"
+                    >
+                      <span className="font-semibold text-slate-800 pr-4">{idx + 1}. {item.q}</span>
+                      <ChevronDown className={`shrink-0 transition-transform duration-300 ${openIndex === idx ? 'rotate-180 text-rose-500' : 'text-slate-400'}`} />
+                    </button>
+                    
+                    <div className={`grid transition-all duration-300 ease-in-out ${openIndex === idx ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                      <div className="overflow-hidden">
+                        <div className="p-4 bg-rose-50 border-t border-rose-100 text-slate-700">
+                          <strong className="text-rose-800 block mb-1">Answer:</strong>
+                          {item.a}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        }
+
+        function AnxEssaysView() {
+          const [openIndex, setOpenIndex] = useState(0);
+
+          const essays = [
+            {
+              title: "Compare and contrast the mechanisms of action and pharmacological profiles of Barbiturates and Benzodiazepines.",
+              answer: "While both drug classes facilitate GABA action at the GABA_A receptor, their specific mechanisms differ significantly. BZDs increase the frequency of the chloride channel opening in the presence of GABA but do not have a direct effect on the receptor without GABA. Barbiturates increase the duration of the chloride channel opening and, at high doses, can act as direct GABA-mimetics, opening the channel even in the absence of GABA. Additionally, barbiturates inhibit AMPA-type glutamate receptors and block sodium channels, contributing to their more profound CNS depression. Pharmacologically, BZDs are safer due to their higher therapeutic index and the availability of Flumazenil as an antagonist. Barbiturates, however, are potent enzyme inducers and are contraindicated in patients with porphyria, as they can precipitate acute attacks by inducing the heme biosynthetic pathway."
+            },
+            {
+              title: "Discuss the diverse clinical applications of Benzodiazepines, linking each use to its physiological action.",
+              answer: "BZDs are highly versatile drugs. Their anxiolytic effect is achieved by potentiating GABA in the limbic system, making them effective for anxiety and panic disorders. Their sedative/hypnotic action targets the brainstem reticular formation to treat insomnia and night terrors. In anesthesia, they are used for conscious sedation and as adjuncts because they induce amnesia and potentiate narcotics (e.g., Midazolam). As anticonvulsants, they are critical for managing epilepsy and status epilepticus (e.g., Diazepam, Clonazepam). BZDs also act at the spinal and supraspinal levels as muscle relaxants for conditions like cerebral palsy or trauma-induced spasticity. Finally, they are used in alcohol withdrawal management; long-acting BZDs like Diazepam provide a smoother withdrawal process by replacing the GABA-potentiating effects of alcohol."
+            },
+            {
+              title: "Analyze the role of selective agents (Z-hypnotics, Buspirone, and Ramelteon) in modern therapy compared to traditional BZDs.",
+              answer: "Modern therapy has shifted toward selective agents to minimize the broad side effects of BZDs. Z-hypnotics (e.g., Zolpidem) are 'selective hypnotics' because they target the α₁ subunit (BZ₁ receptor), providing sleep induction with less effect on cognitive or motor functions and less REM sleep suppression compared to BZDs. Buspirone serves as a 'selective anxiolytic'; by acting as a 5-HT₁A partial agonist, it treats chronic anxiety without the sedation, muscle relaxation, or addiction risks associated with BZDs. However, its 2-week delayed onset makes it unsuitable for acute relief. Ramelteon targets the circadian rhythm via melatonin receptors (MT₁/MT₂) rather than the GABA system, offering a non-controlled substance option for sleep-onset insomnia with zero abuse potential. These agents allow clinicians to target specific symptoms while avoiding the ataxia, confusion, and dependence risks of traditional benzodiazepines."
+            }
+          ];
+
+          return (
+            <div className="space-y-6 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <FileText className="text-emerald-600 text-3xl" />
+                  VII. Essay Review
+                </h2>
+                <p className="text-slate-600 mt-2">
+                  Detailed synthesis questions for long-form exam preparation.
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-4">
+                {essays.map((essay, idx) => (
+                  <div key={idx} className={`border rounded-xl overflow-hidden transition-all duration-300 ${openIndex === idx ? 'border-emerald-300 shadow-md ring-1 ring-emerald-100' : 'border-slate-200 hover:border-emerald-200 hover:shadow-md'}`}>
+                    <button 
+                      className={`w-full text-left p-5 flex justify-between items-start gap-4 transition-colors duration-200 active:bg-emerald-100/50 ${openIndex === idx ? 'bg-emerald-50' : 'bg-white hover:bg-slate-50'}`}
+                      onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
+                    >
+                      <h3 className={`font-bold text-lg leading-snug transition-colors duration-300 ${openIndex === idx ? 'text-emerald-900' : 'text-slate-700'}`}>
+                        Essay {idx + 1}: {essay.title}
+                      </h3>
+                      <ChevronDown className={`mt-1 shrink-0 transition-transform duration-300 ${openIndex === idx ? 'rotate-180 text-emerald-600' : 'text-slate-400'}`} />
+                    </button>
+                    
+                    <div className={`grid transition-all duration-300 ease-in-out ${openIndex === idx ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                      <div className="overflow-hidden">
+                        <div className="p-6 bg-white border-t border-emerald-100 text-slate-700 leading-relaxed text-lg shadow-inner whitespace-pre-wrap">
+                          {essay.answer}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        }
+
+        function AnxGlossaryView() {
+          const terms = [
+            { term: "Anterograde Amnesia", def: "The inability to form new memories after taking a drug (a common BZD effect)." },
+            { term: "Direct GABA-mimetic", def: "The ability of barbiturates (at high doses) to open chloride channels without GABA being present." },
+            { term: "Enzyme Induction", def: "The process by which barbiturates speed up the liver's metabolism of drugs." },
+            { term: "Hyperpolarization", def: "The result of Cl⁻ influx, making a neuron less likely to fire (the goal of inhibitory receptors)." },
+            { term: "Pentamer", def: "The 5-subunit structure of the GABA_A receptor (α, α, β, β, γ)." },
+            { term: "Rebound Insomnia", def: "A worsening of sleep problems after stopping a sedative drug." },
+            { term: "Status Epilepticus", def: "A medical emergency characterized by prolonged seizures, treated first-line with Diazepam." }
+          ];
+
+          const mnemonics = [
+            { drug: "Benzodiazepines", hook: "Increase FREQUENCY of channel opening.", trigger: "Ben is Freq-y" },
+            { drug: "Barbiturates", hook: "Increase DURATION of channel opening.", trigger: "Barb is a Dura-tion" },
+            { drug: "Z-Drugs (Zolpidem)", hook: "Selective for sleep (α₁).", trigger: "Catch some Z's" },
+            { drug: "Buspirone", hook: "Anxious but not sleepy, no abuse potential.", trigger: "Always Busy but Pure" },
+            { drug: "Ramelteon", hook: "Acts on melatonin receptors.", trigger: "Rem-elteon helps you Rem-ember to sleep" }
+          ];
+
+          return (
+            <div className="space-y-8 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <Bookmark className="text-yellow-500 text-3xl" />
+                  VIII. Glossary & Mnemonics
+                </h2>
+                <p className="text-slate-600 mt-2">
+                  High-yield terms and memory hooks for quick recall.
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-8">
+                
+                {/* Golden Buzzwords */}
+                <div className="bg-yellow-50 rounded-xl p-6 border border-yellow-200 shadow-sm">
+                  <h3 className="text-xl font-bold text-yellow-900 mb-4 flex items-center gap-2">
+                    <Zap /> Golden Buzzwords
+                  </h3>
+                  <ul className="space-y-3">
+                    <li className="bg-white p-3 rounded shadow-sm border border-yellow-100">
+                      <strong className="text-yellow-700">Flumazenil:</strong> The "BZD Switch-Off" (Antagonist).
+                    </li>
+                    <li className="bg-white p-3 rounded shadow-sm border border-yellow-100">
+                      <strong className="text-yellow-700">Alpha-1 (α₁):</strong> Think "1st thing you do is sleep" (Sedation/Hypnosis).
+                    </li>
+                    <li className="bg-white p-3 rounded shadow-sm border border-yellow-100">
+                      <strong className="text-yellow-700">Alpha-2 (α₂):</strong> Think "2-fold effect" (Anxiety + Muscle relaxation).
+                    </li>
+                    <li className="bg-white p-3 rounded shadow-sm border border-yellow-100">
+                      <strong className="text-yellow-700">Narrow Therapeutic Index:</strong> The "Danger Zone" of Barbiturates.
+                    </li>
+                    <li className="bg-white p-3 rounded shadow-sm border border-yellow-100">
+                      <strong className="text-yellow-700">Two Weeks:</strong> The "Waiting Period" for Buspirone.
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Mnemonics */}
+                <div className="bg-indigo-50 rounded-xl p-6 border border-indigo-200 shadow-sm">
+                  <h3 className="text-xl font-bold text-indigo-900 mb-4 flex items-center gap-2">
+                    <Brain /> Memory Hooks
+                  </h3>
+                  <div className="space-y-3">
+                    {mnemonics.map((m, idx) => (
+                      <div key={idx} className="bg-white p-3 rounded shadow-sm border-l-4 border-indigo-500">
+                        <div className="font-bold text-indigo-900 text-lg mb-1">"{m.trigger}"</div>
+                        <div className="text-slate-700 text-sm">
+                          <span className="font-semibold">{m.drug}:</span> {m.hook}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Key Terms */}
+              <div>
+                <h3 className="text-2xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-block">Key Terms Definitions</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {terms.map((t, idx) => (
+                    <div key={idx} className="border border-slate-200 p-4 rounded-lg bg-white hover:border-blue-300 transition-colors">
+                      <h4 className="font-bold text-blue-800 mb-1">{t.term}</h4>
+                      <p className="text-slate-600 text-sm">{t.def}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+            </div>
+          );
+        }
+
+
+        // ==========================================
+        // 2. ANTIDEPRESSANTS STUDY GUIDE
+        // ==========================================
+
+        function AntidepressantsStudyGuide({ onBack }) {
+          const [activeTab, setActiveTab] = useState('classification');
+          const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+          const tabs = [
+            { id: 'classification', label: 'Classification & Theories', icon: <List /> },
+            { id: 'mechanisms', label: 'Drug Classes & Mechanisms', icon: <Activity /> },
+            { id: 'clinical', label: 'Clinical Uses & Adverse Effects', icon: <Shield /> },
+            { id: 'traps', label: 'Exam Traps & Nuances', icon: <AlertTriangle /> },
+            { id: 'rapidfire', label: 'Rapid Fire Associations', icon: <Zap /> },
+            { id: 'quiz', label: 'Flashcard Quiz', icon: <HelpCircle /> },
+            { id: 'essays', label: 'Essay Review', icon: <FileText /> },
+            { id: 'glossary', label: 'Glossary & Mnemonics', icon: <Bookmark /> },
+          ];
+
+          return (
+            <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row font-sans text-slate-800">
+              
+              {/* Mobile Header */}
+              <div className="md:hidden bg-emerald-900 text-white p-4 flex justify-between items-center shadow-md z-20">
+                <div className="flex items-center gap-3">
+                  <button onClick={onBack} className="p-1 hover:bg-emerald-800 rounded transition-all duration-200 active:scale-90 w-8 h-8 flex items-center justify-center group">
+                    <ArrowLeft className="transition-transform duration-300 group-hover:-translate-x-1" />
+                  </button>
+                  <div className="flex items-center gap-2 font-bold text-lg">
+                    <Activity className="text-emerald-300" />
+                    <span>NeuroPharm Review</span>
+                  </div>
+                </div>
+                <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="w-8 h-8 flex items-center justify-center transition-transform duration-300 active:scale-90">
+                  <div className={`transition-transform duration-300 ${isMobileMenuOpen ? 'rotate-90 scale-110' : 'rotate-0'}`}>
+                    {isMobileMenuOpen ? <X /> : <Menu />}
+                  </div>
+                </button>
+              </div>
+
+              {/* Sidebar Navigation */}
+              <nav className={`
+                ${isMobileMenuOpen ? 'flex' : 'hidden'} 
+                md:flex flex-col w-full md:w-72 bg-emerald-900 text-white shadow-xl
+                fixed md:sticky top-0 h-screen overflow-y-auto z-10 transition-all duration-300
+              `}>
+                <div className="p-4 border-b border-emerald-800 flex items-center justify-between">
+                  <button 
+                    onClick={onBack}
+                    className="flex items-center gap-2 text-emerald-300 hover:text-white hover:bg-emerald-800 px-3 py-2 rounded-lg transition-all duration-200 transform hover:-translate-x-1 active:scale-95 text-sm font-semibold w-full group"
+                  >
+                    <ArrowLeft className="transition-transform duration-300 group-hover:-translate-x-1" /> Back to Dashboard
+                  </button>
+                </div>
+                <div className="hidden md:flex items-center gap-3 p-6 border-b border-emerald-800">
+                  <Activity className="text-2xl text-emerald-300" />
+                  <div>
+                    <h1 className="font-bold text-xl leading-tight">NeuroPharm</h1>
+                    <span className="text-emerald-300 text-xs uppercase tracking-wider font-semibold">Study Guide</span>
+                  </div>
+                </div>
+                
+                <div className="p-4 flex-1">
+                  <p className="text-emerald-400 text-xs font-bold mb-4 uppercase tracking-wider px-2">Exam Modules</p>
+                  <ul className="space-y-1">
+                    {tabs.map((tab) => (
+                      <li key={tab.id}>
+                        <button
+                          onClick={() => {
+                            setActiveTab(tab.id);
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className={`w-full flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200 transform hover:translate-x-2 active:scale-95 text-left group
+                            ${activeTab === tab.id 
+                              ? 'bg-emerald-600 text-white shadow-md' 
+                              : 'text-emerald-200 hover:bg-emerald-800 hover:text-white'
+                            }`}
+                        >
+                          <span className={`w-5 h-5 flex items-center justify-center transition-transform duration-300 ${activeTab === tab.id ? 'scale-110' : 'group-hover:scale-110'}`}>{tab.icon}</span>
+                          <span className="font-medium">{tab.label}</span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                
+                <div className="p-4 border-t border-emerald-800 text-xs text-emerald-400 text-center">
+                  Comprehensive Review: Antidepressants
+                </div>
+              </nav>
+
+              {/* Main Content Area */}
+              <main className="flex-1 p-4 md:p-8 overflow-y-auto w-full max-w-5xl mx-auto">
+                <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-10 min-h-[80vh]">
+                  {activeTab === 'classification' && <AntiDepClassificationView />}
+                  {activeTab === 'mechanisms' && <AntiDepMechanismsView />}
+                  {activeTab === 'clinical' && <AntiDepClinicalView />}
+                  {activeTab === 'traps' && <AntiDepTrapsView />}
+                  {activeTab === 'rapidfire' && <AntiDepRapidFireView />}
+                  {activeTab === 'quiz' && <AntiDepQuizView />}
+                  {activeTab === 'essays' && <AntiDepEssaysView />}
+                  {activeTab === 'glossary' && <AntiDepGlossaryView />}
+                </div>
+              </main>
+            </div>
+          );
+        }
+
+        function AntiDepClassificationView() {
+          return (
+            <div className="space-y-8 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <List className="text-emerald-600 text-3xl" />
+                  I. Classification & Theories of Depression
+                </h2>
+                <p className="text-slate-600 mt-2 text-lg">
+                  Depression is defined as a mood disorder categorized into two primary types, with several underlying biochemical theories.
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="bg-emerald-50 rounded-xl p-6 border border-emerald-200">
+                  <h3 className="text-xl font-bold text-emerald-900 mb-2">Unipolar Depression</h3>
+                  <p className="text-emerald-800 text-sm font-semibold mb-3">Major Depressive Disorder</p>
+                  <ul className="space-y-2 text-slate-700">
+                    <li>Affects ~17% of the population.</li>
+                    <li>Genetically determined biochemical disorder.</li>
+                    <li>Characterized by an inability to cope with the normal stresses of life.</li>
+                  </ul>
+                </div>
+
+                <div className="bg-purple-50 rounded-xl p-6 border border-purple-200">
+                  <h3 className="text-xl font-bold text-purple-900 mb-2">Bipolar Disorder</h3>
+                  <p className="text-purple-800 text-sm font-semibold mb-3">Manic Depressive Disorder</p>
+                  <ul className="space-y-2 text-slate-700">
+                    <li>Affects ~2% of the population.</li>
+                    <li>Alternating episodes of depression and mania.</li>
+                    <li><strong>Manic symptoms:</strong> decreased need for sleep, grandiosity, euphoria, talkativeness, psychomotor agitation, potential psychotic symptoms.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="bg-slate-100 p-6 rounded-xl border border-slate-200">
+                <h3 className="text-lg font-bold text-slate-800 mb-3 flex items-center gap-2">
+                  <AlertTriangle className="text-amber-500" /> Key Symptoms of Depression
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {["Sadness", "Anhedonia (inability to feel pleasure)", "Fatigue", "Loss of libido", "Sleep disturbances", "Appetite disturbances", "Guilt", "Worthlessness", "Suicidal ideation", "Psychotic symptoms (severe cases)"].map(sym => (
+                     <span key={sym} className="bg-white px-3 py-1.5 rounded-full border border-slate-300 text-sm font-medium text-slate-700 shadow-sm">{sym}</span>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-2xl font-bold text-slate-800 mb-4 border-b pb-2">Biochemical Theories</h3>
+                
+                <div className="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl mb-4">
+                  <h4 className="text-xl font-bold text-blue-900 mb-2">Monoamine Theory</h4>
+                  <p className="text-slate-800">
+                    Proposes that a <strong>decrease in the activity of brain monoamines—Norepinephrine (NE) and Serotonin (5-HT)—results in depression</strong>, while increased activity leads to mood elevation.
+                  </p>
+                </div>
+
+                <div className="bg-white border border-slate-200 p-5 rounded-xl">
+                  <h4 className="font-bold text-slate-800 mb-3">Other Contributing Theories:</h4>
+                  <ul className="space-y-3 text-slate-700">
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="text-emerald-500 shrink-0 mt-0.5" />
+                      <span>Decreased Brain-Derived Neurotrophic Factor (BDNF).</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="text-emerald-500 shrink-0 mt-0.5" />
+                      <span>Abnormalities in the hypothalamic-pituitary-adrenal (HPA) axis (e.g., elevated cortisol).</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="text-emerald-500 shrink-0 mt-0.5" />
+                      <span>Theories involving Glutaminergic, GABAergic, and inflammatory pathways.</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        function AntiDepMechanismsView() {
+          const classes = [
+            { name: "TCAs (Tricyclics)", mechanism: "Block reuptake of 5-HT and NE; block H₁, M, and α receptors.", examples: "Imipramine, Amitriptyline, Clomipramine" },
+            { name: "SSRIs", mechanism: "Selective Serotonin Reuptake Inhibition.", examples: "Fluoxetine, Paroxetine, Sertraline" },
+            { name: "SNRIs", mechanism: "Serotonin-Norepinephrine Reuptake Inhibition.", examples: "Venlafaxine, Duloxetine" },
+            { name: "NDRI (Atypical)", mechanism: "Dopamine (DA) and NE reuptake inhibition.", examples: "Bupropion" },
+            { name: "α₂ Blockers (Atypical)", mechanism: "Block presynaptic α₂ receptors to increase NA & 5-HT release.", examples: "Mirtazapine" },
+            { name: "MAOIs", mechanism: "Inhibit metabolism of biogenic amines by MAO enzymes.", examples: "Phenelzine, Moclobemide (RIMA)" },
+          ];
+
+          return (
+            <div className="space-y-8 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <Activity className="text-blue-500 text-3xl" />
+                  II. Major Drug Classes & Mechanisms
+                </h2>
+              </div>
+
+              <div className="bg-slate-800 text-white rounded-xl p-6 shadow-md">
+                <h3 className="text-xl font-bold mb-4 border-b border-slate-600 pb-2 text-blue-300">Phases of Antidepressant Action</h3>
+                <div className="grid md:grid-cols-3 gap-6">
+                  <div className="bg-slate-700/50 p-4 rounded-lg border border-slate-600">
+                    <h4 className="text-lg font-bold text-amber-400 mb-2">1. Immediate</h4>
+                    <div className="text-xs text-slate-400 mb-2 uppercase tracking-wide">Within 12 Hours</div>
+                    <p className="text-slate-200 text-sm">Increase in brain biogenic amines in the synaptic cleft.</p>
+                  </div>
+                  <div className="bg-slate-700/50 p-4 rounded-lg border border-slate-600">
+                    <h4 className="text-lg font-bold text-blue-400 mb-2">2. Delayed</h4>
+                    <div className="text-xs text-slate-400 mb-2 uppercase tracking-wide">2 - 4 Weeks</div>
+                    <p className="text-slate-200 text-sm">Downregulation of brain β and 5-HT₂ receptors.</p>
+                  </div>
+                  <div className="bg-slate-700/50 p-4 rounded-lg border border-slate-600">
+                    <h4 className="text-lg font-bold text-emerald-400 mb-2">3. Long-term</h4>
+                    <div className="text-xs text-slate-400 mb-2 uppercase tracking-wide">Maintenance</div>
+                    <p className="text-slate-200 text-sm">Modification of neurotrophic factors essential for neuronal survival and function.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-bold text-slate-800 mb-4">Major Drug Classes</h3>
+                <div className="overflow-x-auto shadow-sm rounded-lg border border-slate-200">
+                  <table className="w-full text-left bg-white">
+                    <thead className="bg-slate-50">
+                      <tr>
+                        <th className="p-4 font-bold text-slate-700 border-b w-1/4">Class</th>
+                        <th className="p-4 font-bold text-slate-700 border-b w-2/4">Primary Mechanism</th>
+                        <th className="p-4 font-bold text-slate-700 border-b w-1/4">Representative Members</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {classes.map((row, idx) => (
+                        <tr key={idx} className="hover:bg-blue-50/30 transition-colors">
+                          <td className="p-4 font-bold text-emerald-700 align-top">{row.name}</td>
+                          <td className="p-4 text-sm text-slate-700 align-top">{row.mechanism}</td>
+                          <td className="p-4 text-sm font-medium text-slate-800 align-top italic">{row.examples}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        function AntiDepClinicalView() {
+          return (
+            <div className="space-y-8 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <Shield className="text-rose-500 text-3xl" />
+                  III. Adverse Effects & Clinical Considerations
+                </h2>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="bg-rose-50 rounded-xl p-5 border border-rose-200">
+                  <h3 className="text-lg font-bold text-rose-900 mb-3 flex items-center gap-2">
+                    <HeartPulse /> TCAs (Tricyclics)
+                  </h3>
+                  <ul className="space-y-2 text-slate-700 text-sm">
+                    <li>Notable for autonomic blockade:
+                      <ul className="list-disc list-inside ml-4 mt-1 space-y-1 text-rose-800">
+                        <li><strong>H₁:</strong> Sedation</li>
+                        <li><strong>M (Muscarinic):</strong> Dry mouth, confusion</li>
+                        <li><strong>α:</strong> Postural hypotension</li>
+                      </ul>
+                    </li>
+                    <li className="font-semibold text-red-700 mt-2">Cardiotoxic: QT prolongation.</li>
+                    <li>Low safety margin (dangerous in overdose).</li>
+                  </ul>
+                </div>
+
+                <div className="bg-blue-50 rounded-xl p-5 border border-blue-200">
+                  <h3 className="text-lg font-bold text-blue-900 mb-3 flex items-center gap-2">
+                    <Activity /> SSRIs
+                  </h3>
+                  <ul className="space-y-2 text-slate-700 text-sm">
+                    <li><strong>First-line</strong> treatment due to lack of autonomic side effects.</li>
+                    <li>Common side effects: Sexual dysfunction, nausea.</li>
+                    <li>In youth: Can cause increased suicidal tendencies.</li>
+                  </ul>
+                </div>
+
+                <div className="bg-amber-50 rounded-xl p-5 border border-amber-200">
+                  <h3 className="text-lg font-bold text-amber-900 mb-3 flex items-center gap-2">
+                    <AlertTriangle /> MAOIs
+                  </h3>
+                  <ul className="space-y-2 text-slate-700 text-sm">
+                    <li><strong>"Cheese Reaction":</strong> Hypertensive crisis when taken with tyramine-rich foods.</li>
+                    <li><strong>Serotonin Syndrome:</strong> Fatal risk when combined with SSRIs or TCAs.</li>
+                  </ul>
+                </div>
+
+                <div className="bg-purple-50 rounded-xl p-5 border border-purple-200">
+                  <h3 className="text-lg font-bold text-purple-900 mb-3 flex items-center gap-2">
+                    <Zap /> Atypical Agents
+                  </h3>
+                  <ul className="space-y-2 text-slate-700 text-sm">
+                    <li><strong>Bupropion:</strong> Used for smoking cessation. Lacks sexual side effects, but increases seizure risk.</li>
+                    <li><strong>Mirtazapine:</strong> Causes weight gain and sedation, but has rapid effects and antiemetic properties.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="bg-slate-100 p-6 rounded-xl border border-slate-200">
+                <h3 className="text-xl font-bold text-slate-800 mb-4 border-b border-slate-300 pb-2">Therapeutic Uses & Guidelines</h3>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 className="font-bold text-emerald-800 mb-2">Psychiatric Indications:</h4>
+                    <ul className="list-disc list-inside space-y-1 text-slate-700 text-sm">
+                      <li>Major Depressive Disorder (MDD)</li>
+                      <li>Anxiety (GAD, OCD, Phobias)</li>
+                      <li>PTSD</li>
+                      <li>Eating Disorders</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-emerald-800 mb-2">Non-Psychiatric Indications:</h4>
+                    <ul className="list-disc list-inside space-y-1 text-slate-700 text-sm">
+                      <li>Neuropathic pain (Amitriptyline, Duloxetine)</li>
+                      <li>Nocturnal enuresis (Imipramine)</li>
+                      <li>Smoking cessation (Bupropion)</li>
+                      <li>Migraine prophylaxis</li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="mt-4 bg-white p-3 rounded border border-slate-300 text-sm text-slate-700 font-medium flex flex-wrap gap-4">
+                  <span className="flex items-center gap-1"><Clock className="text-blue-500" /> Effect is delayed 2-4 weeks.</span>
+                  <span className="flex items-center gap-1"><CheckCircle className="text-emerald-500" /> Continue 6 months post-remission.</span>
+                  <span className="flex items-center gap-1"><AlertTriangle className="text-amber-500" /> Withdraw gradually (over 4 weeks).</span>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        function AntiDepTrapsView() {
+          const traps = [
+            {
+              title: "The 4-Week Efficacy Paradox",
+              context: "Biochemical effect (blocking reuptake) happens in hours, but clinical effect (mood elevation) takes 2-4 weeks.",
+              pathway: "↑ Synaptic amines → gradual down-regulation of β and 5-HT₂ receptors → ↑ Brain Derived Neurotrophic Factor (BDNF) → clinical improvement.",
+              trap: "If a scenario features a patient complaining the drug 'isn't working' after 1 week, the correct action is to wait and continue therapy, not increase the dose or switch drugs.",
+              color: "emerald"
+            },
+            {
+              title: "TCA Toxicity: The '3 Receptor' Rule",
+              context: "TCAs non-selectively block 3 distinct autonomic targets: M (Muscarinic) Blockade (Dry mouth, blurred vision, tachycardia, urine retention), H₁ (Histamine) Blockade (Severe sedation and massive weight gain), and α₁ (Adrenergic) Blockade (Postural hypotension and reflex tachycardia).",
+              trap: "The actual cause of death in TCA overdose is blockade of cardiac sodium channels → prolonged QT interval and fatal arrhythmias.",
+              color: "rose"
+            },
+            {
+              title: "Bupropion vs. SSRIs: Sexual Function",
+              context: "SSRIs cause high rates of sexual dysfunction due to excess serotonin. Bupropion is an NDRI (acts solely on Dopamine and Norepinephrine, completely ignoring serotonin).",
+              trap: "Bupropion is the perfect switch for a patient with SSRI-induced sexual dysfunction, but carries an absolute contraindication for patients with a seizure history (↑ convulsion risk).",
+              color: "blue"
+            },
+            {
+              title: "Mirtazapine's Paradoxical Profile",
+              context: "Blocks presynaptic α₂ receptors → removes negative feedback 'brakes' → massive NE and 5-HT release. Blocks 5-HT₃ receptors → potent antiemetic.",
+              trap: "Because it heavily blocks H₁ receptors, it causes intense sedation and weight gain. Ideal for depressed patients with insomnia and severe weight loss, but contraindicated for obese/lethargic patients.",
+              color: "purple"
+            },
+            {
+              title: "The Cheese Reaction Mechanism",
+              context: "Non-selective MAOIs (Tranylcypromine) irreversibly destroy gut MAO. Tyramine (from aged cheese/wine) survives the gut → enters circulation → displaces massive amounts of NE from nerve terminals.",
+              trap: "Moclobemide (RIMA) avoids this. It is a reversible inhibitor, meaning dietary tyramine safely outcompetes the drug, allowing gut MAO to break the tyramine down.",
+              color: "amber"
+            },
+            {
+              title: "The Serotonin Syndrome Combination",
+              context: "Combining an MAOI with 5-HT elevating drugs (SSRIs, TCAs, or even Tramadol/Pethidine) leads to toxic serotonin accumulation. Symptoms: Tachycardia, hyperthermia, muscle rigidity, convulsions, coma.",
+              trap: "You MUST enforce a 'Washout Period' of at least 2 weeks between stopping an MAOI and starting an SSRI. If the patient was on Fluoxetine, the washout must be 5 weeks due to its extremely long half-life.",
+              color: "red"
+            }
+          ];
+
+          return (
+            <div className="space-y-8 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <AlertTriangle className="text-amber-500 text-3xl" />
+                  Quick Exam Revision: The Trickiest Parts
+                </h2>
+                <p className="text-slate-600 mt-2 text-lg">
+                  High-yield paradoxes, clinical traps, and highly-tested nuances.
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                {traps.map((item, idx) => (
+                  <div key={idx} className={`bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm flex flex-col`}>
+                    <div className={`bg-${item.color}-50 border-b border-${item.color}-100 p-4`}>
+                      <h3 className={`text-xl font-bold text-${item.color}-900`}>{item.title}</h3>
+                    </div>
+                    <div className="p-4 flex-1 flex flex-col gap-3">
+                      <p className="text-slate-700 text-sm leading-relaxed">{item.context}</p>
+                      {item.pathway && (
+                        <div className="bg-slate-50 p-2 rounded text-xs text-slate-600 border border-slate-200 font-mono">
+                          {item.pathway}
+                        </div>
+                      )}
+                      <div className="mt-auto pt-3">
+                        <div className={`bg-${item.color}-100/50 border-l-4 border-${item.color}-500 p-3 rounded-r`}>
+                          <strong className={`text-${item.color}-800 block text-sm uppercase tracking-wider mb-1 flex items-center gap-1`}>
+                            <Zap className="text-xs" /> Exam Trap
+                          </strong>
+                          <p className={`text-${item.color}-900 text-sm font-medium`}>{item.trap}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="bg-slate-800 text-white p-6 rounded-xl shadow-md">
+                <h3 className="text-xl font-bold mb-4 border-b border-slate-600 pb-2 text-emerald-300">Non-Psychiatric Uses of Antidepressants</h3>
+                <p className="text-slate-300 mb-4 text-sm italic">The exam loves to test these drugs outside of major depressive disorder.</p>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="bg-slate-700/50 p-4 rounded-lg border border-slate-600">
+                    <h4 className="font-bold text-blue-400 mb-1">Nocturnal Enuresis (bedwetting)</h4>
+                    <p className="text-slate-200 text-sm"><strong className="text-white">Imipramine:</strong> Its anticholinergic effect violently contracts the internal urethral sphincter.</p>
+                  </div>
+                  <div className="bg-slate-700/50 p-4 rounded-lg border border-slate-600">
+                    <h4 className="font-bold text-purple-400 mb-1">Neuropathic Pain & Migraines</h4>
+                    <p className="text-slate-200 text-sm"><strong className="text-white">Amitriptyline:</strong> Often used at doses lower than those needed for depression.</p>
+                  </div>
+                  <div className="bg-slate-700/50 p-4 rounded-lg border border-slate-600">
+                    <h4 className="font-bold text-orange-400 mb-1">Smoking Cessation</h4>
+                    <p className="text-slate-200 text-sm"><strong className="text-white">Bupropion:</strong> ↑ dopamine in the reward pathway significantly reduces cravings.</p>
+                  </div>
+                  <div className="bg-slate-700/50 p-4 rounded-lg border border-slate-600">
+                    <h4 className="font-bold text-teal-400 mb-1">SNRI Specifics</h4>
+                    <ul className="text-slate-200 text-sm space-y-1">
+                      <li><strong className="text-white">Duloxetine:</strong> Stress Urinary Incontinence (SUI) & neuropathic pain.</li>
+                      <li><strong className="text-white">Venlafaxine:</strong> Uniquely causes dose-dependent hypertension.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        function AntiDepRapidFireView() {
+          const generalRules = [
+            { hook: "Patient expects immediate relief or wants to quit after 1 week.", think: "Antidepressant effects are delayed for 2-4 weeks; treatment must continue for a full 4 weeks before being considered unsuccessful." },
+            { hook: "Patient wants to stop medication.", think: "Be careful of 'Withdrawal syndrome.' You must gradually withdraw the drug over 4 weeks." },
+            { hook: "Patient's depression is resistant to initial therapy.", think: "Switch to a different class, use combination therapy (e.g., SSRI + SNRI), or add an atypical antipsychotic, Lithium, or T3." }
+          ];
+
+          const drugHooks = [
+            { hook: "First-line therapy for depression.", think: "SSRIs (e.g., Fluoxetine, Paroxetine). They lack autonomic side effects and have less cardiotoxicity." },
+            { hook: "Patient wants to quit smoking.", think: "Bupropion." },
+            { hook: "Depression + Insomnia + Severe weight loss.", think: "Mirtazapine. It is an H1 antagonist that causes sedation and weight gain." },
+            { hook: "Nocturnal enuresis (bedwetting).", think: "Imipramine (a TCA), because its anticholinergic effect contracts the urethral sphincter." },
+            { hook: "Chronic neuropathic pain or Migraine prophylaxis.", think: "Amitriptyline or Duloxetine." },
+            { hook: "Stress Urinary Incontinence (loss of urine when laughing/sneezing).", think: "Duloxetine." }
+          ];
+
+          const precautions = [
+            { title: "The Cheese Reaction (Hypertensive Crisis)", trigger: "A patient on MAOIs who eats tyramine-rich foods (old cheese, chicken liver, chocolate) or takes cold remedies (sympathomimetics)." },
+            { title: "Serotonin Syndrome", trigger: "Combining MAOIs with SSRIs, TCAs, Tramadol, or Pethidine.", presentation: "Tachycardia, hyperthermia, agitation, confusion, rigidity, and convulsions." },
+            { title: "Washout Period", trigger: "Switching a patient from an MAOI to another drug. You MUST wait 2 weeks before starting a TCA or SSRI because the MAOI effect persists." },
+            { title: "History of Seizures", trigger: "Do NOT prescribe Bupropion, as it increases the risk of convulsions." },
+            { title: "Sexual Dysfunction", trigger: "Common side effect of SSRIs, SNRIs, and TCAs.", solution: "Replace with an atypical antidepressant like Bupropion or Mirtazapine, which do not cause sexual dysfunction." },
+            { title: "Cardiotoxicity (Prolonged QT)", trigger: "Think TCAs; they have a low safety margin and can cause fatal arrhythmias. (Note: The SSRI Citalopram can also increase the QT interval)." },
+            { title: "Autonomic Blockade / Atropine-like actions", trigger: "TCAs cause H1, M, and Alpha blockade, leading to sedation, dry mouth, confusion, and postural hypotension. They must be used cautiously in the elderly." }
+          ];
+
+          return (
+            <div className="space-y-8 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <Zap className="text-purple-500 text-3xl" />
+                  Rapid Fire: "If you see this, think that"
+                </h2>
+                <p className="text-slate-600 mt-2 text-lg">
+                  High-yield clinical associations and management rules of thumb.
+                </p>
+              </div>
+
+              {/* General Rules */}
+              <div>
+                <h3 className="text-xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
+                  <BookOpen className="text-blue-600"/> 1. General Management Rules
+                </h3>
+                <div className="grid gap-4 md:grid-cols-3">
+                  {generalRules.map((rule, idx) => (
+                    <div key={idx} className="bg-blue-50 border border-blue-200 p-5 rounded-xl shadow-sm">
+                      <strong className="text-blue-900 block mb-2 pb-2 border-b border-blue-200">
+                        <span className="text-blue-600 mr-2">IF YOU SEE:</span>{rule.hook}
+                      </strong>
+                      <p className="text-slate-700 text-sm">
+                        <span className="font-bold text-emerald-600 mr-1">THINK:</span>{rule.think}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Drug Hooks */}
+              <div>
+                <h3 className="text-xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
+                  <Pill className="text-emerald-600"/> 2. Drug-Specific Hooks
+                </h3>
+                <div className="grid gap-3 md:grid-cols-2">
+                  {drugHooks.map((hook, idx) => (
+                    <div key={idx} className="bg-white border border-slate-200 p-4 rounded-lg shadow-sm flex flex-col justify-center">
+                      <div className="flex gap-2 mb-2">
+                        <span className="bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider shrink-0">Hook</span>
+                        <span className="font-semibold text-slate-800">{hook.hook}</span>
+                      </div>
+                      <div className="flex gap-2">
+                        <span className="bg-emerald-100 text-emerald-800 text-xs font-bold px-2 py-1 rounded uppercase tracking-wider shrink-0">Think</span>
+                        <span className="text-slate-600 text-sm">{hook.think}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Precautions */}
+              <div>
+                <h3 className="text-xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
+                  <Shield className="text-rose-600"/> 3. "Be Careful Of" (Precautions)
+                </h3>
+                <div className="space-y-4">
+                  {precautions.map((prec, idx) => (
+                    <div key={idx} className="bg-rose-50 border border-rose-200 rounded-xl overflow-hidden shadow-sm">
+                      <div className="bg-rose-100 px-4 py-2 border-b border-rose-200">
+                        <h4 className="font-bold text-rose-900 flex items-center gap-2">
+                          <AlertTriangle className="text-rose-600 text-sm" /> 
+                          {prec.title}
+                        </h4>
+                      </div>
+                      <div className="p-4 space-y-2">
+                        <p className="text-sm text-slate-800"><strong className="text-rose-700">Trigger:</strong> {prec.trigger}</p>
+                        {prec.presentation && <p className="text-sm text-slate-800"><strong className="text-purple-700">Presentation:</strong> {prec.presentation}</p>}
+                        {prec.solution && <p className="text-sm text-slate-800"><strong className="text-emerald-700">Solution:</strong> {prec.solution}</p>}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+            </div>
+          );
+        }
+
+        function AntiDepQuizView() {
+          const [openIndex, setOpenIndex] = useState(null);
+
+          const questions = [
+            {
+              q: "What is the 'Monoamine Theory' of depression?",
+              a: "It suggests depression is caused by decreased activity of brain neurotransmitters (NE and 5-HT). Antidepressants work by increasing the concentration of these monoamines in the synaptic cleft to elevate mood."
+            },
+            {
+              q: "Why are Tricyclic Antidepressants (TCAs) used cautiously in elderly patients?",
+              a: "TCAs cause autonomic blockade leading to postural hypotension (fall risk), sedation, and atropine-like effects (confusion/dry mouth). They are also cardiotoxic, potentially causing arrhythmias."
+            },
+            {
+              q: "Explain the 'Cheese Reaction' associated with MAOIs.",
+              a: "It occurs when MAOIs prevent the breakdown of tyramine in foods like aged cheese. This leads to the release of massive amounts of catecholamines, resulting in a life-threatening hypertensive crisis."
+            },
+            {
+              q: "How does Moclobemide differ from non-selective MAOIs?",
+              a: "Moclobemide is a Reversible Inhibitor of MAO-A (RIMA). It has a reduced risk of the cheese reaction because it is selective for MAO-A and is easily displaced by tyramine if levels rise."
+            },
+            {
+              q: "What are the specific advantages of Bupropion over SSRIs?",
+              a: "Bupropion does not cause sexual dysfunction. Additionally, it increases NE/DA levels, which helps decrease cravings in patients undergoing smoking cessation."
+            },
+            {
+              q: "Describe the mechanism and benefits of Mirtazapine.",
+              a: "It acts as a presynaptic α₂ blocker, increasing the release of NA and 5-HT. It provides a more rapid effect with less nausea and sexual dysfunction than SSRIs, and its H₁ antagonism provides sedative/antiemetic benefits."
+            },
+            {
+              q: "What is the management protocol for antidepressant-induced sexual dysfunction?",
+              a: "Management includes reducing the dose, taking a 'drug holiday', treating with sildenafil (Viagra), or replacing the medication with atypical antidepressants like Mirtazapine or Bupropion."
+            },
+            {
+              q: "Why is there a delay of 2-4 weeks before antidepressants show clinical efficacy?",
+              a: "While biogenic amines increase within 12 hours, therapeutic effect requires the downregulation of brain β and 5-HT₂ receptors, and modification of neurotrophic factors, which takes 2-4 weeks."
+            },
+            {
+              q: "What are the signs of Serotonin Syndrome, and what causes it?",
+              a: "Signs include tachycardia, hyperthermia, agitation, confusion, rigidity, and convulsions. It is caused by drug interactions that excessively increase 5-HT (e.g., combining MAOIs with SSRIs, TCAs, or Pethidine)."
+            },
+            {
+              q: "How does Imipramine assist in treating nocturnal enuresis?",
+              a: "It works due to its anticholinergic (muscarinic blockade) properties, which cause the contraction of the urethral sphincter, helping to prevent involuntary urination at night."
+            }
+          ];
+
+          return (
+            <div className="space-y-6 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <HelpCircle className="text-orange-500 text-3xl" />
+                  IV. Flashcard Quiz
+                </h2>
+                <p className="text-slate-600 mt-2">
+                  Test your knowledge. Click on a question to reveal the answer. Active recall is the best way to memorize!
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                {questions.map((item, idx) => (
+                  <div key={idx} className="border border-slate-200 rounded-lg overflow-hidden shadow-sm hover:border-orange-300 transition-all duration-300 hover:shadow-md">
+                    <button
+                      onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
+                      className="w-full text-left p-4 bg-white hover:bg-orange-50/50 flex justify-between items-center focus:outline-none transition-colors duration-200 active:bg-orange-100/50"
+                    >
+                      <span className="font-semibold text-slate-800 pr-4">{idx + 1}. {item.q}</span>
+                      <ChevronDown className={`shrink-0 transition-transform duration-300 ${openIndex === idx ? 'rotate-180 text-orange-500' : 'text-slate-400'}`} />
+                    </button>
+                    
+                    <div className={`grid transition-all duration-300 ease-in-out ${openIndex === idx ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                      <div className="overflow-hidden">
+                        <div className="p-4 bg-orange-50 border-t border-orange-100 text-slate-700">
+                          <strong className="text-orange-800 block mb-1">Answer:</strong>
+                          {item.a}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        }
+
+        function AntiDepEssaysView() {
+          const [openIndex, setOpenIndex] = useState(0);
+
+          const essays = [
+            {
+              title: "Compare the side effect profiles of TCAs and SSRIs. Explain the pharmacological rationale for why SSRIs have replaced TCAs as first-line therapy.",
+              answer: "TCAs block autonomic receptors non-selectively, causing muscarinic blockade (dry mouth, blurred vision, urine retention), H₁ blockade (sedation, weight gain), and α₁ blockade (postural hypotension). Most dangerously, TCAs block cardiac sodium channels, leading to QT prolongation and fatal arrhythmias in overdose. SSRIs (e.g., Fluoxetine, Paroxetine) lack these autonomic and cardiac receptor affinities, making them vastly safer in overdose (wider therapeutic index). While SSRIs cause GI upset, sexual dysfunction, and sleep disturbances, their lack of cardiotoxicity and lethality makes them the preferred first-line agents."
+            },
+            {
+              title: "Explain the pathophysiological mechanism of the 'Cheese Reaction'. Detail the biochemical difference that makes Moclobemide safer than Tranylcypromine.",
+              answer: "The 'Cheese Reaction' occurs when a patient on non-selective, irreversible MAOIs (like Tranylcypromine) ingests tyramine-rich foods (aged cheese). The MAOI prevents tyramine degradation in the GI tract. Tyramine enters systemic circulation, displacing massive amounts of norepinephrine from sympathetic nerve terminals, precipitating a fatal hypertensive crisis. Moclobemide is a Reversible Inhibitor of MAO-A (RIMA). Because it is reversible, high dietary tyramine can competitively displace Moclobemide from the MAO enzyme, allowing the tyramine to be safely metabolized and preventing the hypertensive crisis."
+            },
+            {
+              title: "Describe the chronological timeline of antidepressant efficacy. How does this dictate clinical management?",
+              answer: "The immediate biochemical phase (within hours) involves the blockade of amine reuptake pumps or MAO inhibition, immediately increasing synaptic levels of NE and 5-HT. However, the delayed clinical phase (mood elevation) requires 2 to 4 weeks. This delay is attributed to the required gradual down-regulation of post-synaptic β and 5-HT₂ receptors, which subsequently alters gene expression to increase Brain Derived Neurotrophic Factor (BDNF). Clinically, this means a physician must wait a full 4 weeks before deeming an initial antidepressant trial unsuccessful before adjusting the dose or switching classes."
+            },
+            {
+              title: "Contrast the specific mechanisms of action, primary clinical advantages, and major contraindications of Bupropion versus Mirtazapine.",
+              answer: "• Bupropion: An NDRI (Norepinephrine-Dopamine Reuptake Inhibitor). Its advantage is a complete lack of serotonergic activity, meaning it causes no sexual dysfunction; it is also highly effective for smoking cessation. Its major contraindication is a history of seizures, as it lowers the convulsion threshold.\n\n• Mirtazapine: An α₂ presynaptic antagonist (increases NE/5-HT release), an H₁ antagonist, and a 5-HT₃ antagonist. Its advantages include potent antiemetic effects and utility in depressed patients with severe insomnia and anorexia. Its major drawback/contraindication is in obese or hypersomnolent patients due to extreme weight gain and sedation from H₁ blockade."
+            },
+            {
+              title: "Define Serotonin Syndrome. List the offending drug classes, manifestations, and explain the 'Washout Period'.",
+              answer: "Serotonin Syndrome is a life-threatening hyper-metabolic state caused by toxic accumulation of serotonin in the CNS. It is typically precipitated by combining MAOIs with other serotonergic drugs like SSRIs, TCAs, SNRIs, or specific opioids (Tramadol, Pethidine). Clinical manifestations include hyperthermia, tachycardia, extreme muscle rigidity, tremors, and convulsions. To prevent this, a strict 'Washout Period' of at least 2 weeks is mandatory between discontinuing an MAOI and initiating an SSRI (extended to 5 weeks for Fluoxetine due to its exceptionally long half-life) to allow clearance of the drugs and regeneration of MAO enzymes."
+            }
+          ];
+
+          return (
+            <div className="space-y-6 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <FileText className="text-indigo-600 text-3xl" />
+                  V. Essay Review
+                </h2>
+                <p className="text-slate-600 mt-2">
+                  Detailed synthesis questions for long-form exam preparation.
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-4">
+                {essays.map((essay, idx) => (
+                  <div key={idx} className={`border rounded-xl overflow-hidden transition-all duration-300 ${openIndex === idx ? 'border-indigo-300 shadow-md ring-1 ring-indigo-100' : 'border-slate-200 hover:border-indigo-200 hover:shadow-md'}`}>
+                    <button 
+                      className={`w-full text-left p-5 flex justify-between items-start gap-4 transition-colors duration-200 active:bg-indigo-100/50 ${openIndex === idx ? 'bg-indigo-50' : 'bg-white hover:bg-slate-50'}`}
+                      onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
+                    >
+                      <h3 className={`font-bold text-lg leading-snug transition-colors duration-300 ${openIndex === idx ? 'text-indigo-900' : 'text-slate-700'}`}>
+                        Essay {idx + 1}: {essay.title}
+                      </h3>
+                      <ChevronDown className={`mt-1 shrink-0 transition-transform duration-300 ${openIndex === idx ? 'rotate-180 text-indigo-600' : 'text-slate-400'}`} />
+                    </button>
+                    
+                    <div className={`grid transition-all duration-300 ease-in-out ${openIndex === idx ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                      <div className="overflow-hidden">
+                        <div className="p-6 bg-white border-t border-indigo-100 text-slate-700 leading-relaxed text-lg shadow-inner whitespace-pre-wrap">
+                          {essay.answer}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        }
+
+        function AntiDepGlossaryView() {
+          const buzzwords = [
+            { hook: "Monoamine Theory", details: "↓ NE, ↓ 5-HT, immediate synaptic increase, delayed receptor down-regulation." },
+            { hook: "TCAs", details: "Imipramine, Amitriptyline, non-selective reuptake block, M / H₁ / α₁ blockade, prolonged QT, lethal arrhythmias." },
+            { hook: "SSRIs", details: "Fluoxetine, Paroxetine, first-line, safe cardiac profile, sexual dysfunction, CYP2D6 inhibitors." },
+            { hook: "SNRIs", details: "Venlafaxine, Duloxetine, dose-dependent hypertension, stress urinary incontinence." },
+            { hook: "Bupropion", details: "NDRI, dopamine increase, smoking cessation, seizure risk, preserved sexual function." },
+            { hook: "Mirtazapine", details: "α₂ presynaptic antagonist, H₁ blocker, 5-HT₃ antagonist, sedation, extreme weight gain, antiemetic." },
+            { hook: "Moclobemide", details: "RIMA, reversible MAO-A inhibitor, tyramine displacement, safe cheese profile." },
+            { hook: "Cheese Reaction", details: "Tyramine, aged cheese, non-selective MAOIs, catecholamine surge, fatal hypertensive crisis." },
+            { hook: "Serotonin Syndrome", details: "MAOIs + SSRIs, hyperthermia, muscle rigidity, convulsions, washout period." }
+          ];
+
+          const terms = [
+            { term: "Anhedonia", def: "The inability to experience pleasure; a core symptom of depression." },
+            { term: "Atropine-like actions", def: "Side effects resulting from muscarinic (M) receptor blockade, including dry mouth, blurred vision, and confusion." },
+            { term: "Biogenic Amines", def: "Neurotransmitters such as Norepinephrine, Serotonin, and Dopamine." },
+            { term: "Cheese Reaction", def: "A hypertensive crisis caused by the interaction between MAOIs and tyramine-rich foods." },
+            { term: "Drug Holiday", def: "A brief, supervised break from medication used to manage side effects like sexual dysfunction." },
+            { term: "RIMA", def: "Reversible Inhibitor of MAO-A (e.g., Moclobemide)." },
+            { term: "Washout Period", def: "The necessary 2-week interval between stopping an MAOI and starting an SSRI/TCA to avoid Serotonin Syndrome." }
+          ];
+
+          return (
+            <div className="space-y-8 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <Bookmark className="text-yellow-500 text-3xl" />
+                  VI. Glossary, Buzzwords & Mnemonics
+                </h2>
+              </div>
+
+              {/* Key Buzzwords */}
+              <div>
+                <h3 className="text-xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
+                  <Activity className="text-emerald-600"/> High-Yield Buzzword Hooks
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {buzzwords.map((item, idx) => (
+                    <div key={idx} className="bg-white border border-slate-200 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow hover:border-emerald-300">
+                      <strong className="text-emerald-800 block mb-1 text-lg">{item.hook}</strong>
+                      <p className="text-slate-600 text-sm">{item.details}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-8 pt-4 border-t border-slate-200">
+                {/* Mnemonics */}
+                <div className="bg-emerald-50 rounded-xl p-6 border border-emerald-200 shadow-sm">
+                  <h3 className="text-xl font-bold text-emerald-900 mb-4 flex items-center gap-2">
+                    <Brain /> High-Yield Mnemonics
+                  </h3>
+                  <div className="space-y-4">
+                    <div className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-emerald-500">
+                      <div className="font-bold text-emerald-900 text-lg mb-2">The "3 A's" of Mirtazapine</div>
+                      <ul className="text-slate-700 text-sm list-disc list-inside">
+                        <li><strong className="text-slate-900">A</strong>lpha-2 blocker</li>
+                        <li><strong className="text-slate-900">A</strong>ppetite stimulant (weight gain)</li>
+                        <li><strong className="text-slate-900">A</strong>ntiemetic</li>
+                      </ul>
+                    </div>
+
+                    <div className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-rose-500">
+                      <div className="font-bold text-rose-900 text-lg mb-2">TCA Autonomic Blockade (HAM)</div>
+                      <ul className="text-slate-700 text-sm space-y-1">
+                        <li><strong className="text-slate-900">H</strong>istamine (H₁) → Sedation/Weight gain</li>
+                        <li><strong className="text-slate-900">A</strong>lpha (α) → Postural hypotension</li>
+                        <li><strong className="text-slate-900">M</strong>uscarinic (M) → Atropine-like effects (Dry mouth/Confusion)</li>
+                      </ul>
+                    </div>
+
+                    <div className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-blue-500">
+                      <div className="font-bold text-blue-900 text-lg mb-2">SSRI "S" Side Effects</div>
+                      <ul className="text-slate-700 text-sm list-disc list-inside">
+                        <li><strong className="text-slate-900">S</strong>exual dysfunction</li>
+                        <li><strong className="text-slate-900">S</strong>uicidal tendency (in youth)</li>
+                        <li><strong className="text-slate-900">S</strong>erotonin Syndrome (if mixed with MAOIs)</li>
+                      </ul>
+                    </div>
+                    
+                    <div className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-purple-500">
+                      <div className="font-bold text-purple-900 text-lg mb-1">TCA Cardiotoxicity = "QT"</div>
+                      <p className="text-slate-700 text-sm">TCAs increase the QT interval, leading to arrhythmias.</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Key Terms */}
+                <div>
+                  <h3 className="text-xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
+                    <List className="text-slate-600"/> Key Terms Definitions
+                  </h3>
+                  <div className="flex flex-col gap-3">
+                    {terms.map((t, idx) => (
+                      <div key={idx} className="border border-slate-200 p-3 rounded-lg bg-white hover:border-emerald-300 transition-colors">
+                        <h4 className="font-bold text-emerald-800 mb-1">{t.term}</h4>
+                        <p className="text-slate-600 text-sm">{t.def}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          );
+        }
+
+        // ==========================================
+        // 3. EPILEPSY & MIGRAINES STUDY GUIDE
+        // ==========================================
+
+        function EpilepsyStudyGuide({ onBack }) {
+          const [activeTab, setActiveTab] = useState('classification');
+          const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+          const tabs = [
+            { id: 'classification', label: 'Etiology & Classification', icon: <List /> },
+            { id: 'mechanisms', label: 'AED Mechanisms', icon: <Activity /> },
+            { id: 'clinical', label: 'Clinical Choice & Migraine', icon: <Shield /> },
+            { id: 'traps', label: 'Exam Traps & Nuances', icon: <AlertTriangle /> },
+            { id: 'rapidfire', label: 'Rapid Fire Associations', icon: <Zap /> },
+            { id: 'quiz', label: 'Flashcard Quiz', icon: <HelpCircle /> },
+            { id: 'essays', label: 'Essay Review', icon: <FileText /> },
+            { id: 'glossary', label: 'Glossary & Mnemonics', icon: <Bookmark /> },
+          ];
+
+          return (
+            <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row font-sans text-slate-800">
+              
+              {/* Mobile Header */}
+              <div className="md:hidden bg-purple-900 text-white p-4 flex justify-between items-center shadow-md z-20">
+                <div className="flex items-center gap-3">
+                  <button onClick={onBack} className="p-1 hover:bg-purple-800 rounded transition-all duration-200 active:scale-90 w-8 h-8 flex items-center justify-center group">
+                    <ArrowLeft className="transition-transform duration-300 group-hover:-translate-x-1" />
+                  </button>
+                  <div className="flex items-center gap-2 font-bold text-lg">
+                    <Zap className="text-purple-300" />
+                    <span>NeuroPharm Review</span>
+                  </div>
+                </div>
+                <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="w-8 h-8 flex items-center justify-center transition-transform duration-300 active:scale-90">
+                  <div className={`transition-transform duration-300 ${isMobileMenuOpen ? 'rotate-90 scale-110' : 'rotate-0'}`}>
+                    {isMobileMenuOpen ? <X /> : <Menu />}
+                  </div>
+                </button>
+              </div>
+
+              {/* Sidebar Navigation */}
+              <nav className={`
+                ${isMobileMenuOpen ? 'flex' : 'hidden'} 
+                md:flex flex-col w-full md:w-72 bg-purple-900 text-white shadow-xl
+                fixed md:sticky top-0 h-screen overflow-y-auto z-10 transition-all duration-300
+              `}>
+                <div className="p-4 border-b border-purple-800 flex items-center justify-between">
+                  <button 
+                    onClick={onBack}
+                    className="flex items-center gap-2 text-purple-300 hover:text-white hover:bg-purple-800 px-3 py-2 rounded-lg transition-all duration-200 transform hover:-translate-x-1 active:scale-95 text-sm font-semibold w-full group"
+                  >
+                    <ArrowLeft className="transition-transform duration-300 group-hover:-translate-x-1" /> Back to Dashboard
+                  </button>
+                </div>
+                <div className="hidden md:flex items-center gap-3 p-6 border-b border-purple-800">
+                  <Zap className="text-2xl text-purple-300" />
+                  <div>
+                    <h1 className="font-bold text-xl leading-tight">NeuroPharm</h1>
+                    <span className="text-purple-300 text-xs uppercase tracking-wider font-semibold">Study Guide</span>
+                  </div>
+                </div>
+                
+                <div className="p-4 flex-1">
+                  <p className="text-purple-400 text-xs font-bold mb-4 uppercase tracking-wider px-2">Exam Modules</p>
+                  <ul className="space-y-1">
+                    {tabs.map((tab) => (
+                      <li key={tab.id}>
+                        <button
+                          onClick={() => {
+                            setActiveTab(tab.id);
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className={`w-full flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200 transform hover:translate-x-2 active:scale-95 text-left group
+                            ${activeTab === tab.id 
+                              ? 'bg-purple-600 text-white shadow-md' 
+                              : 'text-purple-200 hover:bg-purple-800 hover:text-white'
+                            }`}
+                        >
+                          <span className={`w-5 h-5 flex items-center justify-center transition-transform duration-300 ${activeTab === tab.id ? 'scale-110' : 'group-hover:scale-110'}`}>{tab.icon}</span>
+                          <span className="font-medium">{tab.label}</span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                
+                <div className="p-4 border-t border-purple-800 text-xs text-purple-400 text-center">
+                  Comprehensive Review: Epilepsy & Migraines
+                </div>
+              </nav>
+
+              {/* Main Content Area */}
+              <main className="flex-1 p-4 md:p-8 overflow-y-auto w-full max-w-5xl mx-auto">
+                <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-10 min-h-[80vh]">
+                  {activeTab === 'classification' && <EpilepsyClassificationView />}
+                  {activeTab === 'mechanisms' && <EpilepsyMechanismsView />}
+                  {activeTab === 'clinical' && <EpilepsyClinicalView />}
+                  {activeTab === 'traps' && <EpilepsyTrapsView />}
+                  {activeTab === 'rapidfire' && <EpilepsyRapidFireView />}
+                  {activeTab === 'quiz' && <EpilepsyQuizView />}
+                  {activeTab === 'essays' && <EpilepsyEssaysView />}
+                  {activeTab === 'glossary' && <EpilepsyGlossaryView />}
+                </div>
+              </main>
+            </div>
+          );
+        }
+
+        function EpilepsyClassificationView() {
+          return (
+            <div className="space-y-8 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <List className="text-purple-600 text-3xl" />
+                  1. Epilepsy: Definition, Etiology, and Classification
+                </h2>
+              </div>
+
+              <div className="bg-purple-50 border-l-4 border-purple-500 p-5 rounded-r-xl mb-4">
+                <h3 className="text-xl font-bold text-purple-900 mb-2">Definition</h3>
+                <p className="text-slate-800">
+                  Epilepsy is a chronic disease characterized by <strong>repeated attacks (two or more seizures occurring at least 24 hours apart)</strong>. These attacks result from abnormal electrical discharges of cerebral neurons, leading to EEG, motor, sensory, autonomic, or psychological changes.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-2xl font-bold text-slate-800 mb-4 border-b pb-2">Etiology</h3>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
+                    <h4 className="text-lg font-bold text-emerald-800 mb-2">Primary (Idiopathic)</h4>
+                    <p className="text-slate-700">Unknown cause.</p>
+                  </div>
+
+                  <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
+                    <h4 className="text-lg font-bold text-rose-800 mb-2">Secondary</h4>
+                    <p className="text-slate-700 mb-2">Caused by external or internal factors:</p>
+                    <ul className="space-y-2 text-sm">
+                      <li className="flex gap-2">
+                        <AlertTriangle className="text-rose-500 mt-1 shrink-0" />
+                        <span><strong>Conditions:</strong> Trauma, meningitis, brain tumors, fevers, or hypoglycemia.</span>
+                      </li>
+                      <li className="flex gap-2">
+                        <Pill className="text-blue-500 mt-1 shrink-0" />
+                        <span><strong>Drugs:</strong> Insulin (via hypoglycemia), TCAs, cocaine, antipsychotics, and Lithium (Li+).</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-slate-100 p-6 rounded-xl border border-slate-200">
+                <h3 className="text-xl font-bold text-slate-800 mb-4">Classification of Epilepsy</h3>
+                <p className="text-slate-600 mb-4 italic">Seizures are categorized based on whether the electrical discharge is localized or widespread:</p>
+                
+                <div className="overflow-x-auto shadow-sm rounded-lg border border-slate-200">
+                  <table className="w-full text-left bg-white">
+                    <thead className="bg-purple-100">
+                      <tr>
+                        <th className="p-3 font-bold text-purple-900 border-b">Type</th>
+                        <th className="p-3 font-bold text-purple-900 border-b">Subtypes</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      <tr className="hover:bg-purple-50/50 transition-colors">
+                        <td className="p-3 font-semibold text-slate-800">Generalized Epilepsy</td>
+                        <td className="p-3 text-sm text-slate-700">Tonic-Clonic, Absence, Myoclonic</td>
+                      </tr>
+                      <tr className="hover:bg-purple-50/50 transition-colors">
+                        <td className="p-3 font-semibold text-slate-800">Partial Epilepsy</td>
+                        <td className="p-3 text-sm text-slate-700">Simple partial, Complex partial</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        function EpilepsyMechanismsView() {
+          return (
+            <div className="space-y-8 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <Activity className="text-purple-600 text-3xl" />
+                  2. Antiepileptic Drugs (AEDs): Mechanisms
+                </h2>
+                <p className="text-slate-600 mt-2 text-lg">
+                  Anti-epileptics function by decreasing the hyper-excitability of cerebral neurons through neurotransmitter modulation or ion channel blockade.
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                
+                {/* Na+ Channels */}
+                <div className="bg-white border border-slate-200 p-5 rounded-xl shadow-sm hover:border-blue-300 transition-colors">
+                  <div className="flex items-center gap-3 mb-3 border-b pb-2">
+                    <div className="bg-blue-100 p-2 rounded-lg"><Zap className="text-blue-600" /></div>
+                    <h3 className="font-bold text-lg text-slate-800">Blockade of Na+ Channels</h3>
+                  </div>
+                  <p className="text-sm text-slate-600 mb-3 italic">Inhibits repetitive firing of neurons.</p>
+                  <p className="text-sm font-medium text-slate-800">
+                    <strong className="text-blue-700">Drugs:</strong> <span className="bg-yellow-100 px-1 rounded font-bold">Phenytoin</span>, <span className="bg-yellow-100 px-1 rounded font-bold">Carbamazepine</span>, <span className="bg-yellow-100 px-1 rounded font-bold">Valproate</span>, Topiramate, <span className="bg-yellow-100 px-1 rounded font-bold">Lamotrigine</span>, Lacosamide, Zonisamide, Rufinamide.
+                  </p>
+                </div>
+
+                {/* Ca++ Channels (T-type) */}
+                <div className="bg-white border-rose-400 p-5 rounded-xl shadow-md transition-colors relative overflow-hidden ring-2 ring-rose-200">
+                  <div className="absolute top-0 right-0 bg-rose-500 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg tracking-wider">⭐ VIP FOCUS</div>
+                  <div className="flex items-center gap-3 mb-3 border-b pb-2">
+                    <div className="bg-rose-100 p-2 rounded-lg"><Activity className="text-rose-600" /></div>
+                    <h3 className="font-bold text-lg text-slate-800">Blockade of T-type Ca++ Channels</h3>
+                  </div>
+                  <p className="text-sm text-slate-600 mb-3 italic">Decreases brain rhythmic activity in the Thalamus.</p>
+                  <p className="text-sm font-medium text-slate-800 mb-2">
+                    <strong className="text-rose-700">Drugs:</strong> <span className="bg-yellow-100 px-1 rounded font-bold">Ethosuximide</span>, Valproate.
+                  </p>
+                  <div className="bg-rose-50 border border-rose-200 p-2 rounded text-xs text-rose-800 font-semibold">
+                    Dr's Note: Ethosuximide is specifically a NARROW SPECTRUM drug effective only for Absence seizures.
+                  </div>
+                </div>
+
+                {/* Ca++ Channels (Presynaptic) */}
+                <div className="bg-white border border-slate-200 p-5 rounded-xl shadow-sm hover:border-orange-300 transition-colors">
+                  <div className="flex items-center gap-3 mb-3 border-b pb-2">
+                    <div className="bg-orange-100 p-2 rounded-lg"><Zap className="text-orange-600" /></div>
+                    <h3 className="font-bold text-lg text-slate-800">Blockade of Presynaptic Voltage-Gated Ca++</h3>
+                  </div>
+                  <p className="text-sm text-slate-600 mb-3 italic">Decreases glutamate release.</p>
+                  <p className="text-sm font-medium text-slate-800">
+                    <strong className="text-orange-700">Drugs:</strong> <span className="bg-yellow-100 px-1 rounded font-bold">Lamotrigine</span>, Gabapentin, Pregabalin.
+                  </p>
+                </div>
+
+                {/* SV2A & NMDA */}
+                <div className="bg-white border border-slate-200 p-5 rounded-xl shadow-sm hover:border-purple-300 transition-colors flex flex-col gap-4">
+                  <div>
+                    <h3 className="font-bold text-slate-800 flex items-center gap-2"><CheckCircle className="text-purple-500" /> Binding to Vesicle Protein SV2A</h3>
+                    <p className="text-sm text-slate-600 mt-1">Modifies glutamate release. <strong className="text-purple-700">Drug:</strong> Levetiracetam.</p>
+                  </div>
+                  <div className="border-t pt-3">
+                    <h3 className="font-bold text-slate-800 flex items-center gap-2"><CheckCircle className="text-emerald-500" /> NMDA Glutamate Antagonism</h3>
+                    <p className="text-sm text-slate-600 mt-1"><strong className="text-emerald-700">Drugs:</strong> <span className="bg-yellow-100 px-1 rounded font-bold">Valproate</span>, Felbamate, Preampanel.</p>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* GABA Module */}
+              <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-6 shadow-sm">
+                <h3 className="text-xl font-bold text-emerald-900 mb-4 flex items-center gap-2 border-b border-emerald-200 pb-2">
+                  <Shield className="text-emerald-600" /> Effects on GABA (Inhibitory)
+                </h3>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 className="font-bold text-emerald-800 mb-2">Facilitate GABA Action:</h4>
+                    <ul className="list-disc list-inside text-sm text-slate-700 space-y-1">
+                      <li><span className="font-bold">Phenobarbital</span></li>
+                      <li><span className="font-bold">Benzodiazepines</span></li>
+                      <li>Topiramate</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-emerald-800 mb-2">Increase GABA Levels:</h4>
+                    <ul className="text-sm text-slate-700 space-y-2">
+                      <li><strong className="bg-yellow-100 px-1 rounded">Valproate:</strong> Increases turnover.</li>
+                      <li><strong>Tiagabin:</strong> Inhibits uptake.</li>
+                      <li><strong>Vigabatrin:</strong> Inhibits degradation via transaminase.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          );
+        }
+
+        function EpilepsyClinicalView() {
+          return (
+            <div className="space-y-10 animate-in fade-in duration-500">
+              
+              {/* Clinical Choice */}
+              <section>
+                <div className="border-b border-slate-200 pb-2 mb-4 flex justify-between items-center">
+                  <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
+                    <List className="text-purple-500" /> 3. Clinical Choice of AEDs
+                  </h2>
+                </div>
+                
+                <div className="overflow-x-auto shadow-sm rounded-lg border border-slate-200 mb-4">
+                  <table className="w-full text-left bg-white">
+                    <thead className="bg-slate-100">
+                      <tr>
+                        <th className="p-3 font-bold text-slate-700 border-b">Seizure Type</th>
+                        <th className="p-3 font-bold text-slate-700 border-b">First-Line Agents <span className="bg-red-100 text-red-800 text-[10px] font-bold px-1.5 py-0.5 rounded uppercase ml-2 animate-pulse">VIP</span></th>
+                        <th className="p-3 font-bold text-slate-700 border-b">Alternative / Adjunctive</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      <tr className="hover:bg-slate-50 transition-colors">
+                        <td className="p-3 font-bold text-slate-800">Partial</td>
+                        <td className="p-3 text-sm font-medium"><span className="bg-emerald-100 text-emerald-800 px-2 py-1 rounded font-bold border border-emerald-300 shadow-sm">Carbamazepine</span> (1st choice), Lamotrigine, Valproate</td>
+                        <td className="p-3 text-sm text-slate-600">Levetiracetam, Oxcarbazepine, Gabapentin, Topiramate</td>
+                      </tr>
+                      <tr className="hover:bg-slate-50 transition-colors">
+                        <td className="p-3 font-bold text-slate-800">Tonic-Clonic</td>
+                        <td className="p-3 text-sm text-emerald-700 font-medium">Valproate, Lamotrigine</td>
+                        <td className="p-3 text-sm text-slate-600">Carbamazepine, Oxcarbazepine, Levetiracetam, Phenytoin</td>
+                      </tr>
+                      <tr className="hover:bg-slate-50 transition-colors">
+                        <td className="p-3 font-bold text-slate-800">Absence</td>
+                        <td className="p-3 text-sm font-medium"><span className="bg-emerald-100 text-emerald-800 px-2 py-1 rounded font-bold border border-emerald-300 shadow-sm">Ethosuximide</span> (1st choice), Valproate</td>
+                        <td className="p-3 text-sm text-slate-600">Lamotrigine, Clonazepam</td>
+                      </tr>
+                      <tr className="hover:bg-slate-50 transition-colors">
+                        <td className="p-3 font-bold text-slate-800">Myoclonic</td>
+                        <td className="p-3 text-sm font-medium"><span className="bg-emerald-100 text-emerald-800 px-2 py-1 rounded font-bold border border-emerald-300 shadow-sm">Valproate</span> (1st choice)</td>
+                        <td className="p-3 text-sm text-slate-600">Levetiracetam, Topiramate, Clonazepam</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="bg-rose-50 border-2 border-rose-300 p-4 rounded-xl shadow-sm">
+                  <h4 className="font-bold text-rose-900 flex items-center gap-2 mb-3">
+                    <AlertTriangle className="text-rose-600" /> VIP Contraindications & Notes
+                  </h4>
+                  <ul className="space-y-3 text-sm text-rose-800">
+                    <li className="bg-white p-2 rounded shadow-sm border border-rose-100"><strong className="text-rose-900 bg-rose-200 px-1 rounded">Absence & Myoclonic Contraindication:</strong> Phenytoin, Carbamazepine, and Oxcarbazepine are <strong>STRICTLY</strong> prohibited (may worsen condition).</li>
+                    <li className="bg-white p-2 rounded shadow-sm border border-rose-100"><strong className="text-rose-900 bg-rose-200 px-1 rounded">Contraindicated in Females:</strong> Both <strong>Phenytoin</strong> & <strong>Valproate</strong> are highly teratogenic. <span className="text-xs text-slate-500">(MCQ/Written Focus)</span></li>
+                    <li className="bg-white p-2 rounded shadow-sm border border-rose-100"><strong className="text-rose-900">Valproate vs. Ethosuximide:</strong> Valproate is preferred if tonic-clonic or myoclonic seizures coexist with absence seizures.</li>
+                  </ul>
+                </div>
+              </section>
+
+              {/* Adverse Effects */}
+              <section>
+                <div className="border-b border-slate-200 pb-2 mb-4">
+                  <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
+                    <Shield className="text-rose-500" /> 4. Adverse Effects and Precautions
+                  </h2>
+                </div>
+
+                <div className="overflow-x-auto shadow-sm rounded-lg border border-slate-200 mb-6">
+                  <table className="w-full text-left bg-white text-sm">
+                    <thead className="bg-slate-800 text-white">
+                      <tr>
+                        <th className="p-3 font-bold border-b">Feature</th>
+                        <th className="p-3 font-bold border-b text-blue-200">Phenytoin</th>
+                        <th className="p-3 font-bold border-b text-orange-200">Carbamazepine</th>
+                        <th className="p-3 font-bold border-b text-purple-200">Valproate</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-200">
+                      <tr>
+                        <td className="p-3 font-semibold bg-slate-50">Hypersensitivity</td>
+                        <td className="p-3 text-red-600 font-medium">Skin rash (Stop drug)</td>
+                        <td className="p-3 text-red-600 font-medium">Skin rash (Stop drug)</td>
+                        <td className="p-3 text-red-600 font-medium">Skin rash (Stop drug)</td>
+                      </tr>
+                      <tr>
+                        <td className="p-3 font-semibold bg-slate-50">GIT Disturbances</td>
+                        <td className="p-3">Nausea, vomiting</td>
+                        <td className="p-3">Nausea, vomiting</td>
+                        <td className="p-3 font-bold text-slate-800">Nausea, epigastric pain (Most common)</td>
+                      </tr>
+                      <tr>
+                        <td className="p-3 font-semibold bg-slate-50">Neurological</td>
+                        <td className="p-3">Nystagmus, Ataxia, Drowsiness</td>
+                        <td className="p-3">Diplopia, Ataxia, Drowsiness</td>
+                        <td className="p-3">Fine hand tremors, Ataxia (Less sedative)</td>
+                      </tr>
+                      <tr>
+                        <td className="p-3 font-semibold bg-slate-50">Hepatic Enzymes</td>
+                        <td className="p-3 text-emerald-600 font-bold">Inducer</td>
+                        <td className="p-3 text-emerald-600 font-bold">Inducer</td>
+                        <td className="p-3 text-rose-600 font-bold">Inhibitor</td>
+                      </tr>
+                      <tr>
+                        <td className="p-3 font-semibold bg-slate-50">Hematological <span className="text-[10px] bg-red-500 text-white px-1 rounded block w-fit mt-1">VIP</span></td>
+                        <td className="p-3 bg-amber-50 font-medium text-amber-900">Megaloblastic anemia <br/><span className="text-xs text-amber-700 italic border-t border-amber-200 mt-1 pt-1 block">→ Add Folic Acid (Same symptom as Nitrous Oxide)</span></td>
+                        <td className="p-3 bg-orange-50 font-medium text-orange-900">Agranulocytosis & Leukopenia</td>
+                        <td className="p-3 bg-purple-50 font-medium text-purple-900">Thrombocytopenia <br/><span className="text-xs text-purple-700 italic border-t border-purple-200 mt-1 pt-1 block">→ Mentioned in Case Study!</span></td>
+                      </tr>
+                      <tr>
+                        <td className="p-3 font-semibold bg-slate-50">Teratogenicity <span className="text-[10px] bg-red-500 text-white px-1 rounded block w-fit mt-1">VIP</span></td>
+                        <td className="p-3 text-rose-700 font-medium bg-rose-50">Cleft palate, Heart anomalies <br/><span className="text-xs text-rose-500 font-bold block mt-1">Strictly Contraindicated</span></td>
+                        <td className="p-3 text-slate-600">Less teratogenic</td>
+                        <td className="p-3 text-rose-700 font-medium bg-rose-50">Spina bifida, Neural tube defects <br/><span className="text-xs text-rose-500 font-bold block mt-1">Strictly Contraindicated</span></td>
+                      </tr>
+                      <tr>
+                        <td className="p-3 font-semibold bg-slate-50">Other Specifics <span className="text-[10px] bg-red-500 text-white px-1 rounded block w-fit mt-1">VIP</span></td>
+                        <td className="p-3 font-medium text-blue-900">Osteomalacia <br/><span className="text-xs text-blue-700 italic block border-t border-blue-200 mt-1 pt-1 mb-2">→ ↑ Vit D metabolism, add Vit D/Ca supp.</span><span className="text-slate-800 font-bold">Cosmetic:</span> Gingival hyperplasia, Hirsutism, Acne</td>
+                        <td className="p-3 font-medium">Dilutional Hyponatremia <br/><span className="text-xs text-slate-500 italic block">(Water intoxication)</span></td>
+                        <td className="p-3 font-medium">Hepatotoxicity (Fatal) <br/><span className="text-xs text-slate-500 italic block">Hair loss, Weight gain</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                  <h4 className="font-bold text-slate-800 mb-3 border-b pb-2">Other Drug Interactions & Notes:</h4>
+                  <div className="grid md:grid-cols-2 gap-3 text-sm">
+                    <div className="flex gap-2"><strong className="text-purple-700 min-w-24">Warfarin:</strong> <span>Contraindicated/requires adjustment with enzyme inducers (Phenytoin/Carbamazepine).</span></div>
+                    <div className="flex gap-2"><strong className="text-purple-700 min-w-24">Lamotrigine:</strong> <span>Fatal dermatitis (Stevens-Johnson Syndrome).</span></div>
+                    <div className="flex gap-2"><strong className="text-purple-700 min-w-24">Levetiracetam:</strong> <span>Mood and behavioral changes.</span></div>
+                    <div className="flex gap-2"><strong className="text-purple-700 min-w-24">Topiramate:</strong> <span>Renal stones, weight loss, hypohydrosis.</span></div>
+                  </div>
+                </div>
+              </section>
+
+              {/* Status Epilepticus & Migraine */}
+              <div className="grid md:grid-cols-2 gap-6">
+                
+                {/* Status Epilepticus */}
+                <div className="bg-blue-50 p-6 rounded-xl border-2 border-blue-400 shadow-md relative overflow-hidden">
+                  <div className="absolute top-0 right-0 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg shadow-sm">⭐ VIP EXAM FOCUS</div>
+                  <h3 className="text-xl font-bold text-blue-900 mb-2 flex items-center gap-2">
+                    <Activity /> 5. Status Epilepticus & Pregnancy
+                  </h3>
+                  <p className="text-xs text-blue-700 font-bold mb-4 uppercase tracking-wider">Dr's Note: Management must be memorized!</p>
+                  
+                  <div className="space-y-3">
+                    <div className="bg-white p-3 rounded border border-blue-200 shadow-sm">
+                      <strong className="text-blue-800 text-sm block">1. Rapid Control (IV)</strong>
+                      <span className="text-sm font-semibold text-slate-800">Lorazepam (preferred), Midazolam, or Diazepam.</span>
+                    </div>
+                    <div className="bg-white p-3 rounded border border-blue-200 shadow-sm">
+                      <strong className="text-blue-800 text-sm block">2. Maintenance Control (IV)</strong>
+                      <span className="text-sm font-semibold text-slate-800">Fosphenytoin (prodrug, better) or Phenytoin.</span>
+                    </div>
+                    <div className="bg-white p-3 rounded border border-blue-200 shadow-sm flex justify-between items-center">
+                      <strong className="text-slate-600 text-sm">3. Second Choice:</strong>
+                      <span className="text-sm font-bold text-slate-800">Phenobarbital</span>
+                    </div>
+                    
+                    <div className="mt-4 pt-3 border-t border-blue-200">
+                      <strong className="text-purple-800 text-sm block mb-1">Pregnancy Management:</strong>
+                      <span className="text-xs text-slate-700 block bg-purple-50 p-2 rounded border border-purple-100">Never stop therapy. Use lowest effective dose. Avoid Valproate & Phenytoin. Folic acid is MANDATORY.</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Migraine */}
+                <div className="bg-emerald-50 p-6 rounded-xl border border-emerald-200 shadow-sm">
+                  <h3 className="text-xl font-bold text-emerald-900 mb-3 flex items-center gap-2">
+                    <Brain /> 6. Migraine Management
+                  </h3>
+                  
+                  <div className="space-y-4">
+                    <div className="bg-white p-3 rounded border border-emerald-100 shadow-sm">
+                      <h4 className="font-bold text-emerald-800 text-sm mb-2 border-b border-emerald-100 pb-1">I. Acute Attack Termination</h4>
+                      <ul className="text-sm text-slate-700 space-y-2">
+                        <li><strong className="text-slate-900 bg-emerald-100 px-1 rounded">Triptans:</strong> Sumatriptan (5HT₁B/₁D agonist).</li>
+                        <li><strong className="text-slate-900 bg-emerald-100 px-1 rounded">Ergot:</strong> Ergotamine.</li>
+                        <li><strong className="text-slate-900">Mild Analgesics:</strong> NSAIDs.</li>
+                        <li><strong className="text-slate-900">Antiemetics:</strong> Metoclopramide.</li>
+                      </ul>
+                    </div>
+                    
+                    <div className="bg-white p-3 rounded border border-emerald-100 shadow-sm">
+                      <h4 className="font-bold text-emerald-800 text-sm mb-2 border-b border-emerald-100 pb-1">II. Drug Migraine Prophylaxis</h4>
+                      <ul className="text-sm text-slate-700 space-y-1">
+                        <li><strong className="text-emerald-700">Beta-blockers:</strong> Propranolol, Timolol.</li>
+                        <li><strong className="text-emerald-700">Ca++ Blockers:</strong> Verapamil.</li>
+                        <li><strong className="text-emerald-700">Antidepressants:</strong> Amitriptyline.</li>
+                        <li><strong className="text-emerald-700">Antiepileptics:</strong> Valproate.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          );
+        }
+
+        function EpilepsyTrapsView() {
+          const traps = [
+            {
+              title: "The Doctor's Case: Lamotrigine + Valproate",
+              context: "Patient on Lamotrigine not responding well, doctor adds Valproate.",
+              trap: "Valproate is a potent enzyme inhibitor. It drastically inhibits Lamotrigine's metabolism → rapid toxic accumulation → high risk of Stevens-Johnson Syndrome (fatal dermatitis). MUST decrease Lamotrigine dose by 50%.",
+              color: "red"
+            },
+            {
+              title: "The Female Contraindication (Written/MCQ)",
+              context: "AED therapy in women of childbearing age requires extreme caution due to teratogenicity.",
+              trap: "Phenytoin (Cleft palate/Heart anomalies) and Valproate (Spina Bifida/Neural tube defects) are strictly contraindicated. Folic acid is mandatory.",
+              color: "purple"
+            },
+            {
+              title: "Absence & Myoclonic Seizure Trap",
+              context: "Absence seizures require Ethosuximide (safest, 1st line) or Valproate.",
+              trap: "NEVER use Phenytoin or Carbamazepine. They are strictly contraindicated and will make absence and myoclonic seizures WORSE.",
+              color: "rose"
+            },
+            {
+              title: "The Liver Enzyme Paradox: Inducers vs. Inhibitors",
+              context: "Enzyme Inducers (Phenytoin, Carbamazepine, Phenobarbital) ↑ metabolism of other drugs (e.g., Warfarin or OCP failure). Enzyme Inhibitors (Valproate) ↓ metabolism of other drugs.",
+              trap: "Combining Valproate with other drugs requires immediate dose reduction of the second drug to prevent fatal toxicity.",
+              color: "amber"
+            },
+            {
+              title: "Phenytoin's Kinetic Nightmare",
+              context: "Phenytoin exhibits saturation (zero-order) kinetics at therapeutic doses.",
+              trap: "A very small increase in dose can lead to a massive, disproportionate increase in blood levels, easily crossing into lethal toxicity. Routine therapeutic drug monitoring (TDM) is mandatory.",
+              color: "blue"
+            },
+            {
+              title: "Migraine Management & Vascular Risks",
+              context: "Acute Termination (Triptans/Ergots) vs. Prophylaxis (Beta-blockers/CCBs).",
+              trap: "Triptans are contraindicated in 'The Heavy Three' (Uncontrolled HTN, Ischemic Stroke, IHD). Ergotamine causes severe prolonged vasospasm (gangrene) and is contraindicated in pregnancy and PVD.",
+              color: "emerald"
+            }
+          ];
+
+          return (
+            <div className="space-y-8 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <AlertTriangle className="text-amber-500 text-3xl" />
+                  Quick Exam Revision: The Trickiest Parts
+                </h2>
+                <p className="text-slate-600 mt-2 text-lg">
+                  High-yield paradoxes, clinical traps, and Case Studies from the lecture.
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                {traps.map((item, idx) => (
+                  <div key={idx} className={`bg-white rounded-xl overflow-hidden border-2 ${idx < 2 ? `border-${item.color}-400 shadow-md` : `border-slate-200 shadow-sm`} flex flex-col relative`}>
+                    {idx < 2 && <div className={`absolute top-0 right-0 bg-${item.color}-500 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg`}>⭐ VIP CASE</div>}
+                    <div className={`bg-${item.color}-50 border-b border-${item.color}-100 p-4`}>
+                      <h3 className={`text-xl font-bold text-${item.color}-900`}>{item.title}</h3>
+                    </div>
+                    <div className="p-4 flex-1 flex flex-col gap-3">
+                      <p className="text-slate-700 text-sm leading-relaxed">{item.context}</p>
+                      <div className="mt-auto pt-3">
+                        <div className={`bg-${item.color}-100/50 border-l-4 border-${item.color}-500 p-3 rounded-r`}>
+                          <strong className={`text-${item.color}-800 block text-sm uppercase tracking-wider mb-1 flex items-center gap-1`}>
+                            <Zap className="text-xs" /> Exam Trap
+                          </strong>
+                          <p className={`text-${item.color}-900 text-sm font-medium`}>{item.trap}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        }
+
+        function EpilepsyRapidFireView() {
+          const drugHooks = [
+            { hook: "A patient with isolated Absence seizures (e.g., a child with staring spells).", think: "Ethosuximide. It is the safest and first-line drug (narrow spectrum, blocks T-type Ca²⁺)." },
+            { hook: "Treatment for coexisting seizure types (e.g., tonic-clonic + absence) or a patient with bipolar/migraines who also has epilepsy.", think: "Valproate. It is a broad-spectrum agent with multiple mechanisms of action." },
+            { hook: "A patient presenting with Status Epilepticus (a prolonged, continuous seizure).", think: "A two-step emergency protocol. 1: IV Lorazepam, Midazolam, or Diazepam (rapid control). 2: IV Fosphenytoin or Phenytoin (maintain control)." },
+            { hook: "A patient taking an AED complains of gingival hyperplasia, coarse facial features, or excess body hair (hirsutism).", think: "Phenytoin. (Remind the patient to practice meticulous gum hygiene)." },
+            { hook: "A patient with severe neuropathic facial pain (Trigeminal Neuralgia).", think: "Carbamazepine." },
+            { hook: "Patient taking an AED complains of bone pain/fractures (Osteomalacia).", think: "Phenytoin. It increases Vitamin D metabolism. You MUST add Vit D and Ca supplements." },
+            { hook: "Patient taking an AED develops Megaloblastic Anemia.", think: "Phenytoin. You MUST add Folic Acid. (Note: Nitrous Oxide also causes this)." },
+            { hook: "A patient taking Valproate presents with bleeding/bruising (Case Study).", think: "Valproate-induced Thrombocytopenia." },
+            { hook: "A patient taking Carbamazepine with low sodium.", think: "Dilutional Hyponatremia (Carbamazepine potentiates ADH)." },
+            { hook: "A patient with a moderate-to-severe acute migraine attack in an outpatient setting.", think: "Triptans (e.g., Zolmitriptan, Sumatriptan). They are the specific first-line therapy." },
+            { hook: "A patient who needs Migraine Prophylaxis to prevent frequent attacks.", think: "Beta-blockers (Propranolol and Timolol), which are the drugs of choice." }
+          ];
+
+          const pkHooks = [
+            { hook: "An antiepileptic drug that acts as an enzyme inhibitor.", think: "Valproate. (Note: Phenytoin and Carbamazepine are enzyme inducers)." },
+            { hook: "A drug with troublesome, unpredictable serum levels due to irregular bioavailability and 'saturation kinetics'.", think: "Phenytoin." }
+          ];
+
+          const precautions = [
+            { title: "Pregnancy & Females", trigger: "Phenytoin & Valproate are strictly contraindicated (Written/MCQ). Valproate causes Spina Bifida. Folic acid is mandatory." },
+            { title: "Fatal Hepatotoxicity", trigger: "Valproate carries a risk of severe liver damage." },
+            { title: "Hematological Toxicity", trigger: "Carbamazepine causes Agranulocytosis/Leukopenia. Phenytoin causes Megaloblastic anemia (like Nitrous Oxide)." },
+            { title: "Lamotrigine + Valproate", trigger: "Valproate inhibits Lamotrigine metabolism causing Stevens-Johnson Syndrome." },
+            { title: "Water Intoxication / Hyponatremia", trigger: "Carbamazepine, because it potentiates ADH (Antidiuretic Hormone), leading to dilutional hyponatremia." },
+            { title: "Medication Overuse Headache (MOH)", trigger: "A migraine patient using acute anti-migraine therapy for >10 days/month. This leads to rebound headaches. To avoid this, switch to prophylactic drugs." },
+            { title: "Peripheral Vascular Disease or Pregnancy in Migraineurs", trigger: "The use of Ergots (like Ergotamine). Contraindicated because they cause severe vasospasm leading to gangrene. Long-term use causes valvular heart disease." },
+            { title: "Drug-Induced Seizures", trigger: "New-onset seizures in a patient on Insulin (hypoglycemia), TCAs, Cocaine, Antipsychotics, or Lithium." }
+          ];
+
+          return (
+            <div className="space-y-8 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <Zap className="text-purple-500 text-3xl" />
+                  Rapid Fire: "If you see this, think that"
+                </h2>
+                <p className="text-slate-600 mt-2 text-lg">
+                  Highest-yield clinical hooks, buzzwords, and precautions.
+                </p>
+              </div>
+
+              {/* Drug Hooks */}
+              <div>
+                <h3 className="text-xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
+                  <Pill className="text-purple-600"/> 1. Drug-Specific "Hooks"
+                </h3>
+                <div className="grid gap-3 md:grid-cols-2">
+                  {drugHooks.map((hook, idx) => (
+                    <div key={idx} className="bg-white border border-slate-200 p-4 rounded-lg shadow-sm flex flex-col justify-center">
+                      <div className="flex gap-2 mb-2">
+                        <span className="bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider shrink-0 h-fit">If you see</span>
+                        <span className="font-semibold text-slate-800 leading-snug">{hook.hook}</span>
+                      </div>
+                      <div className="flex gap-2 mt-2 border-t border-slate-100 pt-2">
+                        <span className="bg-purple-100 text-purple-800 text-xs font-bold px-2 py-1 rounded uppercase tracking-wider shrink-0 h-fit">Think</span>
+                        <span className="text-slate-600 text-sm leading-snug">{hook.think}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* PK Hooks */}
+              <div>
+                <h3 className="text-xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
+                  <Activity className="text-blue-600"/> 2. Pharmacokinetic Hooks
+                </h3>
+                <div className="grid gap-4 md:grid-cols-2">
+                  {pkHooks.map((rule, idx) => (
+                    <div key={idx} className="bg-blue-50 border border-blue-200 p-5 rounded-xl shadow-sm">
+                      <strong className="text-blue-900 block mb-2 pb-2 border-b border-blue-200 leading-snug">
+                        <span className="text-blue-600 mr-2 text-sm uppercase tracking-wider">If you see:</span>{rule.hook}
+                      </strong>
+                      <p className="text-slate-700 text-sm leading-snug">
+                        <span className="font-bold text-purple-600 mr-1 uppercase tracking-wider text-xs">Think:</span>{rule.think}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Precautions */}
+              <div>
+                <h3 className="text-xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
+                  <Shield className="text-rose-600"/> 3. "Be Careful Of" (Precautions & Toxicities)
+                </h3>
+                <div className="space-y-4">
+                  {precautions.map((prec, idx) => (
+                    <div key={idx} className="bg-rose-50 border border-rose-200 rounded-xl overflow-hidden shadow-sm">
+                      <div className="bg-rose-100 px-4 py-2 border-b border-rose-200">
+                        <h4 className="font-bold text-rose-900 flex items-center gap-2">
+                          <AlertTriangle className="text-rose-600 text-sm" /> 
+                          Be careful of: {prec.title}
+                        </h4>
+                      </div>
+                      <div className="p-4 space-y-2">
+                        <p className="text-sm text-slate-800 leading-relaxed"><strong className="text-rose-700">Trigger/Rule:</strong> {prec.trigger}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+            </div>
+          );
+        }
+
+        function EpilepsyQuizView() {
+          const [openIndex, setOpenIndex] = useState(null);
+
+          const questions = [
+            {
+              q: "How is epilepsy clinically defined, and what distinguishes primary from secondary etiology?",
+              a: "Epilepsy is a chronic disease characterized by at least two seizures occurring >24 hours apart. Primary is idiopathic (unknown), while secondary is triggered by identifiable factors (trauma, meningitis, hypoglycemia, or drugs like TCAs/Cocaine)."
+            },
+            {
+              q: "Contrast the mechanisms of action between Ethosuximide and Phenytoin.",
+              a: "Ethosuximide blocks T-type Ca++ channels in the thalamus (effective for absence seizures). Phenytoin blocks voltage-gated Na+ channels to prevent repetitive neuronal firing (effective for partial/tonic-clonic)."
+            },
+            {
+              q: "Why is Valproate considered a broad-spectrum antiepileptic drug in terms of its mechanism?",
+              a: "It employs multiple mechanisms: blocking Na+ and T-type Ca++ channels, antagonizing NMDA receptors, and increasing GABA levels (by enhancing turnover). This allows it to treat tonic-clonic, absence, and myoclonic seizures."
+            },
+            {
+              q: "What are the specific contraindications for using Carbamazepine or Phenytoin in certain seizure types?",
+              a: "Both (along with Oxcarbazepine) are strictly contraindicated in absence and myoclonic seizures. Using them for those specific types may actually worsen the condition."
+            },
+            {
+              q: "Describe the clinical advantages of Fosphenytoin over traditional Phenytoin.",
+              a: "Fosphenytoin is a prodrug designed for status epilepticus that can be given IM or IV. It offers better bioavailability and a lower risk of causing phlebitis and cardiac side effects compared to traditional IV phenytoin."
+            },
+            {
+              q: "What are the primary cosmetic and neurological side effects associated with chronic Phenytoin use?",
+              a: "Cosmetic: gingival hyperplasia, hirsutism, acne, coarse facial features. Neurological: toxic doses cause nystagmus, diplopia, ataxia, and impaired learning in children."
+            },
+            {
+              q: "How do Triptans function to terminate an acute migraine attack?",
+              a: "They act as selective 5HT(1B/1D) agonists on presynaptic trigeminal nerve endings to inhibit vasodilatory neuropeptide release. This causes vasoconstriction of dural vessels, preventing the stretching of pain nerve endings."
+            },
+            {
+              q: "What is 'Medication Overuse Headache' (MOH), and how is it avoided?",
+              a: "MOH is a secondary headache caused by excessive use of acute migraine treatments. Avoid it by limiting anti-migraine therapy to <10 days per month. If more frequent, initiate prophylactic drugs like beta-blockers."
+            },
+            {
+              q: "Which drugs are preferred for the management of status epilepticus, and in what order?",
+              a: "1. Rapid control: IV Lorazepam (preferred), Midazolam, or Diazepam. 2. Maintenance: Fosphenytoin or Phenytoin. 3. Second choice maintenance: Phenobarbital."
+            },
+            {
+              q: "What precautions must be taken regarding antiepileptic therapy during pregnancy?",
+              a: "Do not stop therapy (seizures harm the fetus). Use the lowest effective dose, avoid Valproate (spina bifida risk), and mandate Folic Acid supplements. Doses may need adjustment as pregnancy increases AED metabolism."
+            }
+          ];
+
+          return (
+            <div className="space-y-6 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <HelpCircle className="text-purple-500 text-3xl" />
+                  VI. Flashcard Quiz
+                </h2>
+                <p className="text-slate-600 mt-2">
+                  Test your knowledge. Click on a question to reveal the answer. Active recall is the best way to memorize!
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                {questions.map((item, idx) => (
+                  <div key={idx} className="border border-slate-200 rounded-lg overflow-hidden shadow-sm hover:border-purple-300 transition-all duration-300 hover:shadow-md">
+                    <button
+                      onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
+                      className="w-full text-left p-4 bg-white hover:bg-purple-50/50 flex justify-between items-center focus:outline-none transition-colors duration-200 active:bg-purple-100/50"
+                    >
+                      <span className="font-semibold text-slate-800 pr-4">{idx + 1}. {item.q}</span>
+                      <ChevronDown className={`shrink-0 transition-transform duration-300 ${openIndex === idx ? 'rotate-180 text-purple-500' : 'text-slate-400'}`} />
+                    </button>
+                    
+                    <div className={`grid transition-all duration-300 ease-in-out ${openIndex === idx ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                      <div className="overflow-hidden">
+                        <div className="p-4 bg-purple-50 border-t border-purple-100 text-slate-700">
+                          <strong className="text-purple-800 block mb-1">Answer:</strong>
+                          {item.a}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        }
+
+        function EpilepsyEssaysView() {
+          const [openIndex, setOpenIndex] = useState(0);
+
+          const essays = [
+            {
+              title: "Discuss the pharmacological mechanisms of action of Valproate. Why is it considered a 'broad-spectrum' antiepileptic?",
+              answer: "Valproate possesses a multi-modal mechanism of action, which accounts for its broad-spectrum efficacy. It blocks voltage-gated Na⁺ channels (suppressing repetitive neuronal firing), blocks T-type Ca²⁺ channels in the thalamus (effective against absence seizures), acts as an NMDA glutamate receptor antagonist (reducing excitation), and increases GABA levels by stimulating its turnover and inhibiting its degradation. Because it targets both cortical sodium channels and thalamic calcium channels, it is effective against generalized tonic-clonic, myoclonic, and absence seizures."
+            },
+            {
+              title: "Contrast the adverse effect profiles and pharmacokinetic interactions of Phenytoin and Valproate.",
+              answer: "Phenytoin toxicity uniquely presents with cosmetic changes (gingival hyperplasia, coarse facial features, hirsutism), osteomalacia, and megaloblastic anemia. Valproate is characterized by fatal hepatotoxicity, hair loss, polycystic ovaries, and significant weight gain. Pharmacokinetically, Phenytoin is a potent hepatic enzyme inducer, increasing the metabolism of other drugs (e.g., OCPs). Conversely, Valproate is a potent enzyme inhibitor, which dangerously decreases the clearance of concurrent drugs. Teratogenically, Phenytoin causes cleft palate/lip, whereas Valproate causes neural tube defects (spina bifida)."
+            },
+            {
+              title: "A patient on Lamotrigine is newly prescribed Valproate. Explain the dangerous drug interaction that occurs and how to clinically manage it.",
+              answer: "Valproate is a potent inhibitor of hepatic microsomal enzymes. When added to Lamotrigine, it drastically inhibits Lamotrigine's metabolism, leading to a rapid and toxic accumulation of Lamotrigine in the blood. High serum levels of Lamotrigine heavily predispose the patient to life-threatening dermatological reactions, specifically Stevens-Johnson Syndrome (fatal dermatitis). To safely manage this, the clinician must immediately reduce the Lamotrigine dose by 50% when initiating Valproate therapy."
+            },
+            {
+              title: "Explain the pathophysiology of an acute migraine attack and describe the specific mechanism of action of Triptans in terminating it.",
+              answer: "An acute migraine attack is triggered by the release of pro-inflammatory, vasodilatory neuropeptides (specifically CGRP) from the nerve endings of the trigeminal nerve into the perivascular space. This causes painful dilation of dural blood vessels and stretch of pain nerve endings. Triptans (e.g., Sumatriptan) terminate this attack by acting as highly selective 5-HT₁B/₁D receptor agonists. Activation of these presynaptic receptors on the trigeminal nerve inhibits the further release of vasodilatory neuropeptides, and directly stimulates vasoconstriction of the dilated dural vessels, effectively aborting the headache."
+            },
+            {
+              title: "Compare the clinical indications for Ergotamine versus Propranolol in the management of migraines. What are the absolute contraindications for Ergotamine?",
+              answer: "Ergotamine is an acute, abortive therapy used specifically to terminate prolonged or frequent acute migraine attacks when they occur. Propranolol (a Beta-blocker) is used strictly as a chronic prophylactic therapy, taken daily to reduce the frequency and severity of future attacks, and has no efficacy during an acute episode. Ergotamine carries a high risk of profound vasospasm, which can lead to tissue ischemia and gangrene. Therefore, it is absolutely contraindicated in patients with peripheral vascular disease, coronary artery disease, and during pregnancy."
+            }
+          ];
+
+          return (
+            <div className="space-y-6 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <FileText className="text-purple-600 text-3xl" />
+                  VII. Essay Review
+                </h2>
+                <p className="text-slate-600 mt-2">
+                  Detailed synthesis questions for long-form exam preparation.
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-4">
+                {essays.map((essay, idx) => (
+                  <div key={idx} className={`border rounded-xl overflow-hidden transition-all duration-300 ${openIndex === idx ? 'border-purple-300 shadow-md ring-1 ring-purple-100' : 'border-slate-200 hover:border-purple-200 hover:shadow-md'}`}>
+                    <button 
+                      className={`w-full text-left p-5 flex justify-between items-start gap-4 transition-colors duration-200 active:bg-purple-100/50 ${openIndex === idx ? 'bg-purple-50' : 'bg-white hover:bg-slate-50'}`}
+                      onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
+                    >
+                      <h3 className={`font-bold text-lg leading-snug transition-colors duration-300 ${openIndex === idx ? 'text-purple-900' : 'text-slate-700'}`}>
+                        Essay {idx + 1}: {essay.title}
+                      </h3>
+                      <ChevronDown className={`mt-1 shrink-0 transition-transform duration-300 ${openIndex === idx ? 'rotate-180 text-purple-600' : 'text-slate-400'}`} />
+                    </button>
+                    
+                    <div className={`grid transition-all duration-300 ease-in-out ${openIndex === idx ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                      <div className="overflow-hidden">
+                        <div className="p-6 bg-white border-t border-purple-100 text-slate-700 leading-relaxed text-lg shadow-inner whitespace-pre-wrap">
+                          {essay.answer}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        }
+
+        function EpilepsyGlossaryView() {
+          const buzzwords = [
+            { hook: "Na⁺ Channel Blockers", details: "Phenytoin, Carbamazepine, Valproate, Lamotrigine, Topiramate." },
+            { hook: "T-Type Ca²⁺ Channel Blockers", details: "Ethosuximide, Valproate (strictly for absence seizures)." },
+            { hook: "SV2A Vesicle Protein", details: "Levetiracetam (modifies glutamate release)." },
+            { hook: "Phenytoin Toxicity", details: "Gingival hyperplasia, coarse facial features, hirsutism, osteomalacia, megaloblastic anemia, zero-order kinetics." },
+            { hook: "Valproate Toxicity", details: "Hepatotoxicity (fatal), hair loss, polycystic ovaries, weight gain, enzyme inhibitor, spina bifida." },
+            { hook: "Carbamazepine Toxicity", details: "Leukopenia, agranulocytosis, diplopia, enzyme inducer." },
+            { hook: "Lamotrigine Risk", details: "Fatal dermatitis, Stevens-Johnson Syndrome." },
+            { hook: "Migraine Pathophysiology", details: "CGRP release, trigeminal nerve, dural vessel vasodilation." },
+            { hook: "Triptans", details: "5-HT₁B/₁D agonists, acute migraine termination, vasoconstriction." },
+            { hook: "Migraine Prophylaxis", details: "Propranolol (Beta-blockers), Flunarizine (CCBs), Amitriptyline (TCAs), Valproate, Topiramate." }
+          ];
+
+          const terms = [
+            { term: "Status Epilepticus", def: "Prolonged tonic-clonic seizure (>5 min) or repeated seizures without recovering consciousness." },
+            { term: "Aura", def: "Visual disturbances or scotoma preceding the headache phase of a migraine." },
+            { term: "Enzyme Inducer", def: "Drugs (Phenytoin, Carbamazepine) that speed up the metabolism of other medications." },
+            { term: "Enzyme Inhibitor", def: "Drugs (Valproate) that slow down the metabolism of other medications." },
+            { term: "CGRP", def: "Vasodilatory neuropeptide central to migraine pain pathways." },
+            { term: "SV2A", def: "Vesicle protein targeted by Levetiracetam to modify glutamate release." },
+            { term: "Idiopathic", def: "Term used for 'Primary Epilepsy' where the cause is unknown." },
+            { term: "Gingival Hyperplasia", def: "Overgrowth of gum tissue; a classic side effect of Phenytoin." },
+            { term: "Hyponatremia", def: "Low sodium; a side effect specifically associated with Carbamazepine and Oxcarbazepine." },
+            { term: "Stevens-Johnson Syndrome", def: "A fatal dermatitis/rash associated with Lamotrigine." }
+          ];
+
+          return (
+            <div className="space-y-8 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <Bookmark className="text-purple-500 text-3xl" />
+                  VIII. Glossary & Mnemonics
+                </h2>
+                <p className="text-slate-600 mt-2">
+                  High-yield terms and memory hooks for quick recall.
+                </p>
+              </div>
+
+              {/* Key Buzzwords */}
+              <div>
+                <h3 className="text-xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
+                  <Activity className="text-purple-600"/> High-Yield Buzzword Hooks
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {buzzwords.map((item, idx) => (
+                    <div key={idx} className="bg-white border border-slate-200 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow hover:border-purple-300">
+                      <strong className="text-purple-800 block mb-1 text-lg">{item.hook}</strong>
+                      <p className="text-slate-600 text-sm">{item.details}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-8 pt-4 border-t border-slate-200">
+                
+                {/* Valproate Mnemonic */}
+                <div className="bg-rose-50 rounded-xl p-6 border border-rose-200 shadow-sm">
+                  <h3 className="text-xl font-bold text-rose-900 mb-4 flex items-center gap-2">
+                    <Brain /> Valproate: "The V-Heavy"
+                  </h3>
+                  <div className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-rose-500 space-y-2">
+                    <div className="flex items-start gap-2 text-sm text-slate-700">
+                      <strong className="text-rose-700 text-lg leading-none">V</strong>
+                      <span className="mt-0.5">omit (GIT upset)</span>
+                    </div>
+                    <div className="flex items-start gap-2 text-sm text-slate-700">
+                      <strong className="text-rose-700 text-lg leading-none">V</strong>
+                      <span className="mt-0.5">ery fat (Weight gain/appetite increase)</span>
+                    </div>
+                    <div className="flex items-start gap-2 text-sm text-slate-700">
+                      <strong className="text-rose-700 text-lg leading-none">V</strong>
+                      <span className="mt-0.5">alopecia (Hair loss)</span>
+                    </div>
+                    <div className="flex items-start gap-2 text-sm text-slate-700">
+                      <strong className="text-rose-700 text-lg leading-none">V</strong>
+                      <span className="mt-0.5">ery dangerous for liver (Hepatotoxicity)</span>
+                    </div>
+                    <div className="flex items-start gap-2 text-sm text-slate-700">
+                      <strong className="text-rose-700 text-lg leading-none">V</strong>
+                      <span className="mt-0.5">ertebrae defects (Spina bifida)</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Phenytoin Mnemonic */}
+                <div className="bg-blue-50 rounded-xl p-6 border border-blue-200 shadow-sm">
+                  <h3 className="text-xl font-bold text-blue-900 mb-4 flex items-center gap-2">
+                    <Brain /> Phenytoin's "4H" Cosmetic Hook
+                  </h3>
+                  <div className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-blue-500 space-y-2">
+                    <div className="flex items-start gap-2 text-sm text-slate-700">
+                      <strong className="text-blue-700 text-lg leading-none">H</strong>
+                      <span className="mt-0.5">yperplasia (Gingival)</span>
+                    </div>
+                    <div className="flex items-start gap-2 text-sm text-slate-700">
+                      <strong className="text-blue-700 text-lg leading-none">H</strong>
+                      <span className="mt-0.5">irsutism (Excess hair)</span>
+                    </div>
+                    <div className="flex items-start gap-2 text-sm text-slate-700">
+                      <strong className="text-blue-700 text-lg leading-none">H</strong>
+                      <span className="mt-0.5">ardened face (Coarse features)</span>
+                    </div>
+                    <div className="flex items-start gap-2 text-sm text-slate-700">
+                      <strong className="text-blue-700 text-lg leading-none">H</strong>
+                      <span className="mt-0.5">ole in the palate (Teratogenicity)</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Key Terms */}
+              <div>
+                <h3 className="text-2xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-block">Key Terms Definitions</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {terms.map((t, idx) => (
+                    <div key={idx} className="border border-slate-200 p-4 rounded-lg bg-white hover:border-purple-300 transition-colors">
+                      <h4 className="font-bold text-purple-800 mb-1">{t.term}</h4>
+                      <p className="text-slate-600 text-sm">{t.def}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+            </div>
+          );
+        }
+
+        // --- Render the Application ---
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroPhysio Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes slideInRight { 0% { transform: translateX(60px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+        @keyframes slideInLeft { 0% { transform: translateX(-60px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+        .slide-forward { animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .slide-backward { animation: slideInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes fadeSlideUp { 0% { opacity: 0; transform: translateY(15px); } 100% { opacity: 1; transform: translateY(0); } }
+        .animate-in { animation: fadeSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        
+        /* Flashcard 3D flip effects */
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .flashcard-transition { transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); }
+    </style>
+</head>
+<body class="bg-slate-50 overflow-x-hidden text-slate-800 font-sans">
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // --- Icons ---
+        const Icon = ({ name, className = "" }) => <i className={`fa-solid fa-${name} ${className}`}></i>;
+
+        // --- Main App Component ---
+        function App() {
+          const [currentView, setCurrentView] = useState('dashboard');
+          const [direction, setDirection] = useState('forward');
+
+          const navigateTo = (view) => {
+            setDirection(view === 'dashboard' ? 'backward' : 'forward');
+            setCurrentView(view);
+            window.scrollTo(0, 0);
+          };
+
+          const backToPortal = () => { window.location.href = 'index.html'; };
+
+          return (
+            <div key={currentView} className={direction === 'forward' ? 'slide-forward' : 'slide-backward'}>
+              {currentView === 'dashboard' ? (
+                <Dashboard onSelect={(module) => navigateTo(module)} onBackToPortal={backToPortal} />
+              ) : (
+                <Module view={currentView} onBack={() => navigateTo('dashboard')} />
+              )}
+            </div>
+          );
+        }
+
+        // --- Dashboard Component ---
+        function Dashboard({ onSelect, onBackToPortal }) {
+          return (
+            <div className="min-h-screen bg-slate-100 p-6 md:p-12">
+              <div className="max-w-6xl mx-auto space-y-8 animate-in">
+                <button onClick={onBackToPortal} className="text-slate-500 hover:text-emerald-600 font-bold flex items-center gap-2 transition-all">
+                  <Icon name="house" /> Back to Subject Portal
+                </button>
+                
+                <header className="flex items-center gap-4 pb-6 border-b border-slate-200">
+                  <div className="bg-emerald-600 p-4 rounded-xl shadow-lg text-white"><Icon name="brain" className="text-xl" /></div>
+                  <h1 className="text-4xl font-bold">NeuroPhysio Hub</h1>
+                </header>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {/* Card 1 */}
+                  <div onClick={() => onSelect('action-potentials')} className="bg-[#ebfbf3] border-2 border-emerald-300 p-6 rounded-3xl cursor-pointer hover:border-slate-900 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 flex flex-col group">
+                    <div className="bg-white w-16 h-16 rounded-2xl flex items-center justify-center shadow-sm mb-6">
+                      <i className="fa-solid fa-chart-line text-2xl text-emerald-500 group-hover:scale-110 transition-transform duration-300"></i>
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-900 mb-3">Functions of Reticular Formation & Electrical Activity of Brain</h3>
+                    <p className="text-slate-600 text-sm leading-relaxed mb-8 flex-grow">
+                      Explore the ascending reticular activating system (RAS) and the electrical patterns of the brain (EEG).
+                    </p>
+                    <button className="w-full bg-white/60 border border-slate-300 text-slate-900 font-semibold py-3 rounded-xl group-hover:bg-white group-hover:border-slate-400 transition-colors duration-300">
+                      Open Review
+                    </button>
+                  </div>
+
+                  {/* Card 2: Sleep & Arousal */}
+                  <div onClick={() => onSelect('sleep')} className="bg-[#ebfbf3] border-2 border-emerald-300 p-6 rounded-3xl cursor-pointer hover:border-slate-900 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 flex flex-col group">
+                    <div className="bg-white w-16 h-16 rounded-2xl flex items-center justify-center shadow-sm mb-6">
+                      <i className="fa-solid fa-bed text-2xl text-emerald-500 group-hover:scale-110 transition-transform duration-300"></i>
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-900 mb-3">Sleep & Arousal</h3>
+                    <p className="text-slate-600 text-sm leading-relaxed mb-8 flex-grow">
+                      Master the physiology of NREM/REM sleep cycles, the suprachiasmatic nucleus, and neurochemical regulation.
+                    </p>
+                    <button className="w-full bg-white/60 border border-slate-300 text-slate-900 font-semibold py-3 rounded-xl group-hover:bg-white group-hover:border-slate-400 transition-colors duration-300">
+                      Open Review
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        // --- Module Container ---
+        function Module({ view, onBack }) {
+          const reticularTabs = [
+            { id: 'mechanisms', label: 'Mechanisms', icon: 'list-ul' },
+            { id: 'clinical', label: 'Clinical/Pathology', icon: 'shield-halved' },
+            { id: 'traps', label: 'Exam Traps', icon: 'triangle-exclamation' },
+            { id: 'rapid', label: 'Rapid Fire', icon: 'bolt' },
+            { id: 'flashcards', label: 'Flashcard Quiz', icon: 'circle-question' },
+            { id: 'essay', label: 'Essay Review', icon: 'file-lines' },
+            { id: 'glossary', label: 'Glossary & Mnemonics', icon: 'bookmark' },
+          ];
+
+          const sleepTabs = [
+            { id: 'short', label: 'Short-Answer Quiz', icon: 'stopwatch' },
+            { id: 'long', label: 'Essay Review', icon: 'file-lines' },
+            { id: 'traps', label: 'Exam Traps', icon: 'triangle-exclamation' },
+            { id: 'keywords', label: 'Keywords & Mnemonics', icon: 'lightbulb' },
+          ];
+
+          const tabs = view === 'sleep' ? sleepTabs : reticularTabs;
+          const [activeTab, setActiveTab] = useState(tabs[0].id);
+          
+          const moduleTitle = view === 'sleep' ? 'Sleep & Arousal' : 'Functions of Reticular Formation & Electrical Activity of Brain';
+
+          return (
+            <div className="min-h-screen bg-slate-50 flex">
+              {/* Fixed Vertical Sidebar (Emerald-950 instead of Purple) */}
+              <div className="w-72 fixed inset-y-0 left-0 bg-emerald-950 flex flex-col shadow-2xl z-30">
+                {/* 1. Header Section */}
+                <div className="p-6 border-b border-emerald-800/50">
+                  <button onClick={onBack} className="text-emerald-300 hover:text-white font-semibold flex items-center gap-2 mb-8 transition-colors text-sm">
+                    <Icon name="arrow-left" /> Back to Dashboard
+                  </button>
+                  
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center text-white shadow-lg">
+                      <Icon name={view === 'sleep' ? 'bed' : 'bolt'} className="text-xl" />
+                    </div>
+                    <div>
+                      <h1 className="text-2xl font-bold text-white tracking-wide">NeuroPhysio</h1>
+                      <div className="text-emerald-400 text-xs font-bold tracking-widest mt-0.5">STUDY GUIDE</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2. Navigation List Section */}
+                <div className="flex-1 overflow-y-auto p-4 py-6">
+                  <h2 className="text-[11px] font-bold text-emerald-600 uppercase tracking-widest mb-4 px-3">Study Navigation</h2>
+                  <nav className="flex flex-col gap-1.5">
+                    {tabs.map(tab => {
+                      const isActive = activeTab === tab.id;
+                      return (
+                        <button
+                          key={tab.id}
+                          onClick={() => { setActiveTab(tab.id); window.scrollTo(0, 0); }}
+                          className={`flex items-center gap-3 px-4 py-3.5 rounded-xl text-left text-sm font-semibold transition-all duration-300 ease-in-out group ${
+                            isActive 
+                              ? 'bg-emerald-500 text-white shadow-md transform scale-[1.02]' 
+                              : 'text-emerald-100 hover:bg-emerald-800/50 hover:text-white hover:scale-[1.01]'
+                          }`}
+                        >
+                          <Icon 
+                            name={tab.icon} 
+                            className={`text-lg transition-colors duration-300 ${
+                              isActive ? 'text-white' : 'text-emerald-400 group-hover:text-emerald-300'
+                            }`} 
+                          />
+                          {tab.label}
+                        </button>
+                      );
+                    })}
+                  </nav>
+                </div>
+
+                {/* 3. Footer Section */}
+                <div className="p-6 border-t border-emerald-800/50">
+                  <p className="text-emerald-400 text-xs leading-relaxed font-medium">
+                    Comprehensive Review:<br/>
+                    <span className="text-white font-bold">{moduleTitle}</span>
+                  </p>
+                </div>
+              </div>
+
+              {/* Main Content Area (Offset by the 72px sidebar width) */}
+              <div className="ml-72 flex-1 min-w-0">
+                <div className="max-w-5xl mx-auto px-8 py-10 animate-in">
+                  <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-8 md:p-12 min-h-[800px]">
+                    {view === 'action-potentials' && (
+                      <>
+                        {activeTab === 'mechanisms' && <MechanismsTab />}
+                        {activeTab === 'clinical' && <ClinicalTab />}
+                        {activeTab === 'traps' && <ExamTrapsTab />}
+                        {activeTab === 'rapid' && <RapidFireTab />}
+                        {activeTab === 'flashcards' && <FlashcardsTab />}
+                        {activeTab === 'essay' && <EssayTab />}
+                        {activeTab === 'glossary' && <GlossaryTab />}
+                      </>
+                    )}
+                    {view === 'sleep' && (
+                      <>
+                        {activeTab === 'short' && <SleepShortTab />}
+                        {activeTab === 'long' && <SleepLongTab />}
+                        {activeTab === 'traps' && <SleepTrapsTab />}
+                        {activeTab === 'keywords' && <SleepKeywordsTab />}
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        // --- Shared Components ---
+        const SectionTitle = ({ children }) => <h2 className="text-2xl font-bold text-slate-800 border-b-2 border-emerald-100 pb-2 mb-6 mt-8 first:mt-0">{children}</h2>;
+        const SubTitle = ({ children }) => <h3 className="text-xl font-bold text-emerald-700 mb-4 mt-6">{children}</h3>;
+        const VIPNote = ({ title, children }) => (
+          <div className="bg-rose-50 border border-rose-200 border-l-4 border-l-rose-500 p-5 rounded-r-2xl my-6 shadow-sm">
+            <h4 className="flex items-center gap-2 text-rose-800 font-bold mb-2 text-lg">
+              <Icon name="user-doctor" /> {title || "Dr's VIP Note"}
+            </h4>
+            <div className="text-rose-900 leading-relaxed text-sm">{children}</div>
+          </div>
+        );
+
+        // --- Tab Content Components ---
+
+        function MechanismsTab() {
+          return (
+            <div className="space-y-6 text-slate-700 leading-relaxed animate-in">
+              <div>
+                <h1 className="text-3xl font-extrabold text-slate-900 mb-4">Reticular Formation & Electrical Activity</h1>
+                <p className="text-lg text-slate-600">A widespread network of interconnected neurons within the brain stem acting as a vital bridge to the thalamus, hypothalamus, and spinal cord.</p>
+              </div>
+
+              <SectionTitle>I. Neuronal Composition</SectionTitle>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                  <h4 className="font-bold text-emerald-700 mb-2 flex items-center gap-2"><Icon name="tower-broadcast" /> Sensory Neurons</h4>
+                  <p className="text-sm">Facilitate interconnections for convergence, divergence, and after-discharge. Receive afferent impulses from:</p>
+                  <ul className="list-disc pl-5 mt-2 text-sm space-y-1">
+                    <li>Long ascending sensory tracts (spinothalamic, dorsal column).</li>
+                    <li>Cranial pathways (trigeminal, visual, auditory, olfactory).</li>
+                    <li>Regulatory centers (basal ganglia, cerebellum, hypothalamus).</li>
+                    <li>Vestibular apparatus.</li>
+                  </ul>
+                </div>
+                <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                  <h4 className="font-bold text-emerald-700 mb-2 flex items-center gap-2"><Icon name="person-running" /> Motor Neurons</h4>
+                  <p className="text-sm">Organized into two antagonistic groups:</p>
+                  <ul className="list-disc pl-5 mt-2 text-sm space-y-1">
+                    <li><strong>Pontine:</strong> Excitatory</li>
+                    <li><strong>Medullary:</strong> Inhibitory</li>
+                  </ul>
+                </div>
+              </div>
+
+              <SubTitle>Functional Anatomy of Motor Nuclei</SubTitle>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse bg-white rounded-xl overflow-hidden shadow-sm border border-slate-200">
+                  <thead className="bg-emerald-50 text-emerald-800">
+                    <tr>
+                      <th className="p-4 border-b border-emerald-100 font-bold">Nuclei Group</th>
+                      <th className="p-4 border-b border-emerald-100 font-bold">Location</th>
+                      <th className="p-4 border-b border-emerald-100 font-bold">Primary Function</th>
+                      <th className="p-4 border-b border-emerald-100 font-bold">Intrinsic Activity</th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-sm">
+                    <tr className="border-b border-slate-100 hover:bg-slate-50">
+                      <td className="p-4 font-bold text-slate-800">Pontine (Excitatory)</td>
+                      <td className="p-4">Pons and Midbrain</td>
+                      <td className="p-4">Facilitates antigravity muscle tone (bulboreticular facilitatory area).</td>
+                      <td className="p-4 font-semibold text-emerald-600">High intrinsic activity</td>
+                    </tr>
+                    <tr className="hover:bg-slate-50">
+                      <td className="p-4 font-bold text-slate-800">Medullary (Inhibitory)</td>
+                      <td className="p-4">Medulla Oblongata</td>
+                      <td className="p-4">Inhibits excitatory area; decreases antigravity muscle tone.</td>
+                      <td className="p-4 font-semibold text-rose-600">No intrinsic activity</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <SectionTitle>II. Ascending Reticular Activating System (RAS)</SectionTitle>
+              <p>A multineuronal, polysynaptic system originating in the excitatory RF. Follows the <strong>reticulo-thalamo-cortical pathway</strong>, relaying through nonspecific thalamic nuclei.</p>
+              
+              <div className="bg-emerald-50 p-6 rounded-2xl border border-emerald-100 mt-4">
+                <h4 className="font-bold text-emerald-800 mb-3">Functions of the RAS:</h4>
+                <ul className="space-y-2">
+                  <li className="flex gap-3"><Icon name="check-circle" className="text-emerald-500 mt-1" /> <strong>Arousal & Consciousness:</strong> Potentiates thalamic/cortical activity to maintain wakefulness.</li>
+                  <li className="flex gap-3"><Icon name="check-circle" className="text-emerald-500 mt-1" /> <strong>Attention:</strong> Facilitates transition from relaxed wakefulness to high alertness.</li>
+                </ul>
+              </div>
+
+              <SectionTitle>III. General Functions of Reticular Formation</SectionTitle>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
+                  <Icon name="link" className="text-emerald-500 text-2xl mb-2" />
+                  <p className="font-bold">Integration</p>
+                  <p className="text-xs text-slate-500 mt-1">Links higher brain & lower spinal centers.</p>
+                </div>
+                <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
+                  <Icon name="child-reaching" className="text-emerald-500 text-2xl mb-2" />
+                  <p className="font-bold">Postural Control</p>
+                  <p className="text-xs text-slate-500 mt-1">Maintains extensor muscle tone.</p>
+                </div>
+                <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
+                  <Icon name="heart-pulse" className="text-emerald-500 text-2xl mb-2" />
+                  <p className="font-bold">Autonomic</p>
+                  <p className="text-xs text-slate-500 mt-1">Regulates HR, BP, respiration.</p>
+                </div>
+                <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
+                  <Icon name="shield-halved" className="text-emerald-500 text-2xl mb-2" />
+                  <p className="font-bold">Pain Modulation</p>
+                  <p className="text-xs text-slate-500 mt-1">Raphe nuclei inhibit dorsal horn.</p>
+                </div>
+                <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
+                  <Icon name="bed" className="text-emerald-500 text-2xl mb-2" />
+                  <p className="font-bold">Sleep Regulation</p>
+                  <p className="text-xs text-slate-500 mt-1">Triggers REM sleep (pontine RF).</p>
+                </div>
+              </div>
+
+              <SectionTitle>IV. Electrical Activity of the Brain</SectionTitle>
+              <SubTitle>Characteristics of Spontaneous Potential (EEG) Waves</SubTitle>
+              <p className="mb-4 text-sm">The EEG measures the summation of postsynaptic potentials of neurons in the cerebral cortex.</p>
+              
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse bg-white rounded-xl overflow-hidden shadow-sm border border-slate-200">
+                  <thead className="bg-slate-100 text-slate-700">
+                    <tr>
+                      <th className="p-3 border-b border-slate-200">Wave</th>
+                      <th className="p-3 border-b border-slate-200">Freq (Hz)</th>
+                      <th className="p-3 border-b border-slate-200">Amp (µv)</th>
+                      <th className="p-3 border-b border-slate-200">Typical State</th>
+                      <th className="p-3 border-b border-slate-200">Recording Site</th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-sm">
+                    <tr className="border-b border-slate-100"><td className="p-3 font-bold">Alpha (α)</td><td className="p-3">8–13</td><td className="p-3">50</td><td className="p-3">Awake, relaxed, eyes closed.</td><td className="p-3">Occipital, Parietal, Frontal.</td></tr>
+                    <tr className="border-b border-slate-100"><td className="p-3 font-bold">Beta (β)</td><td className="p-3">13–30</td><td className="p-3">25</td><td className="p-3">Awake, eyes open, mental activity.</td><td className="p-3">Parietal, Frontal.</td></tr>
+                    <tr className="border-b border-slate-100"><td className="p-3 font-bold">Theta (θ)</td><td className="p-3">4–7</td><td className="p-3">100</td><td className="p-3">Children, light sleep, stress.</td><td className="p-3">Temporal, Parietal.</td></tr>
+                    <tr className="border-b border-slate-100 bg-rose-50/30"><td className="p-3 font-bold text-rose-700">Delta (δ)</td><td className="p-3">{'< 3.5'}</td><td className="p-3">100</td><td className="p-3 text-rose-700 font-semibold">Deep sleep, infants, brain damage.</td><td className="p-3">All cortical areas.</td></tr>
+                    <tr><td className="p-3 font-bold">Gamma (γ)</td><td className="p-3">30–80</td><td className="p-3">0.5–2</td><td className="p-3">Hyperarousal, complex tasks.</td><td className="p-3">All cortical areas.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          );
+        }
+
+        function ClinicalTab() {
+          return (
+            <div className="space-y-6 text-slate-700 animate-in">
+              <SectionTitle>Clinical & Pathology Correlations</SectionTitle>
+              
+              <div className="bg-white border-l-4 border-emerald-500 shadow-sm rounded-r-2xl p-6 mb-6">
+                <h3 className="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
+                  <Icon name="bed-pulse" className="text-emerald-600" /> RAS Lesions & Coma
+                </h3>
+                <p>The Ascending Reticular Activating System (RAS) is structurally critical for consciousness. Lesions affecting the reticulo-thalamo-cortical pathway cause severe impairment of consciousness. Massive or bilateral damage to the midbrain/pontine reticular formation results in a prolonged <strong>coma</strong>.</p>
+                <div className="mt-4 flex flex-wrap gap-2 text-sm">
+                  <span className="bg-slate-100 text-slate-700 px-3 py-1 rounded-full">Tumors</span>
+                  <span className="bg-slate-100 text-slate-700 px-3 py-1 rounded-full">Vascular Lesions</span>
+                  <span className="bg-slate-100 text-slate-700 px-3 py-1 rounded-full">Trauma</span>
+                </div>
+              </div>
+
+              <div className="bg-white border-l-4 border-emerald-500 shadow-sm rounded-r-2xl p-6 mb-6">
+                <h3 className="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
+                  <Icon name="wave-square" className="text-emerald-600" /> Clinical Value of EEG
+                </h3>
+                <ul className="list-disc pl-5 space-y-2">
+                  <li><strong>Localization of brain tumors:</strong> Tumors can alter electrical pathways, causing localized slowing (delta waves) in awake adults.</li>
+                  <li><strong>Diagnosis of epilepsy:</strong> Identifies abnormal spike-and-wave discharges during or between seizures.</li>
+                  <li><strong>Monitoring sleep:</strong> Essential for polysomnography to diagnose disorders like sleep apnea and narcolepsy.</li>
+                  <li><strong>Brain death determination:</strong> An isoelectric or "flat" EEG indicates an irreversible loss of cortical electrical activity.</li>
+                </ul>
+              </div>
+
+              <div className="bg-white border-l-4 border-emerald-500 shadow-sm rounded-r-2xl p-6">
+                <h3 className="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
+                  <Icon name="eye" className="text-emerald-600" /> Alpha Block (Desynchronization)
+                </h3>
+                <p>A sudden transition in the EEG pattern. When a relaxed subject with eyes closed (showing <strong>Alpha waves</strong>) opens their eyes and focuses attention, the regular alpha rhythm is instantly replaced by fast, irregular, low-voltage <strong>Beta rhythms</strong>.</p>
+                <p className="mt-2 text-sm text-slate-500 italic">Mechanism: This "arousal or alerting response" is caused by direct stimulation from the ascending RAS to the cerebral cortex.</p>
+              </div>
+            </div>
+          );
+        }
+
+        function ExamTrapsTab() {
+          return (
+            <div className="space-y-6 animate-in">
+              <SectionTitle>High-Yield Exam Traps</SectionTitle>
+              <p className="text-slate-600 mb-6">Review these 8 heavily tested "Trickiest Parts" that often trick students on board exams.</p>
+
+              <VIPNote title="Trap #1: The Pontine vs. Medullary Paradox">
+                <ul className="list-disc pl-5 font-semibold space-y-2">
+                  <li><strong>Pontine nuclei = Excitatory (REA)</strong> and possess <em>intrinsic activity</em>. They use the Ventral reticulospinal tract.</li>
+                  <li><strong>Medullary nuclei = Inhibitory</strong> and possess <em>NO intrinsic activity</em> (must be driven by external higher centers). They use the Lateral reticulospinal tract.</li>
+                </ul>
+                <p className="mt-2 text-rose-700 italic">Do not mix up the descending tracts or which one fires spontaneously!</p>
+              </VIPNote>
+
+              <VIPNote title="Trap #2: EEG Signal Origin (APs vs. PSPs)">
+                <p>The EEG records the summation of <strong>postsynaptic potentials (EPSPs and IPSPs)</strong> of the superficial cortical neurons.</p>
+                <p className="mt-2 bg-rose-100 p-2 rounded text-rose-900 font-bold">
+                  Exam Trap: It does NOT record action potentials. Questions will frequently try to trick you into selecting "summation of action potentials."
+                </p>
+              </VIPNote>
+
+              <VIPNote title="Trap #3: The Alpha Blockade (Desynchronization)">
+                <p>Awake/Relaxed (Alpha) &rarr; Open eyes or mental math &rarr; Alert/Active (Beta).</p>
+                <p className="mt-2"><strong>The Trap:</strong> "Desynchronization" means the waves become less synchronized. This results in a <strong>drop in amplitude</strong> (voltage) and an <strong>increase in frequency</strong>. Desynchronization equals brain activation, not sleep!</p>
+              </VIPNote>
+
+              <VIPNote title="Trap #4: Thalamic vs. Cortical Pacemakers">
+                <ul className="list-disc pl-5">
+                  <li><strong>Alpha waves</strong> are strictly driven by a thalamocortical loop originating in the <em>non-specific thalamic nuclei</em>.</li>
+                  <li><strong>Delta waves</strong> originate strictly from <em>cortical neurons</em>.</li>
+                </ul>
+                <p className="mt-2"><strong>The Trap:</strong> If an experimental transection separates the thalamus from the cerebral cortex, Alpha waves disappear, but Delta waves persist.</p>
+              </VIPNote>
+
+              <VIPNote title="Trap #5: The Frequency-Amplitude Inverse Rule">
+                <p>As mental activity increases, EEG frequency <strong>increases</strong>, but amplitude <strong>decreases</strong>.</p>
+                <ul className="list-disc pl-5 mt-1 text-sm">
+                  <li>Deep Sleep (Delta) &rarr; Lowest frequency, Highest amplitude.</li>
+                  <li>Alert (Beta) &rarr; Highest frequency, Lowest amplitude.</li>
+                </ul>
+                <p className="mt-2"><strong>The Trap:</strong> Assuming that a "more active" brain produces "bigger" (higher amplitude) waves. It actually produces faster (higher frequency), shorter waves.</p>
+              </VIPNote>
+
+              <VIPNote title="Trap #6: Theta Waves Context">
+                <p><strong>Normal:</strong> Found in children and adults during light sleep.</p>
+                <p className="mt-2"><strong>The Trap:</strong> If a clinical vignette describes prominent Theta waves in an <em>awake adult</em>, it indicates severe emotional stress or brain pathology, not a resting baseline.</p>
+              </VIPNote>
+
+              <VIPNote title="Trap #7: RF Sensory Inputs">
+                <p>The RF receives collaterals from almost all long ascending sensory tracts (spinothalamic, trigeminal, visual, auditory).</p>
+                <p className="mt-2"><strong>The Trap:</strong> The RF is <em>not</em> a specific sensory relay station (like the VPL of the thalamus); it uses these sensory inputs for general background arousal and wakefulness.</p>
+              </VIPNote>
+
+              <VIPNote title="Trap #8: Electrocorticogram vs. EEG">
+                <p>EEG = Electrodes placed on the scalp. Electrocorticogram = Electrodes placed directly on the surface of the cortex.</p>
+                <p className="mt-2"><strong>The Trap:</strong> Because bone and tissue dampen electrical signals, an electrocorticogram will inherently show much <strong>higher voltage amplitudes</strong> than a standard EEG.</p>
+              </VIPNote>
+            </div>
+          );
+        }
+
+        function RapidFireTab() {
+          const qas = [
+            { q: "Describe the anatomical extent of the reticular formation.", a: "The reticular formation is a network of neurons in the brain stem that extends upward to the thalamus and hypothalamus. Its lower end is continuous with the interneurons of the spinal cord." },
+            { q: "How do the pontine and medullary reticular nuclei differ regarding intrinsic activity?", a: "The pontine reticular nuclei possess intrinsic activity, meaning they generate signals spontaneously. In contrast, the medullary reticular nuclei have no intrinsic activity and must be stimulated by other brain regions." },
+            { q: "Explain the role of the descending fibers of the pontine reticular nuclei.", a: "These fibers descend via the ventral reticulospinal tract to spinal motor neurons. They have a generalized activating effect on both flexors and extensors, with a predominant effect on extensors to increase antigravity muscle tone." },
+            { q: "What is the \"reticulo-thalamo-cortical pathway\"?", a: "This is the primary pathway of the RAS where fibers extend upward, relay through nonspecific thalamic nuclei, and then diffuse to almost all parts of the cerebral cortex to promote arousal." },
+            { q: "Identify three physiological factors that stimulate the RAS.", a: "The RAS is stimulated by pain signals from the periphery, positive feedback signals from the cerebral cortex (emotions/thoughts), and metabolic factors like thyroid hormone or caffeine." },
+            { q: "How does the reticular formation modulate pain sensations?", a: "The RF acts as a site for perceiving slow pain. Furthermore, it originates the descending analgesic system, where raphe nuclei projections inhibit pain signals at the spinal cord's dorsal horn." },
+            { q: "What is the difference between an EEG and an electrocorticogram?", a: "An EEG is recorded from electrodes applied to the scalp of the patient. An electrocorticogram is recorded with electrodes applied directly to the surface of the cerebral cortex." },
+            { q: "Under what specific conditions are Alpha waves recorded?", a: "Alpha waves are recorded in adults who are awake but in a relaxed state with their eyes closed. They are primarily found in the occipital, parietal, and frontal regions." },
+            { q: "Describe the characteristics and clinical significance of Delta waves.", a: "Delta waves have a low frequency (less than 3.5 cycles/sec) and high amplitude (100 µv). They occur during deep sleep, in infants, and are clinical indicators of brain damage or surgical anesthesia." },
+            { q: "Define the phenomenon of \"Alpha block.\"", a: "Alpha block is the replacement of regular alpha rhythms with fast, irregular beta rhythms when a subject focuses their attention. It is caused by RAS stimulation and is also termed desynchronization." }
+          ];
+
+          const [openIndex, setOpenIndex] = useState(null);
+
+          const toggle = (index) => {
+            setOpenIndex(openIndex === index ? null : index);
+          };
+
+          return (
+            <div className="animate-in">
+              <div className="flex justify-between items-end mb-6">
+                <SectionTitle>Rapid Fire Q&A</SectionTitle>
+              </div>
+              <div className="space-y-4">
+                {qas.map((qa, i) => {
+                  const isOpen = openIndex === i;
+                  return (
+                    <div key={i} className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden transition-all duration-300">
+                      <button 
+                        onClick={() => toggle(i)}
+                        className="w-full flex items-center justify-between p-4 cursor-pointer font-semibold text-slate-800 hover:bg-slate-50 transition-colors text-left"
+                      >
+                        <span className="flex gap-3 items-start pr-4">
+                          <span className="text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded flex-shrink-0">Q{i+1}</span>
+                          {qa.q}
+                        </span>
+                        <Icon name="chevron-down" className={`text-slate-400 transition-transform duration-300 flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`} />
+                      </button>
+                      <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                        <div className="overflow-hidden">
+                          <div className="px-4 pb-4 pt-2 text-slate-600 border-t border-slate-100 ml-[3.25rem]">
+                            <span className="font-bold text-emerald-700 mr-2">A:</span>{qa.a}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        }
+
+        function FlashcardsTab() {
+          const cards = [
+            { q: 'If you see: "Summation of postsynaptic potentials" (NOT action potentials).', a: "Think: EEG basis." },
+            { q: 'If you see: Adult, awake, relaxed, "eyes closed."', a: "Think: Alpha (α) waves (8-13 cycles/sec)." },
+            { q: 'If you see: Adult, awake, "eyes open" or actively engaged in a standard task.', a: "Think: Beta (β) waves (13-30 cycles/sec)." },
+            { q: 'If you see: A patient in deep sleep, an infant, or someone with brain damage/surgical anesthesia.', a: "Think: Delta (δ) waves (< 3.5 cycles/sec, high amplitude)." },
+            { q: 'If you see: An adult under emotional stress or in light sleep.', a: "Think: Theta (θ) waves (4-7 cycles/sec)." },
+            { q: 'If you see: "Pontine reticular nuclei."', a: "Think: Excitatory (Bulboreticular facilitatory area, Intrinsic activity)." },
+            { q: 'If you see: "Medullary reticular nuclei."', a: "Think: Inhibitory (antagonistic to pontine, NO intrinsic activity)." }
+          ];
+
+          const [currentIndex, setCurrentIndex] = useState(0);
+          const [isFlipped, setIsFlipped] = useState(false);
+
+          const nextCard = () => {
+            setIsFlipped(false);
+            setTimeout(() => {
+              setCurrentIndex((prev) => (prev + 1) % cards.length);
+            }, 150);
+          };
+
+          const prevCard = () => {
+            setIsFlipped(false);
+            setTimeout(() => {
+              setCurrentIndex((prev) => (prev - 1 + cards.length) % cards.length);
+            }, 150);
+          };
+
+          return (
+            <div className="flex flex-col items-center animate-in">
+              <SectionTitle>Flashcard Mastery: Hooks & Keywords</SectionTitle>
+              <p className="text-slate-500 mb-8">Click the card to flip. Test your pattern recognition!</p>
+
+              {/* Flashcard Container */}
+              <div 
+                className="w-full max-w-lg h-64 perspective-1000 cursor-pointer"
+                onClick={() => setIsFlipped(!isFlipped)}
+              >
+                <div className={`relative w-full h-full transform-style-3d flashcard-transition shadow-xl rounded-3xl ${isFlipped ? 'rotate-y-180' : ''}`}>
+                  
+                  {/* Front */}
+                  <div className="absolute w-full h-full backface-hidden bg-white border-2 border-emerald-100 rounded-3xl flex flex-col items-center justify-center p-8 text-center">
+                    <span className="absolute top-4 left-6 text-sm font-bold text-slate-300">Hook {currentIndex + 1} of {cards.length}</span>
+                    <Icon name="eye" className="text-3xl text-emerald-200 mb-4" />
+                    <h3 className="text-xl font-bold text-slate-800">{cards[currentIndex].q}</h3>
+                  </div>
+
+                  {/* Back */}
+                  <div className="absolute w-full h-full backface-hidden bg-emerald-600 rounded-3xl flex flex-col items-center justify-center p-8 text-center rotate-y-180 text-white">
+                     <span className="absolute top-4 left-6 text-sm font-bold text-emerald-300">Keyword</span>
+                     <h3 className="text-2xl font-bold">{cards[currentIndex].a}</h3>
+                  </div>
+
+                </div>
+              </div>
+
+              {/* Controls */}
+              <div className="flex items-center gap-6 mt-8">
+                <button onClick={prevCard} className="w-12 h-12 rounded-full bg-slate-100 hover:bg-emerald-100 hover:text-emerald-700 flex items-center justify-center transition-colors text-slate-600">
+                  <Icon name="chevron-left" />
+                </button>
+                <span className="font-bold text-slate-400">{currentIndex + 1} / {cards.length}</span>
+                <button onClick={nextCard} className="w-12 h-12 rounded-full bg-slate-100 hover:bg-emerald-100 hover:text-emerald-700 flex items-center justify-center transition-colors text-slate-600">
+                  <Icon name="chevron-right" />
+                </button>
+              </div>
+            </div>
+          );
+        }
+
+        function EssayTab() {
+          return (
+            <div className="space-y-8 animate-in">
+              <SectionTitle>Essay Review & Marking Schemes</SectionTitle>
+
+              <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
+                <h3 className="text-xl font-bold text-slate-800 mb-4">
+                  <span className="text-emerald-600 mr-2">Essay 1:</span>
+                  Compare and contrast the Pontine and Medullary Reticular Nuclei.
+                </h3>
+                <div className="prose prose-slate max-w-none text-slate-600">
+                  <p><strong>Answer:</strong> The pontine and medullary reticular nuclei act antagonistically to regulate motor and cortical activity. The pontine nuclei, located in the pons and midbrain, function as the "Reticular Excitatory Area" or bulboreticular facilitatory area. They possess intrinsic activity and send descending signals via the ventral reticulospinal tract to increase antigravity muscle tone. Their ascending fibers form the RAS, responsible for cortical arousal.</p>
+                  <p className="mt-4">Conversely, the medullary nuclei, located in the medulla oblongata, serve as the "Reticular Inhibitory Area." They lack intrinsic activity and function by inhibiting the pontine facilitatory area. Their descending signals travel through the lateral reticulospinal tract to decrease muscle tone. While the pontine area is stimulated by the neocerebellum and vestibular nuclei, the medullary area is activated by the paleocerebellum, red nucleus, and inhibitory cortical areas.</p>
+                </div>
+              </div>
+
+              <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
+                <h3 className="text-xl font-bold text-slate-800 mb-4">
+                  <span className="text-emerald-600 mr-2">Essay 2:</span>
+                  Discuss the functional importance of the Ascending Reticular Activating System (RAS) and the factors that influence its activity.
+                </h3>
+                <div className="prose prose-slate max-w-none text-slate-600">
+                  <p><strong>Answer:</strong> The RAS is essential for maintaining life-sustaining states of consciousness, arousal, and attention. By discharging to the thalamus and cortex, it potentiates electrical activity across the brain, facilitating the transition from relaxed wakefulness to alert attention. Without a functional RAS, an individual enters a coma or a state of severely impaired consciousness.</p>
+                  <p className="mt-4">The system is highly sensitive to external and internal stimuli. It is stimulated by peripheral pain, cortical feedback during emotional or cognitive processes, and chemical stimulants like caffeine and sympathomimetic drugs. Conversely, it is inhibited by the absence of sensory input, sleep center signals, and chemical depressants like alcohol or general anesthesia. This sensitivity allows the brain to modulate alertness based on environmental demands and internal physiological states.</p>
+                </div>
+              </div>
+
+              <div className="bg-white border-l-4 border-emerald-500 rounded-r-2xl p-8 shadow-sm">
+                <h3 className="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
+                  <Icon name="user-doctor" className="text-emerald-600" /> Case Study: Clinical Interpretation
+                </h3>
+                <div className="bg-slate-50 p-4 rounded-xl mb-4 border border-slate-200">
+                  <p className="font-semibold text-slate-700">Prompt: A 45-year-old patient undergoes an EEG. The technician notes a transition from 10 cycles/sec waves in the occipital region to 20 cycles/sec waves in the frontal and parietal regions. Explain the physiological and behavioral changes the patient likely underwent to cause this shift, and name the specific waves involved.</p>
+                </div>
+                <div className="prose prose-slate max-w-none text-slate-600">
+                  <p><strong>Answer Scheme:</strong> The patient underwent a transition from Alpha (α) waves (10 Hz) to Beta (β) waves (20 Hz). Behaviorally, the patient was initially awake, relaxed, and had their eyes closed (producing Alpha waves predominantly in the occipital region). The shift to Beta waves indicates that the patient opened their eyes or engaged in mental exertion/focused attention. Physiologically, this phenomenon is called <em>Alpha desynchronization</em> (or Alpha block), driven by the Ascending Reticular Activating System (RAS) stimulating the cerebral cortex, resulting in higher frequency, lower amplitude waves.</p>
+                </div>
+              </div>
+
+              <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
+                <h3 className="text-xl font-bold text-slate-800 mb-4">
+                  <span className="text-emerald-600 mr-2">Core Essay 1:</span>
+                  Neuroanatomy of the Reticular Formation
+                </h3>
+                <div className="prose prose-slate max-w-none text-slate-600">
+                  <p><strong>Prompt:</strong> Describe the structural organization of the Reticular Formation, detailing its sensory inputs and the antagonistic relationship of its motor outputs.</p>
+                  <p className="mt-2"><strong>Answer Scheme:</strong> The Reticular Formation is a widespread network of interconnected neurons in the brain stem. Its sensory inputs arrive via collaterals from almost all long ascending sensory tracts (spinothalamic, trigeminal, visual, auditory) which facilitate background arousal through convergence and divergence. Motor output is divided antagonistically: The <em>Pontine reticular nuclei</em> act as the Reticular Excitatory Area (REA), possessing intrinsic, spontaneous electrical activity, projecting via the ventral reticulospinal tract to facilitate extensor muscle tone. Conversely, the <em>Medullary reticular nuclei</em> act as the inhibitory area, lacking intrinsic activity (requiring activation from higher suppressor centers), projecting via the lateral reticulospinal tract to decrease muscle tone.</p>
+                </div>
+              </div>
+
+              <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
+                <h3 className="text-xl font-bold text-slate-800 mb-4">
+                  <span className="text-emerald-600 mr-2">Core Essay 2:</span>
+                  Origins of EEG Waves
+                </h3>
+                <div className="prose prose-slate max-w-none text-slate-600">
+                  <p><strong>Prompt:</strong> Identify the specific anatomical origins of Alpha (α) waves versus Delta (δ) waves within the central nervous system.</p>
+                  <p className="mt-2"><strong>Answer Scheme:</strong> Alpha waves are generated by rhythmic discharges originating from the non-specific thalamic nuclei projecting to the cerebral cortex (a thalamocortical loop). Conversely, Delta waves originate inherently from the cortical neurons themselves, largely independent of lower thalamic or brainstem pacemakers. If the thalamus is separated from the cortex, Alpha waves cease, but Delta waves persist.</p>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        function GlossaryTab() {
+          return (
+            <div className="space-y-8 animate-in text-slate-700">
+              <SectionTitle>Glossary & Mnemonics</SectionTitle>
+
+              <div className="grid md:grid-cols-2 gap-8">
+                {/* Glossary Terms */}
+                <div className="space-y-4">
+                  <h3 className="font-bold text-xl text-emerald-800 flex items-center gap-2 mb-4">
+                    <Icon name="book-open" /> Key Terms
+                  </h3>
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <p className="font-bold text-slate-800">Electrocorticogram</p>
+                    <p className="text-sm mt-1">An electrical recording obtained with electrodes placed <em>directly</em> on the surface of the cortex, resulting in higher voltage amplitudes compared to a standard scalp EEG.</p>
+                  </div>
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <p className="font-bold text-slate-800">Convergence / Divergence / After-discharge</p>
+                    <p className="text-sm mt-1">The complex types of neural signal processing facilitated by the vast interconnections of the sensory neurons within the Reticular Formation.</p>
+                  </div>
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <p className="font-bold text-slate-800">Desynchronization</p>
+                    <p className="text-sm mt-1">The transition from synchronized alpha waves to irregular beta waves (Alpha Block). Characterized by increased frequency but <em>decreased</em> amplitude.</p>
+                  </div>
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <p className="font-bold text-slate-800">Nonspecific Thalamic Nuclei</p>
+                    <p className="text-sm mt-1">The primary relay station and pacemaker origin for Alpha waves before projecting diffusely to the cerebral cortex.</p>
+                  </div>
+                </div>
+
+                {/* Mnemonics & Buzzwords */}
+                <div className="space-y-4">
+                  <h3 className="font-bold text-xl text-emerald-800 flex items-center gap-2 mb-4">
+                    <Icon name="lightbulb" /> Mnemonics & Buzzwords
+                  </h3>
+
+                  <div className="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-xl">
+                    <p className="font-bold text-emerald-900 mb-2">EEG Wave Order (Fastest to Slowest)</p>
+                    <p className="text-sm text-emerald-800 font-mono bg-emerald-100 p-2 rounded text-center font-bold">
+                      "Great Brains Always Think Deeply"
+                    </p>
+                    <ul className="text-sm mt-3 space-y-1 text-emerald-800">
+                      <li><strong>G</strong>amma (&gt;30 Hz) - Hyperaroused</li>
+                      <li><strong>B</strong>eta (13-30 Hz) - Awake, eyes open</li>
+                      <li><strong>A</strong>lpha (8-13 Hz) - Awake, eyes closed</li>
+                      <li><strong>T</strong>heta (4-7 Hz) - Light sleep/stress</li>
+                      <li><strong>D</strong>elta (&lt;3.5 Hz) - Deep sleep/damage</li>
+                    </ul>
+                  </div>
+                  
+                  <div className="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-xl">
+                    <p className="font-bold text-emerald-900">P.E.V. vs M.I.L.</p>
+                    <ul className="text-sm text-emerald-800 mt-2 space-y-1">
+                      <li><strong>P.E.V.</strong> = <strong>P</strong>ontine nuclei are <strong>E</strong>xcitatory and use the <strong>V</strong>entral reticulospinal tract.</li>
+                      <li><strong>M.I.L.</strong> = <strong>M</strong>edullary nuclei are <strong>I</strong>nhibitory and use the <strong>L</strong>ateral reticulospinal tract.</li>
+                    </ul>
+                  </div>
+
+                  <div className="bg-slate-100 p-4 rounded-xl border border-slate-200 mt-6">
+                    <p className="font-bold text-slate-700 text-sm uppercase tracking-wide border-b border-slate-300 pb-2 mb-2">Golden Buzzwords</p>
+                    <ul className="text-sm space-y-2">
+                      <li><strong className="text-emerald-600">Intrinsic Activity:</strong> Defines the spontaneous firing of Pontine nuclei.</li>
+                      <li><strong className="text-emerald-600">Summation of PSPs:</strong> The definitive answer for what an EEG measures.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        // --- Sleep & Arousal Components ---
+
+        function SleepShortTab() {
+          const qas = [
+            { q: "What is the primary difference between sleep and a coma in terms of arousal?", a: "Sleep is a state of unconsciousness from which a person can be aroused by sensory or motor stimuli. Conversely, a coma is a state of unconsciousness from which a person cannot be aroused." },
+            { q: "Why is REM sleep referred to as \"paradoxical sleep\"?", a: "REM is called paradoxical because the EEG shows rapid, irregular, low-voltage waves similar to an alert state, indicating marked brain activity. Despite this high level of neural activity, the person remains deeply asleep and difficult to arouse." },
+            { q: "Identify the EEG characteristics and the percentage of the total sleep cycle represented by Stage 2 NREM sleep.", a: "Stage 2 is characterized by theta waves interspersed with sleep spindles (bursts of 12-14 Hz alpha waves) and K-complexes (large, slow potentials). This stage constitutes the largest portion of the sleep cycle, accounting for 40%–50% of total sleep." },
+            { q: "How do the physiological parameters of the cardiovascular and respiratory systems change during NREM sleep?", a: "During NREM, there is a decrease in pulse, blood pressure, respiration, and basal metabolic rate by approximately 10-30%. This is primarily due to increased parasympathetic activity during this restorative physical rest phase." },
+            { q: "What role does the Suprachiasmatic Nucleus play in the sleep-wake cycle?", a: "This nucleus, located in the hypothalamus, serves as the master clock for the body. It synchronizes the sleep/wakefulness rhythm with the external dark/light cycle." },
+            { q: "Explain the \"Active Theory\" of sleep regarding NREM and REM centers.", a: "The Active Theory posits that sleep results from the stimulation of specific areas: the anterior hypothalamus and basal forebrain induce NREM sleep, while acetylcholine-secreting neurons in the upper brain stem reticular formation induce REM sleep." },
+            { q: "How does the distribution of REM sleep change from infancy to adulthood?", a: "REM sleep occupancy is highest in early life, taking up 80% of sleep time in premature infants and 50% in full-term neonates. In adults, this decreases to 25%, and it continues to decline with further aging." },
+            { q: "Describe the role of the Reticular Activating System (RAS) and the positive feedback loop in maintaining wakefulness.", a: "The midbrain reticular formation (RAS) sends excitation signals to the cortex to activate it. Once activated, the cortex sends signals back to the RAS via corticofugal fibers, creating a positive feedback loop that maintains consciousness." },
+            { q: "What are the specific neurochemical conditions required for the brain to enter the \"Awake\" state?", a: "The awake state is achieved when Norepinephrine and Serotonin levels are dominant, and Histamine release is increased. Simultaneously, GABA release must be reduced, and Acetylcholine levels in the pontine reticular formation must be low." },
+            { q: "What is the significance of Muramyl peptide in the metabolic theory of sleep?", a: "This is a low molecular weight substance that accumulates in the cerebrospinal fluid and urine of animals kept awake for several days. According to the metabolic theory, its accumulation serves as a \"sleep factor\" that induces sleep after prolonged wakefulness." }
+          ];
+
+          const [openIndex, setOpenIndex] = useState(null);
+
+          const toggle = (index) => {
+            setOpenIndex(openIndex === index ? null : index);
+          };
+
+          return (
+            <div className="animate-in">
+              <div className="flex justify-between items-end mb-6">
+                <SectionTitle>Short-Answer Quiz</SectionTitle>
+              </div>
+              <p className="text-slate-600 mb-6">Test your recall of key sleep physiology concepts.</p>
+              <div className="space-y-4">
+                {qas.map((qa, i) => {
+                  const isOpen = openIndex === i;
+                  return (
+                    <div key={i} className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden transition-all duration-300">
+                      <button 
+                        onClick={() => toggle(i)}
+                        className="w-full flex items-center justify-between p-4 cursor-pointer font-semibold text-slate-800 hover:bg-slate-50 transition-colors text-left"
+                      >
+                        <span className="flex gap-3 items-start pr-4">
+                          <span className="text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded flex-shrink-0">Q{i+1}</span>
+                          {qa.q}
+                        </span>
+                        <Icon name="chevron-down" className={`text-slate-400 transition-transform duration-300 flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`} />
+                      </button>
+                      <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                        <div className="overflow-hidden">
+                          <div className="px-4 pb-4 pt-2 text-slate-600 border-t border-slate-100 ml-[3.25rem]">
+                            <span className="font-bold text-emerald-700 mr-2">A:</span>{qa.a}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        }
+
+        function SleepLongTab() {
+          return (
+            <div className="space-y-8 animate-in">
+              <SectionTitle>Essay Review & Comprehensive Answers</SectionTitle>
+
+              <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
+                <h3 className="text-xl font-bold text-slate-800 mb-4">
+                  <span className="text-emerald-600 mr-2">Question 1:</span>
+                  Compare and contrast the physiological and mental characteristics of NREM and REM sleep.
+                </h3>
+                <div className="prose prose-slate max-w-none text-slate-600 space-y-4">
+                  <p><strong>Answer:</strong> NREM and REM sleep serve distinct biological purposes and exhibit vastly different physiological profiles. NREM, or "Slow Wave Sleep," is primarily dedicated to physical rest. It is characterized by a "quieting" of the body: heart rate, blood pressure, and basal metabolic rate decrease by 10-30% due to parasympathetic dominance. Physically, muscle tone is slightly inhibited, eyes are miosed, and growth hormone secretion increases. Mentally, dreams are rare and generally not remembered. NREM is divided into four stages, moving from light theta waves to deep, slow-frequency delta waves.</p>
+                  <p>In contrast, REM sleep is dedicated to mental rest and memory consolidation. It is characterized by physiological instability: pulse, blood pressure, and respiration become irregular or increase due to sympathetic activity. While brain activity is high (resembling wakefulness on an EEG), the body experiences "REM atonia," a marked inhibition of spinal muscle control to prevent the acting out of dreams. Unlike NREM, dreams in REM are vivid and remembered. REM also features penile erections and teeth grinding, which are absent in NREM. While NREM dominates the early night, REM bouts become longer toward the morning.</p>
+                </div>
+              </div>
+
+              <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
+                <h3 className="text-xl font-bold text-slate-800 mb-4">
+                  <span className="text-emerald-600 mr-2">Question 2:</span>
+                  Discuss the neurochemical regulation of the transitions between wakefulness, NREM, and REM sleep.
+                </h3>
+                <div className="prose prose-slate max-w-none text-slate-600 space-y-4">
+                  <p><strong>Answer:</strong> The transitions between states of consciousness are controlled by a complex interplay of neurotransmitters and specific brain nuclei. Wakefulness is promoted by the Reticular Activating System (RAS) and the posterior hypothalamus. Chemically, this state is maintained by high levels of Norepinephrine (from the locus coeruleus), Serotonin (from the raphe nuclei), and Histamine (from tuberomamillary neurons). These chemicals activate the thalamus and cortex, while the inhibitory neurotransmitter GABA is reduced.</p>
+                  <p>The transition to NREM sleep occurs when GABA-releasing neurons in the preoptic area of the hypothalamus become active, inhibiting the arousal centers and reducing Histamine release. This leads to a deactivation of the thalamus and cortex. NREM sleep represents a state where aminergic (Norepinephrine/Serotonin) and cholinergic (Acetylcholine) activities are balanced.</p>
+                  <p>REM sleep is triggered when cholinergic neurons in the pontine reticular formation discharge signals directly to the cerebral cortex. During REM, Acetylcholine levels are high, while Norepinephrine and Serotonin levels are at their lowest. The "switch" between these states is further regulated by Orexin, produced in the lateral hypothalamus, which stabilizes the activity of the brainstem nuclei.</p>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        function SleepTrapsTab() {
+          return (
+            <div className="space-y-6 animate-in">
+              <SectionTitle>High-Yield Exam Traps</SectionTitle>
+              <p className="text-slate-600 mb-6">Review these 8 heavily tested "Trickiest Parts" of Sleep Physiology.</p>
+
+              <VIPNote title="Trap #1: The Brain Wave Deception (Alpha vs. Beta in Sleep)">
+                <p><strong>The Concept:</strong> Brain waves during sleep do not strictly follow a "slower is deeper" rule.</p>
+                <p className="mt-2"><strong>The Details:</strong> Stage 2 NREM features Sleep Spindles (12-14 Hz Alpha bursts) overriding Theta waves. REM sleep features high-frequency, low-voltage Beta waves (desynchronized).</p>
+                <p className="mt-2 text-rose-700 italic"><strong>Exam Trap:</strong> Thinking Alpha and Beta waves only exist when completely awake. Alpha bursts appear in light NREM, and Beta dominates REM.</p>
+              </VIPNote>
+
+              <VIPNote title="Trap #2: The Muscle Tone & Motor Activity Paradox">
+                <p><strong>The Concept:</strong> Physical actions during sleep occur in the "resting" phase, not the "active" phase.</p>
+                <p className="mt-2"><strong>The Details:</strong> NREM &rarr; Muscle tone is only slightly inhibited (allows sleepwalking/talking). REM &rarr; Profound inhibition of spinal motor neurons (paralysis).</p>
+                <p className="mt-2 text-rose-700 italic"><strong>Exam Trap:</strong> Assuming a patient acts out their dreams during REM. Sleepwalking/talking strictly occurs during NREM due to retained muscle tone.</p>
+              </VIPNote>
+
+              <VIPNote title="Trap #3: The Arousal Threshold Trap">
+                <p><strong>The Concept:</strong> The difficulty of waking a patient doesn't strictly correlate with "deep" NREM sleep.</p>
+                <p className="mt-2"><strong>The Details:</strong> NREM &rarr; Easy arousal. REM &rarr; Hard to awake by sensory stimuli, yet individuals usually wake up spontaneously in the morning during a REM episode.</p>
+                <p className="mt-2 text-rose-700 italic"><strong>Exam Trap:</strong> Believing Stage 4 NREM is the hardest stage to wake someone from. REM is actually highly resistant to external sensory arousal.</p>
+              </VIPNote>
+
+              <VIPNote title="Trap #4: The Autonomic Flip-Flop">
+                <p><strong>The Concept:</strong> Vital signs behave completely differently depending on the sleep phase.</p>
+                <p className="mt-2"><strong>The Details:</strong> NREM &rarr; Increased parasympathetic activity causes a stable 10-30% drop in HR, BP, Respiration, and BMR. REM &rarr; Irregular HR and respiration.</p>
+                <p className="mt-2 text-rose-700 italic"><strong>Exam Trap:</strong> Assuming the body is in a uniform state of physiological rest throughout the night. REM features wild, irregular autonomic fluctuations.</p>
+              </VIPNote>
+
+              <VIPNote title="Trap #5: The Age-Dependent REM Shift">
+                <p><strong>The Concept:</strong> The percentage of REM sleep is inversely proportional to age.</p>
+                <p className="mt-2"><strong>The Details:</strong> Premature infants &rarr; 80% REM. Neonates &rarr; 50% REM. Adults &rarr; 25% REM.</p>
+                <p className="mt-2 text-rose-700 italic"><strong>Exam Trap:</strong> Missing demographic clues in a vignette. If a question describes spending 50% of the sleep cycle in REM, it's a normal neonate, not a pathological adult.</p>
+              </VIPNote>
+
+              <VIPNote title="Trap #6: The Neurotransmitter Seesaw (Histamine vs. GABA)">
+                <p><strong>The Concept:</strong> Wakefulness and NREM sleep are driven by opposing neurochemical shifts.</p>
+                <p className="mt-2"><strong>The Pathway:</strong> Increased Histamine + Reduced GABA &rarr; Wakefulness. Reduced Histamine + Increased GABA &rarr; NREM sleep.</p>
+                <p className="mt-2 text-rose-700 italic"><strong>Exam Trap:</strong> Reversing the neurotransmitter directions. Remember that Histamine must drop, and GABA must rise to induce NREM.</p>
+              </VIPNote>
+
+              <VIPNote title="Trap #7: The Brainstem Nuclei Match-Up">
+                <p><strong>The Concept:</strong> Different brainstem structures control different phases via specific neurotransmitters.</p>
+                <p className="mt-2"><strong>The Details:</strong> Raphe Nucleus &rarr; Serotonin &rarr; Induces NREM sleep. Locus Coeruleus &rarr; Norepinephrine &rarr; Triggers REM sleep.</p>
+                <p className="mt-2 text-rose-700 italic"><strong>Exam Trap:</strong> Mixing up the nuclei. A lesion in the Raphe Nucleus causes insomnia (loss of NREM induction), whereas the Locus Coeruleus drives REM.</p>
+              </VIPNote>
+
+              <VIPNote title="Trap #8: The Transection/Passive Theory Fallacy">
+                <p><strong>The Concept:</strong> Sleep is NOT merely the absence of sensory input (Passive Theory).</p>
+                <p className="mt-2"><strong>The Details:</strong> Transection at mid-pons &rarr; Coma. Transection at medullocervical junction &rarr; Normal sleep/wake cycles persist.</p>
+                <p className="mt-2 text-rose-700 italic"><strong>Exam Trap:</strong> Concluding the passive theory is correct. The medullocervical transection removes ascending sensory input but leaves sleep cycles intact, proving sleep is an ACTIVE neurochemical process.</p>
+              </VIPNote>
+              
+              <SectionTitle>If You See This... Think That! (Hooks)</SectionTitle>
+              
+              <div className="space-y-4 text-sm mt-4">
+                <div className="bg-slate-100 p-4 rounded-xl border border-slate-200">
+                    <p className="font-bold text-slate-800 border-b border-slate-300 pb-2 mb-2">1. EEG Waves & Sleep Stages Hooks</p>
+                    <ul className="space-y-2">
+                        <li><strong>If you see:</strong> "Theta waves" in a sleeping patient. &rarr; <strong className="text-emerald-700">Think:</strong> Stage 1 NREM (Very light sleep).</li>
+                        <li><strong>If you see:</strong> "Sleep spindles" (12-14 Hz) or "K complexes." &rarr; <strong className="text-emerald-700">Think:</strong> Stage 2 NREM (Light sleep, making up 40-50% of cycle).</li>
+                        <li><strong>If you see:</strong> "Delta waves" (0.5-3.5 Hz). &rarr; <strong className="text-emerald-700">Think:</strong> Stages 3 & 4 NREM (Deepest sleep).</li>
+                        <li><strong>If you see:</strong> A sleep cycle occurring "every 90 minutes" lasting "5 to 30 minutes." &rarr; <strong className="text-emerald-700">Think:</strong> REM Sleep.</li>
+                    </ul>
+                </div>
+                
+                <div className="bg-slate-100 p-4 rounded-xl border border-slate-200">
+                    <p className="font-bold text-slate-800 border-b border-slate-300 pb-2 mb-2">2. Physiological Characteristics Hooks</p>
+                    <ul className="space-y-2">
+                        <li><strong>If you see:</strong> "Sleep talking and sleepwalking." &rarr; <strong className="text-emerald-700">Think:</strong> NREM Sleep (Skeletal muscle tone is only slightly inhibited).</li>
+                        <li><strong>If you see:</strong> Increased parasympathetic activity (decreased pulse, BP, respiration, BMR). &rarr; <strong className="text-emerald-700">Think:</strong> NREM Sleep.</li>
+                        <li><strong>If you see:</strong> A surge in "Growth Hormone." &rarr; <strong className="text-emerald-700">Think:</strong> NREM Sleep (Deep sleep stages).</li>
+                        <li><strong>If you see:</strong> "Eyes deviate up and miosed" (constricted pupils). &rarr; <strong className="text-emerald-700">Think:</strong> NREM Sleep.</li>
+                        <li><strong>If you see:</strong> Absence of dreams, or dreams "not remembered." &rarr; <strong className="text-emerald-700">Think:</strong> NREM Sleep.</li>
+                    </ul>
+                </div>
+
+                <div className="bg-slate-100 p-4 rounded-xl border border-slate-200">
+                    <p className="font-bold text-slate-800 border-b border-slate-300 pb-2 mb-2">3. Neurochemistry & Arousal Hooks</p>
+                    <ul className="space-y-2">
+                        <li><strong>If you see:</strong> Increased GABA and decreased Histamine. &rarr; <strong className="text-emerald-700">Think:</strong> NREM Sleep.</li>
+                        <li><strong>If you see:</strong> Decreased GABA and increased Histamine. &rarr; <strong className="text-emerald-700">Think:</strong> Wakefulness.</li>
+                        <li><strong>If you see:</strong> Activation of aminergic (NE & Serotonin) AND cholinergic (ACh) neurons. &rarr; <strong className="text-emerald-700">Think:</strong> Wakefulness.</li>
+                        <li><strong>If you see:</strong> Decreased aminergic activity (Low NE & Serotonin) but INCREASED cholinergic activity (High ACh). &rarr; <strong className="text-emerald-700">Think:</strong> REM Sleep.</li>
+                        <li><strong>If you see:</strong> Decreased activity of both aminergic and cholinergic neurons. &rarr; <strong className="text-emerald-700">Think:</strong> NREM Sleep.</li>
+                        <li><strong>If you see:</strong> "Orexin." &rarr; <strong className="text-emerald-700">Think:</strong> Hypothalamic neuropeptide regulating wake/sleep transitions.</li>
+                        <li><strong>If you see:</strong> "Muramyl peptide" accumulating in CSF and urine. &rarr; <strong className="text-emerald-700">Think:</strong> Metabolic theory of sleep.</li>
+                    </ul>
+                </div>
+              </div>
+
+            </div>
+          );
+        }
+
+        function SleepKeywordsTab() {
+          return (
+            <div className="space-y-8 animate-in text-slate-700">
+              <SectionTitle>Keywords & Mnemonics</SectionTitle>
+
+              <div className="grid md:grid-cols-2 gap-8">
+                {/* Glossary Terms */}
+                <div className="space-y-4">
+                  <h3 className="font-bold text-xl text-emerald-800 flex items-center gap-2 mb-4">
+                    <Icon name="book-open" /> Key Terms ("Golden Buzzwords")
+                  </h3>
+
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <p className="font-bold text-slate-800">NREM Sleep (Stages 1-4)</p>
+                    <p className="text-sm mt-1">Slow-wave sleep, increased parasympathetic activity, physical rest, sleep talking/walking, increased growth hormone, absent dreams.</p>
+                  </div>
+
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <p className="font-bold text-slate-800">REM Sleep (Paradoxical Sleep)</p>
+                    <p className="text-sm mt-1">Beta waves (desynchronized), profound skeletal muscle inhibition (atrophy of muscle tone), active dreaming, irregular vitals, penile erection, bruxism.</p>
+                  </div>
+
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <p className="font-bold text-slate-800">Stage 2 NREM Features</p>
+                    <p className="text-sm mt-1">Characterized by <strong>Sleep Spindles</strong> (12-14 Hz alpha bursts) and <strong>K complexes</strong>. The largest sleep portion (40-50%).</p>
+                  </div>
+
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <p className="font-bold text-slate-800">Sleep Cycle Timing</p>
+                    <p className="text-sm mt-1">Occurs in 90-minute intervals, with 5-30 minute REM bouts, totaling 4-6 cycles per night.</p>
+                  </div>
+                  
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <p className="font-bold text-slate-800">Corticofugal Fibers</p>
+                    <p className="text-sm mt-1">Fibers that carry signals from the cortex back to the RAS to maintain the positive feedback loop of wakefulness.</p>
+                  </div>
+                  
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <p className="font-bold text-slate-800">Delta & Theta Waves</p>
+                    <p className="text-sm mt-1"><strong>Delta:</strong> Very slow, high-amplitude (0.5–3.5 Hz) in deep NREM (Stages 3 & 4). <br/><strong>Theta:</strong> Brain waves (4-8 Hz range) found in Stage 1 & 2 NREM.</p>
+                  </div>
+                  
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <p className="font-bold text-slate-800">Orexin (Hypocretin)</p>
+                    <p className="text-sm mt-1">Produced in the lateral hypothalamus; promotes wakefulness. Deficiency causes narcolepsy.</p>
+                  </div>
+                </div>
+
+                {/* Hooks & Neurotransmitters */}
+                <div className="space-y-4">
+                  <h3 className="font-bold text-xl text-emerald-800 flex items-center gap-2 mb-4">
+                    <Icon name="brain" /> Neurochemical Hooks
+                  </h3>
+
+                  <div className="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-xl">
+                    <p className="font-bold text-emerald-900 mb-2">Brainstem Nuclei Match-Up</p>
+                    <ul className="text-sm text-emerald-800 mt-2 space-y-2">
+                      <li><strong className="text-emerald-900">Raphe Nuclei:</strong> Serotonin, active inhibitory process, sleep induction. Lesion causes insomnia.</li>
+                      <li><strong className="text-emerald-900">Locus Coeruleus:</strong> Norepinephrine, triggers REM sleep.</li>
+                    </ul>
+                  </div>
+                  
+                  <div className="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-xl">
+                    <p className="font-bold text-emerald-900 mb-2">The "Awake" Cocktail</p>
+                    <ul className="text-sm text-emerald-800 mt-2 space-y-1">
+                      <li><strong className="text-emerald-900">High:</strong> Norepinephrine, Serotonin, Histamine (active aminergic/cholinergic neurons)</li>
+                      <li><strong className="text-emerald-900">Low:</strong> GABA, Acetylcholine (in pontine RF)</li>
+                    </ul>
+                  </div>
+
+                  <div className="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-xl">
+                    <p className="font-bold text-emerald-900 mb-2">The "NREM" Cocktail</p>
+                    <ul className="text-sm text-emerald-800 mt-2 space-y-1">
+                      <li><strong className="text-emerald-900">High:</strong> GABA (Thalamus/cortex deactivation)</li>
+                      <li><strong className="text-emerald-900">Low:</strong> Histamine</li>
+                    </ul>
+                  </div>
+
+                  <div className="bg-slate-100 p-4 rounded-xl border border-slate-200 mt-6">
+                    <p className="font-bold text-slate-700 text-sm uppercase tracking-wide border-b border-slate-300 pb-2 mb-2">Metabolic Sleep Theory</p>
+                    <p className="text-sm text-slate-600">Prolonged wakefulness leads to <strong>Muramyl peptide</strong> accumulation in CSF and urine, acting as a sleep factor.</p>
+                  </div>
+
+                  <h3 className="font-bold text-xl text-emerald-800 flex items-center gap-2 mb-4 mt-8">
+                    <Icon name="lightbulb" /> Mnemonics
+                  </h3>
+                  
+                  <div className="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-xl">
+                    <p className="font-bold text-emerald-900 mb-2">NREM vs REM Roles</p>
+                    <ul className="text-sm text-emerald-800 mt-2 space-y-2">
+                      <li><strong className="text-emerald-900">NREM = "Near Rest" (Physical):</strong><br/>Focuses on physical restoration, decreased BMR, and increased Growth Hormone.</li>
+                      <li><strong className="text-emerald-900">REM = "Rapid Executive Mentation":</strong><br/>Focuses on mental rest, vivid dreams, and high brain activity.</li>
+                    </ul>
+                  </div>
+
+                  <div className="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-xl">
+                    <p className="font-bold text-emerald-900 mb-2">Neurotransmitter Shortcuts</p>
+                    <ul className="text-sm text-emerald-800 mt-2 space-y-3">
+                      <li>
+                        <strong className="text-emerald-900 bg-emerald-100 px-1 rounded">GABA = "Go Asleep"</strong>
+                        <p className="mt-0.5">High GABA levels promote the transition to NREM sleep.</p>
+                      </li>
+                      <li>
+                        <strong className="text-emerald-900 bg-emerald-100 px-1 rounded">The "S" Chemicals</strong>
+                        <p className="mt-0.5"><strong>S</strong>erotonin (helps keep you awake) and the <strong>S</strong>uprachiasmatic nucleus (<strong>S</strong>yncs your clock).</p>
+                      </li>
+                      <li>
+                        <strong className="text-emerald-900 bg-emerald-100 px-1 rounded">"A" for REM</strong>
+                        <p className="mt-0.5"><strong>A</strong>cetylcholine is the primary neurotransmitter that triggers REM sleep.</p>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
