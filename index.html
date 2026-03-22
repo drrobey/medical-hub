@@ -53,6 +53,8 @@
         const GraduationCap = ({className}) => <i className={`fa-solid fa-graduation-cap ${className}`}></i>;
         const Pills = ({className}) => <i className={`fa-solid fa-pills ${className}`}></i>;
         const Bolt = ({className}) => <i className={`fa-solid fa-bolt ${className}`}></i>;
+        // تمت إضافة أيقونة الميكروسكوب لحل مشكلة ReferenceError
+        const Microscope = ({className}) => <i className={`fa-solid fa-microscope ${className}`}></i>;
 
         function App() {
             // Check the URL hash on load to determine if we should start inside the CNS module
@@ -216,67 +218,86 @@
 
         function CNSDashboard({ onBack }) {
             return (
-                <div className="max-w-6xl mx-auto space-y-12">
-                    <header className="flex flex-col md:flex-row items-center justify-between gap-6 border-b border-slate-700 pb-8 pt-8">
+                <div className="max-w-6xl mx-auto space-y-8">
+                    <header className="flex flex-col md:flex-row items-center justify-between gap-6 border-b border-slate-700 pb-6 pt-6">
                         <div>
-                            <button onClick={onBack} className="text-slate-400 hover:text-white font-bold flex items-center gap-2 mb-4 transition-colors">
+                            <button onClick={onBack} className="text-slate-400 hover:text-white font-bold flex items-center gap-2 mb-2 transition-colors text-sm">
                                 <ArrowLeft /> Back to Systems
                             </button>
-                            <h1 className="text-4xl md:text-5xl font-black text-white flex items-center gap-4">
+                            <h1 className="text-3xl md:text-4xl font-black text-white flex items-center gap-3">
                                 <Brain className="text-blue-500" /> CNS Module
                             </h1>
-                            <p className="text-slate-400 mt-2 text-lg">Select your specialized subject hub.</p>
+                            <p className="text-slate-400 mt-2 text-base">Select your specialized subject hub.</p>
                         </div>
                     </header>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-24">
+                    {/* Changed to a 4-column grid and reduced spacing */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 pb-16">
+                        
                         {/* Pharmacology Hub Link */}
-                        <a href="PharmaBoard.html" className="group relative overflow-hidden bg-slate-800 border border-slate-700 rounded-3xl p-8 transition-all duration-300 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/20 hover:-translate-y-2 block">
-                            <div className="relative z-10">
-                                <div className="w-16 h-16 bg-blue-600/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                    <Pills className="text-3xl text-blue-500" />
+                        <a href="PharmaBoard.html" className="group relative overflow-hidden bg-slate-800 border border-slate-700 rounded-2xl p-5 transition-all duration-300 hover:border-blue-500 hover:shadow-xl hover:shadow-blue-500/20 hover:-translate-y-1 flex flex-col">
+                            <div className="relative z-10 flex flex-col h-full">
+                                <div className="w-12 h-12 bg-blue-600/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shrink-0">
+                                    <Pills className="text-2xl text-blue-500" />
                                 </div>
-                                <h2 className="text-2xl font-bold mb-2 text-white flex items-center gap-2">Neuro-Pharmacology</h2>
-                                <p className="text-slate-400 mb-6 text-sm leading-relaxed">
+                                <h2 className="text-lg font-bold mb-2 text-white">Neuro-Pharmacology</h2>
+                                <p className="text-slate-400 mb-4 text-xs leading-relaxed flex-1">
                                     In-depth review of Anxiolytics, Antidepressants, and Epilepsy medications with VIP clinical notes.
                                 </p>
-                                <div className="flex items-center text-blue-500 font-bold gap-2">
-                                    Enter Pharma Hub <ArrowRight className="group-hover:translate-x-2 transition-transform" />
+                                <div className="flex items-center text-blue-500 font-bold gap-2 text-sm mt-auto">
+                                    Enter Pharma <ArrowRight className="group-hover:translate-x-1 transition-transform" />
                                 </div>
                             </div>
                         </a>
 
                         {/* Physiology Hub Link */}
-                        <a href="PhysioBoard.html" className="group relative overflow-hidden bg-slate-800 border border-slate-700 rounded-3xl p-8 transition-all duration-300 hover:border-emerald-500 hover:shadow-2xl hover:shadow-emerald-500/20 hover:-translate-y-2 block">
-                            <div className="relative z-10">
-                                <div className="w-16 h-16 bg-emerald-600/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                    <Bolt className="text-3xl text-emerald-500" />
+                        <a href="PhysioBoard.html" className="group relative overflow-hidden bg-slate-800 border border-slate-700 rounded-2xl p-5 transition-all duration-300 hover:border-emerald-500 hover:shadow-xl hover:shadow-emerald-500/20 hover:-translate-y-1 flex flex-col">
+                            <div className="relative z-10 flex flex-col h-full">
+                                <div className="w-12 h-12 bg-emerald-600/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shrink-0">
+                                    <Bolt className="text-2xl text-emerald-500" />
                                 </div>
-                                <h2 className="text-2xl font-bold mb-2 text-white flex items-center gap-2">Neuro-Physiology</h2>
-                                <p className="text-slate-400 mb-6 text-sm leading-relaxed">
+                                <h2 className="text-lg font-bold mb-2 text-white">Neuro-Physiology</h2>
+                                <p className="text-slate-400 mb-4 text-xs leading-relaxed flex-1">
                                     Study action potentials, synaptic transmission, sensory pathways, and the autonomic nervous system.
                                 </p>
-                                <div className="flex items-center text-emerald-500 font-bold gap-2">
-                                    Enter Physio Hub <ArrowRight className="group-hover:translate-x-2 transition-transform" />
+                                <div className="flex items-center text-emerald-500 font-bold gap-2 text-sm mt-auto">
+                                    Enter Physio <ArrowRight className="group-hover:translate-x-1 transition-transform" />
                                 </div>
                             </div>
                         </a>
 
                         {/* Anatomy Hub Link */}
-                        <a href="AnatomyBoard.html" className="group relative overflow-hidden bg-slate-800 border border-slate-700 rounded-3xl p-8 transition-all duration-300 hover:border-red-500 hover:shadow-2xl hover:shadow-red-500/20 hover:-translate-y-2 block">
-                            <div className="relative z-10">
-                                <div className="w-16 h-16 bg-red-600/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                    <Brain className="text-3xl text-red-500" />
+                        <a href="AnatomyBoard.html" className="group relative overflow-hidden bg-slate-800 border border-slate-700 rounded-2xl p-5 transition-all duration-300 hover:border-red-500 hover:shadow-xl hover:shadow-red-500/20 hover:-translate-y-1 flex flex-col">
+                            <div className="relative z-10 flex flex-col h-full">
+                                <div className="w-12 h-12 bg-red-600/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shrink-0">
+                                    <Brain className="text-2xl text-red-500" />
                                 </div>
-                                <h2 className="text-2xl font-bold mb-2 text-white flex items-center gap-2">Neuro-Anatomy</h2>
-                                <p className="text-slate-400 mb-6 text-sm leading-relaxed">
+                                <h2 className="text-lg font-bold mb-2 text-white">Neuro-Anatomy</h2>
+                                <p className="text-slate-400 mb-4 text-xs leading-relaxed flex-1">
                                     Master the cerebellum, brainstem pathways, cranial nerves, and vascular supply.
                                 </p>
-                                <div className="flex items-center text-red-500 font-bold gap-2">
-                                    Enter Anatomy Hub <ArrowRight className="group-hover:translate-x-2 transition-transform" />
+                                <div className="flex items-center text-red-500 font-bold gap-2 text-sm mt-auto">
+                                    Enter Anatomy <ArrowRight className="group-hover:translate-x-1 transition-transform" />
                                 </div>
                             </div>
                         </a>
+
+                        {/* Pathology Hub Link */}
+                        <a href="PathologyBoard.html" className="group relative overflow-hidden bg-slate-800 border border-slate-700 rounded-2xl p-5 transition-all duration-300 hover:border-purple-500 hover:shadow-xl hover:shadow-purple-500/20 hover:-translate-y-1 flex flex-col">
+                            <div className="relative z-10 flex flex-col h-full">
+                                <div className="w-12 h-12 bg-purple-600/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shrink-0">
+                                    <Microscope className="text-2xl text-purple-500" />
+                                </div>
+                                <h2 className="text-lg font-bold mb-2 text-white">Neuro-Pathology</h2>
+                                <p className="text-slate-400 mb-4 text-xs leading-relaxed flex-1">
+                                    Review CNS tumors, neurodegenerative disorders, demyelinating diseases, and vascular pathologies.
+                                </p>
+                                <div className="flex items-center text-purple-500 font-bold gap-2 text-sm mt-auto">
+                                    Enter Pathology <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+                                </div>
+                            </div>
+                        </a>
+
                     </div>
                 </div>
             );
