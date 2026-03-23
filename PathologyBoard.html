@@ -34,29 +34,166 @@
     <script type="text/babel">
         const { useState } = React;
 
+        // --- Content Database ---
+        const contentDB = {
+            cerebellar_tumors: {
+                title: "Cerebellar Tumors",
+                shortQuiz: [
+                    { q: "What is the primary demographic for Medulloblastoma, and where does it typically originate?", a: "Medulloblastoma primarily presents in childhood. It is an embryonal neuroepithelial tumor that originates in the cerebellum or the dorsal brain stem." },
+                    { q: "Describe the gross appearance of a Medulloblastoma located in the cerebellar vermis.", a: "In the cerebellar vermis, Medulloblastomas typically appear as pink or grey friable masses. These masses often grow to fill the fourth ventricle." },
+                    { q: "What defines the microscopic structure known as a Homer-Wright rosette?", a: "This microscopic feature consists of primitive tumor cells arranged in a circular pattern. These cells surround a central area of neuropil." },
+                    { q: "Identify the most common cytogenetic aberration found in Medulloblastoma.", a: "The most frequent aberration is the loss of the short arm of chromosome 17 (17p). This often results in an isochromosome 17q through the duplication of the long arm." },
+                    { q: "Which molecular subtype of Medulloblastoma is associated with the best prognosis, and how is it identified?", a: "The WNT-activated subtype is the most favorable genetic variant, occurring in 10% of cases. It is identified by the presence of nuclear β-catenin." },
+                    { q: "Compare the typical age of onset for Medulloblastoma versus Hemangioblastoma.", a: "Medulloblastoma is a childhood tumor, whereas Hemangioblastoma typically occurs in adults. Both are frequently found in the cerebellum." },
+                    { q: "Explain the relationship between Hemangioblastoma and von Hippel-Lindau (VHL) disease.", a: "Approximately 30% of Hemangioblastomas are associated with inherited von Hippel-Lindau disease. This involve the inactivation of the VHL tumor suppressor gene." },
+                    { q: "Why might a Hemangioblastoma appear yellow during a gross examination?", a: "The yellow coloration of a Hemangioblastoma is due to its rich lipid content. This is reflected microscopically by the presence of vacuolated stromal cells." },
+                    { q: "What are the two main microscopic components of a Hemangioblastoma?", a: "The tumor is composed of neoplastic stromal cells, which are large and vacuolated, and abundant vascular cells. Numerous thin-walled vessels are a prominent feature." },
+                    { q: "How does a Hemangioblastoma typically appear on an MRI?", a: "On an MRI, a Hemangioblastoma usually presents as a cyst with an enhancing mural nodule. The nodule typically abuts a pial surface." }
+                ],
+                essays: [
+                    { title: "Comparative Analysis: Medulloblastoma vs. Hemangioblastoma", question: "Compare and contrast Medulloblastoma and Hemangioblastoma in terms of WHO grading, age of onset, and typical gross presentation.", answer: "Medulloblastoma and Hemangioblastoma represent two distinct ends of the WHO grading spectrum for cerebellar tumors. Medulloblastoma is a Grade IV tumor, indicating a highly malignant embryonal neuroepithelial growth primarily affecting children. Grossly, it often appears as a friable pink or grey mass in the cerebellar vermis that fills the fourth ventricle, or a firm, circumscribed mass in the hemispheres. In contrast, Hemangioblastoma is a Grade I tumor, signifying a benign, slow-growing lesion typically found in adults. Its gross presentation is characterized by high vascularity and a cystic nature, often appearing as a yellow-tinted cyst with a solid vascular nodule abutting the pial surface." },
+                    { title: "Molecular and Genetic Markers in Medulloblastoma", question: "Discuss the significance of genetic analysis in the diagnosis and prognosis of Medulloblastoma, highlighting specific aberrations and subtypes.", answer: "Genetic analysis has become integral to the diagnosis of Medulloblastoma, as molecular variants provide clinical utility beyond traditional morphology. The most common cytogenetic finding, occurring in up to 50% of cases, is the loss of the short arm of chromosome 17 (17p), leading to isochromosome 17q. Beyond these aberrations, the identification of the WNT-activated molecular subtype is crucial for prognosis; although it is the rarest subtype (10%), it is the most favorable. This subtype is specifically recognized by the presence of nuclear β-catenin, allowing clinicians to better categorize the tumor within the integrated WHO diagnosis framework." }
+                ],
+                mnemonics: [
+                    { title: '"WNT is a WIN"', desc: 'To remember that the WNT-activated subtype is the most favorable (WIN) prognosis for Medulloblastoma.' },
+                    { title: '"Children go Mid, Adults go High"', desc: 'Mid (Medulloblastoma) = Cerebellar Vermis (Middle), Childhood.\nHigh (Hemangioblastoma) = High vascularity, Adults.' },
+                    { title: '"17p is Missing (Poor)"', desc: 'To remember that the loss of the short arm of chromosome 17 (p for "petite"/short) is a common aberration in the more aggressive Medulloblastoma.' },
+                    { title: '"VHL: Very Highly Lipidized"', desc: 'To remember that Hemangioblastoma is associated with VHL disease and contains lipid-rich (yellow) vacuolated cells.' }
+                ],
+                terms: [
+                    { term: 'Homer-Wright Rosette', def: 'Classic microscopic marker for Medulloblastoma; cells surrounding neuropil.' },
+                    { term: 'Isochromosome 17q', def: 'Common cytogenetic aberration in Medulloblastoma (loss of 17p, gain of 17q).' },
+                    { term: 'Nuclear β-catenin', def: 'Diagnostic marker for the WNT-activated (most favorable) Medulloblastoma.' },
+                    { term: 'Vacuolated Stromal Cells', def: 'Large, lipid-filled cells characteristic of Hemangioblastoma.' },
+                    { term: 'Mural Nodule', def: 'The solid vascular component of a cystic Hemangioblastoma seen on MRI.' },
+                    { term: 'Friable', def: 'Easily crumbled; describes the gross texture of vermis-based Medulloblastomas.' },
+                    { term: 'VHL Gene', def: 'Tumor suppressor gene inactivated in Hemangioblastoma (sporadic and inherited).' }
+                ]
+            },
+            meningeal_infections: {
+                title: "Meningeal Infections",
+                shortQuiz: [
+                    { q: "What are the primary pathways through which infectious agents reach the nervous system?", a: "Infectious agents reach the CNS via the bloodstream, direct trauma, or peripheral nerves. They may also arrive through local extension from adjacent infections such as osteomyelitis, infected sinuses, or dental infections." },
+                    { q: "Distinguish between the origins and typical causes of epidural abscesses and subdural empyema.", a: "Epidural abscesses typically arise from adjacent focal infections like sinusitis or osteomyelitis. Subdural empyema results from infections in the skull or air sinuses spreading to the subdural space, often involving bacterial or fungal agents." },
+                    { q: "How can a large subdural empyema lead to brain infarction?", a: "A large subdural empyema can produce a mass effect on the brain. Additionally, it may cause thrombophlebitis in the bridging veins crossing the subdural space, leading to venous occlusion and subsequent brain infarction." },
+                    { q: "Define meningitis and clarify when the term 'meningoencephalitis' is applied.", a: "Meningitis is an inflammatory process specifically involving the leptomeninges. If the inflammatory process or infection spreads further into the underlying brain parenchyma, it is classified as meningoencephalitis." },
+                    { q: "Identify three non-infectious causes of meningitis listed in the pathological context.", a: "Beyond pathogens, meningitis can be caused by certain drugs and chemicals. It is also associated with systemic conditions such as Systemic Lupus Erythematosus (SLE) and neoplastic conditions like meningeal carcinomatosis." },
+                    { q: "What are the characteristic 'gross' pathological findings in acute pyogenic meningitis?", a: "Pathological examination reveals a suppurative exudate (pus) over the surface of the brain within the leptomeninges. The meningeal vessels appear prominently engorged, and the cerebrospinal fluid (CSF) is visibly mixed with pus." },
+                    { q: "Describe the microscopic environment of the subarachnoid space during bacterial meningitis.", a: "Microscopically, the meningeal vessels are dilated and congested. The subarachnoid space is filled with a dense collection of fibrin, neutrophils, pus cells, and histiocytes." },
+                    { q: "How does meningeal fibrosis contribute to the development of hydrocephalus?", a: "Fibrosis of the meninges can obstruct the foramina of Luschka and Magendie. This blockage prevents the normal flow of CSF, leading to hydrocephalus in children and increased intracranial tension in adults." },
+                    { q: "What is Waterhouse-Friderichsen Syndrome, and what is its clinical trigger?", a: "This is a severe general complication of meningitis where septicemia leads to acute adrenal insufficiency. It is often associated with the systemic spread of the infection and can lead to infective endocarditis." },
+                    { q: "Where is the exudate typically located in tuberculous meningitis, and what are its physical characteristics?", a: "In tuberculous meningitis, the subarachnoid space contains a gelatinous or fibrinous exudate located primarily at the base of the brain. This exudate can obliterate the cisterns, encase cranial nerves, and may contain discrete white granules." }
+                ],
+                essays: [
+                    { title: "Comparative Analysis of Acute Pyogenic and Viral (Aseptic) Meningitis", question: "Compare and contrast acute pyogenic meningitis and viral (aseptic) meningitis regarding their clinical course, macroscopic findings, and microscopic pathology.", answer: "Acute pyogenic meningitis and viral (aseptic) meningitis represent two distinct clinical and pathological entities. Clinically, pyogenic meningitis—usually bacterial in origin—is characterized by a fulminant course with severe symptoms including fever, headache, photophobia, neck stiffness, and altered mental status. In contrast, the clinical course of viral meningitis is generally less fulminant and less severe.\n\nMacroscopically, acute pyogenic meningitis presents with striking features, including a heavy suppurative exudate over the brain surface, engorged vessels, and pus-laden CSF. Viral meningitis, however, has no distinctive macroscopic characteristics other than occasional brain swelling.\n\nMicroscopically, the differences are equally pronounced. Pyogenic meningitis shows a subarachnoid space packed with neutrophils, fibrin, and histiocytes, accompanied by dilated vasculature. Viral meningitis shows either no recognizable microscopic abnormality or a mild to moderate lymphocytic infiltrate within the leptomeninges, highlighting the different cellular responses to bacterial versus viral pathogens." },
+                    { title: "Local and Systemic Complications of CNS Infections", question: "Detail the potential local and systemic complications arising from CNS infections as described in the pathological context.", answer: "CNS infections can lead to a variety of devastating local and systemic complications. Locally, the most immediate concern is increased intracranial tension (ICT). If the infection leads to meningeal fibrosis, it can obstruct the foramina of Luschka and Magendie, resulting in hydrocephalus or further increases in ICT. This pressure and inflammation can damage cranial nerves III, IV, and VI, manifesting clinically as diplopia, squint, and ptosis. Other local complications include the development of encephalitis (inflammation of the brain tissue) and thrombosis of the blood vessels.\n\nSystemically, the spread of the infection into the bloodstream (septicemia) can lead to life-threatening conditions. These include infective endocarditis and Waterhouse-Friderichsen Syndrome, the latter characterized by acute adrenal insufficiency. In cases of chronic infections like tuberculous meningitis, the resulting arachnoid fibrosis serves as a persistent cause of hydrocephalus." }
+                ],
+                mnemonics: [
+                    { title: 'The "Base" of TB', desc: 'Remember that TuberculosB is found at the Base of the brain and causes Bead-like granules (white granules).' },
+                    { title: 'Pyogenic = Pus', desc: 'The word "pyogenic" literally means pus-producing; look for neutrophils and fibrin on histology.' },
+                    { title: 'The 3, 4, 6 Fix', desc: 'Damage to cranial nerves III, IV, and VI leads to the clinical triad of diplopia, squint, and ptosis.' }
+                ],
+                terms: [
+                    { term: 'Leptomeninges', def: 'The inner two membranes (pia mater and arachnoid) surrounding the brain and spinal cord; the primary site of meningitis.' },
+                    { term: 'Meningoencephalitis', def: 'Inflammation involving both the meninges and the underlying brain tissue.' },
+                    { term: 'Subdural Empyema', def: 'A collection of pus in the subdural space; can cause mass effect and venous infarction.' },
+                    { term: 'Bridging Veins', def: 'Veins crossing the subdural space; their thrombosis in infection leads to brain infarction.' },
+                    { term: 'Suppurative Exudate', def: 'Pus; the "golden buzzword" for acute bacterial (pyogenic) meningitis.' },
+                    { term: 'Neutrophils', def: 'The predominant white blood cell found in the subarachnoid space in bacterial meningitis.' },
+                    { term: 'Lymphocytic Infiltrate', def: 'The characteristic microscopic finding in viral (aseptic) meningitis.' },
+                    { term: 'Waterhouse-Friderichsen', def: 'Systemic complication involving septicemia and acute adrenal insufficiency.' },
+                    { term: 'Tuberculoma', def: 'A well-circumscribed intraparenchymal mass resulting from Mycobacterium tuberculosis.' },
+                    { term: 'Foramina of Luschka/Magendie', def: 'Openings for CSF flow; their obstruction via fibrosis leads to hydrocephalus.' },
+                    { term: 'Base of the Brain', def: 'The classic location for the gelatinous exudate found in tuberculous meningitis.' },
+                    { term: 'Aseptic Meningitis', def: 'Meningitis with a clinical course less fulminant than pyogenic, usually viral.' }
+                ]
+            },
+            parenchymal_infections: {
+                title: "Parenchymal Infections",
+                shortQuiz: [
+                    { q: "Identify the three primary routes by which a brain abscess can arise.", a: "Brain abscesses typically originate from direct implantation due to trauma, local extension from adjacent infections like mastoiditis or otitis media, or hematogenous spread. Hematogenous dissemination often stems from systemic pyemia, such as acute bacterial endocarditis or suppurative lung diseases." },
+                    { q: "Contrast the morphology of an acute brain abscess with that of a chronic brain abscess.", a: "An acute abscess is characterized by an irregular area of liquefactive necrosis surrounded by a zone of congestion. In contrast, a chronic abscess develops a smooth fibrous tissue capsule surrounded by a zone of reactive gliosis." },
+                    { q: "What are the potential clinical consequences of a brain abscess rupture?", a: "If a brain abscess ruptures, it can lead to severe secondary complications including ventriculitis and meningitis. Additionally, it may result in venous sinus thrombosis, which further complicates the clinical picture." },
+                    { q: "What are the characteristic histologic features of viral encephalitis?", a: "Viral encephalitis is characterized by perivascular and parenchymal mononuclear cell infiltrates. Other hallmark features include the presence of microglial nodules and the occurrence of neuronophagia." },
+                    { q: "List the three patterns of direct brain injury caused by HIV-1.", a: "The direct effects of HIV-1 on the brain manifest as HIV-1 aseptic meningitis and HIV-1 meningoencephalitis, also known as AIDS dementia. Additionally, it can cause vacuolar myelopathy." },
+                    { q: "Explain the pathogenesis and cellular targets of Progressive Multifocal Leukoencephalopathy (PML).", a: "PML is caused by the JC virus, a papovavirus that typically affects immunosuppressed patients. The virus specifically infects oligodendrocytes and astrocytes, leading to the irregular destruction of white matter through demyelination." },
+                    { q: "Describe the typical localization and clinical presentation of HSV-1 encephalitis.", a: "HSV-1 encephalitis primarily affects the inferior and medial regions of the temporal lobes and the orbital gyri of the frontal lobes. This localization results in clinical alterations in memory, mood, and behavior." },
+                    { q: "How does the presentation of HSV-2 infection differ between adults and neonates?", a: "In adults, HSV-2 typically presents as meningitis. However, in neonates born via vaginal delivery to mothers with active genital infections, it presents as a diffuse and serious encephalitis." },
+                    { q: "Why is Aspergillus fumigatus particularly destructive to brain tissue?", a: "Aspergillus causes widespread septic hemorrhagic infarction. This occurs because the fungus invades the walls of blood vessels, leading to subsequent thrombosis and tissue death." },
+                    { q: "What unique CSF finding is associated with CNS Cysticercosis?", a: "In cases of Cysticercosis, particularly those involving intraventricular or subarachnoid infection, the white blood cell count often shows a significant presence of eosinophils. This occurs in approximately 50% of these cases." }
+                ],
+                essays: [
+                    { title: "Pathogenesis and Diagnostic Features of Brain Abscesses", question: "Discuss the etiology, morphological progression, and diagnostic imaging of brain abscesses as described in the text.", answer: "Brain abscesses are primarily bacterial in origin and develop through three distinct pathways: direct traumatic implantation, local extension from nearby suppurative infections (such as the middle ear or mastoid air cells), or hematogenous spread via the bloodstream. When spread hematogenously, infections often originate from the heart (acute bacterial endocarditis) or the lungs, reaching the brain through the vertebral system of veins.\n\nMorphologically, the abscess evolves from an acute to a chronic state. Initially, it presents as an irregular zone of liquefactive necrosis characterized by vascular congestion. Over time, the body attempts to wall off the infection, resulting in a chronic abscess with a smooth fibrous capsule and an outer layer of reactive gliosis. Clinically, this presents as progressive focal neurological deficits and signs of increased intracranial tension (ICT). On diagnostic imaging (CT or MRI), these abscesses characteristically appear as \"ring-enhancing lesions,\" a hallmark finding where the vascularized capsule takes up contrast material while the necrotic center remains dark." },
+                    { title: "Viral CNS Infections in Immunocompromised and Specific Populations", question: "Compare and contrast the CNS manifestations of HIV-1, Progressive Multifocal Leukoencephalopathy (PML), and Herpes Simplex Virus (HSV).", answer: "HIV-1, PML, and HSV represent distinct viral challenges to the CNS. HIV-1 affects a high percentage of AIDS patients, with neuropathologic changes seen in up to 90% of cases. It causes direct injury (meningitis, dementia, and myelopathy) and predisposes patients to opportunistic infections and primary CNS lymphoma. PML is specifically an opportunistic infection caused by the JC papovavirus in immunosuppressed patients. Unlike the more diffuse involvement of HIV, PML targets the white matter by infecting oligodendrocytes and astrocytes, leading to demyelination and a poor prognosis.\n\nHSV encephalitis is categorized by virus type. HSV-1 is the most common cause of sporadic viral encephalitis in children and young adults, specifically targeting the temporal and frontal lobes. This leads to distinct behavioral and memory deficits. Pathologically, it is identified by Cowdry type A intranuclear inclusions in neurons and glia. Conversely, HSV-2 is generally associated with meningitis in adults but causes devastating diffuse encephalitis in neonates who acquire the virus during birth. While HIV and PML are often linked to immune status, HSV-1 can affect immunocompetent individuals but presents with highly localized destruction." },
+                    { title: "Differential Diagnosis of Meningitis via CSF Analysis", question: "Using the provided data, analyze the differences in Cerebrospinal Fluid (CSF) findings between Acute Bacterial, Viral, and Tuberculous meningitis.", answer: "CSF analysis is critical for differentiating the etiology of meningitis. In Acute Bacterial Meningitis, the fluid appears turbid with a significantly elevated opening pressure. The white blood cell (WBC) count is high with a predominance of Polymorphonuclear leukocytes (PMNs). Protein levels are elevated, while glucose levels are characteristically low.\n\nViral Meningitis presents with a normal to moderately increased opening pressure and clear fluid. The WBC count is elevated, but the cell type is predominantly lymphocytes. Protein levels are normal to mildly increased, and glucose levels typically remain normal, which is a key differentiator from bacterial and tuberculous forms.\n\nTuberculous Meningitis often shows an increased opening pressure, though it may be low if a spinal block occurs. The fluid may show a \"cobweb formation.\" Like viral meningitis, the WBC increase is lymphocytic; however, it differs significantly from viral meningitis because the protein is increased and the glucose is decreased, similar to the bacterial profile. This combination of lymphocytic pleocytosis and low glucose is a hallmark of the tuberculous variety." }
+                ],
+                mnemonics: [
+                    { title: 'HSV-1 "Three T\'s"', desc: 'Temporal Lobe, Thoughts (Mood/Memory changes), and Type A (Cowdry Type A inclusions).' },
+                    { title: 'PML "The Three I\'s"', desc: 'Immunosuppressed patients, Infects oligodendrocytes, Irregular white matter destruction.' },
+                    { title: 'CSF Glucose Rule', desc: '"Bacterial and Tubercular take the sugar" (Low Glucose). "Viral leaves the sugar" (Normal Glucose).' },
+                    { title: 'Brain Abscess Origins', desc: 'Direct (Trauma), Local (Ear/Sinus), Hematogenous (Heart/Lung) — Think D-L-H (like the shipping company, delivering infection to the brain).' }
+                ],
+                terms: [
+                    { term: 'Ring-enhancing lesion', def: 'Classic CT/MRI appearance of a brain abscess.' },
+                    { term: 'Liquefactive necrosis', def: 'The type of tissue death found in the center of an acute brain abscess.' },
+                    { term: 'Reactive gliosis', def: 'The cellular response surrounding the fibrous capsule of a chronic abscess.' },
+                    { term: 'Neuronophagia', def: 'The destruction of nerve cells by phagocytes, seen in viral encephalitis.' },
+                    { term: 'Microglial nodules', def: 'Small clusters of microglia found in the brain parenchyma during viral infection.' },
+                    { term: 'Negri bodies', def: 'Characteristic cytoplasmic inclusion bodies found in Rabies.' },
+                    { term: 'Cowdry type A', def: 'Eosinophilic intranuclear inclusion bodies found in HSV-1 (neurons and glia).' },
+                    { term: 'JC Virus', def: 'The causative agent of Progressive Multifocal Leukoencephalopathy (PML).' },
+                    { term: 'Demyelination', def: 'The destruction of the myelin sheath, specifically in the white matter during PML.' },
+                    { term: 'Cobweb formation', def: 'A physical characteristic of CSF in Tuberculous meningitis.' }
+                ]
+            }
+        };
+
+
         // --- Main App Component ---
         function App() {
           const [currentView, setCurrentView] = useState('dashboard');
           const [direction, setDirection] = useState('forward');
 
           const navigateTo = (view) => {
-            setDirection(view === 'dashboard' ? 'backward' : 'forward');
+            // Logic to determine animation direction
+            if (view === 'dashboard') {
+                setDirection('backward');
+            } else if (view === 'cns_infections_menu' && currentView !== 'dashboard') {
+                setDirection('backward'); // Going back to submenu from a topic
+            } else {
+                setDirection('forward');
+            }
             setCurrentView(view);
           };
 
-          // Routes back to the CNS Module in the Master Portal
-          const backToPortal = () => {
-              window.location.href = 'index.html#cns';
-          };
+          const backToPortal = () => { window.location.href = 'index.html#cns'; };
 
           return (
             <>
               <div key={currentView} className={direction === 'forward' ? 'slide-forward' : 'slide-backward'}>
-                {currentView === 'dashboard' ? (
-                  <Dashboard onSelectGuide={() => navigateTo('module1')} onBackToPortal={backToPortal} />
-                ) : (
-                  <PathologyTopicGuide onBack={() => navigateTo('dashboard')} />
+                
+                {currentView === 'dashboard' && (
+                  <Dashboard onSelectGuide={navigateTo} onBackToPortal={backToPortal} />
                 )}
+
+                {currentView === 'cns_infections_menu' && (
+                  <InfectionsSubMenu onSelectGuide={navigateTo} onBack={() => navigateTo('dashboard')} />
+                )}
+
+                {(currentView === 'cerebellar_tumors' || currentView === 'meningeal_infections' || currentView === 'parenchymal_infections') && (
+                  <PathologyTopicGuide 
+                    topicId={currentView} 
+                    onBack={() => {
+                        // If it's an infection topic, go back to the sub-menu, otherwise main dashboard
+                        if(currentView === 'meningeal_infections' || currentView === 'parenchymal_infections') {
+                            navigateTo('cns_infections_menu');
+                        } else {
+                            navigateTo('dashboard');
+                        }
+                    }} 
+                  />
+                )}
+
               </div>
               
               <div className="fixed bottom-2 right-3 text-right text-[10px] md:text-xs text-slate-400/50 font-medium pointer-events-none z-50 select-none">
@@ -67,8 +204,67 @@
           );
         }
 
-        // --- Dashboard Component ---
+        // --- Main Dashboard Component ---
         function Dashboard({ onSelectGuide, onBackToPortal }) {
+          const guides = [
+            {
+              id: 'cerebellar_tumors',
+              title: 'Cerebellar Tumors',
+              description: 'Comparative analysis of Medulloblastoma and Hemangioblastoma, including molecular genetics.',
+              status: 'active',
+              icon: <i className="fa-solid fa-viruses text-2xl text-purple-600"></i>,
+              color: 'bg-purple-50 border-purple-200',
+              hoverBorder: 'hover:border-purple-500',
+              buttonContent: <>Open Review</>
+            },
+            {
+              id: 'cns_infections_menu',
+              title: 'Pathological Aspects of CNS Infections',
+              description: 'Select to review specific pathways, including Meningeal and Parenchymal infections.',
+              status: 'active',
+              icon: <i className="fa-solid fa-bacterium text-2xl text-rose-600"></i>,
+              color: 'bg-rose-50 border-rose-200',
+              hoverBorder: 'hover:border-rose-500',
+              buttonContent: <>View Topics <i className="fa-solid fa-chevron-right ml-1"></i></>
+            },
+            {
+              id: 'neurodegen',
+              title: 'Neurodegenerative & Myelin Disease',
+              description: 'Pathology of Alzheimer\'s, Parkinson\'s, Multiple Sclerosis, and other demyelinating conditions.',
+              status: 'locked',
+              icon: <i className="fa-solid fa-brain text-2xl text-slate-400"></i>,
+              color: 'bg-slate-50 border-slate-200',
+              hoverBorder: ''
+            },
+            {
+              id: 'cns_trauma',
+              title: 'CNS Trauma',
+              description: 'Pathological features of epidural and subdural hematomas, concussions, and diffuse axonal injury.',
+              status: 'locked',
+              icon: <i className="fa-solid fa-car-burst text-2xl text-slate-400"></i>,
+              color: 'bg-slate-50 border-slate-200',
+              hoverBorder: ''
+            },
+            {
+              id: 'cns_tumors',
+              title: 'CNS Tumors',
+              description: 'Gliomas, meningiomas, and metastatic brain lesions (excluding specific cerebellar tumors).',
+              status: 'locked',
+              icon: <i className="fa-solid fa-disease text-2xl text-slate-400"></i>,
+              color: 'bg-slate-50 border-slate-200',
+              hoverBorder: ''
+            },
+            {
+              id: 'cerebrovascular',
+              title: 'Cerebrovascular Diseases',
+              description: 'Pathology of ischemic and hemorrhagic strokes, aneurysms, and vascular malformations.',
+              status: 'locked',
+              icon: <i className="fa-solid fa-heart-pulse text-2xl text-slate-400"></i>,
+              color: 'bg-slate-50 border-slate-200',
+              hoverBorder: ''
+            }
+          ];
+
           return (
             <div className="min-h-screen bg-slate-100 font-sans text-slate-800 p-6 md:p-12">
               <div className="max-w-6xl mx-auto space-y-8 animate-in">
@@ -100,22 +296,46 @@
                   </h2>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {/* Tumors Module Card */}
-                    <div 
-                      onClick={onSelectGuide}
-                      className="relative overflow-hidden rounded-2xl border-2 p-6 transition-all duration-300 ease-out flex flex-col h-full transform cursor-pointer hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.02] hover:border-purple-500 group bg-purple-50 border-purple-200"
-                    >
-                      <div className="bg-white w-16 h-16 rounded-2xl shadow-sm flex items-center justify-center mb-6 shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
-                        <i className="fa-solid fa-viruses text-2xl text-purple-600"></i>
+                    {guides.map((guide) => (
+                      <div 
+                        key={guide.id}
+                        onClick={() => guide.status === 'active' && onSelectGuide(guide.id)}
+                        className={`
+                          relative overflow-hidden rounded-2xl border-2 p-6 transition-all duration-300 ease-out flex flex-col h-full transform
+                          ${guide.color}
+                          ${guide.status === 'active' 
+                            ? `cursor-pointer hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.02] ${guide.hoverBorder} group` 
+                            : 'opacity-75 grayscale-[0.5] cursor-not-allowed'}
+                        `}
+                      >
+                        {guide.status === 'locked' && (
+                          <div className="absolute top-4 right-4 bg-slate-200 p-2 rounded-full w-8 h-8 flex items-center justify-center shadow-inner">
+                            <i className="fa-solid fa-lock text-sm text-slate-500"></i>
+                          </div>
+                        )}
+                        
+                        <div className={`bg-white w-16 h-16 rounded-2xl shadow-sm flex items-center justify-center mb-6 shrink-0 transition-transform duration-300 ${guide.status === 'active' ? 'group-hover:scale-110 group-hover:rotate-3' : ''}`}>
+                          {guide.icon}
+                        </div>
+                        
+                        <h3 className={`text-xl font-bold mb-2 ${guide.status === 'active' ? 'text-slate-900' : 'text-slate-600'}`}>
+                          {guide.title}
+                        </h3>
+                        <p className="text-slate-600 mb-8 line-clamp-2 flex-1">
+                          {guide.description}
+                        </p>
+                        
+                        {guide.status === 'active' ? (
+                          <button className="w-full py-3 px-4 bg-white/50 hover:bg-white text-slate-800 border border-slate-300 font-semibold rounded-xl transition-all duration-200 transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 mt-auto shadow-sm">
+                            {guide.buttonContent}
+                          </button>
+                        ) : (
+                          <div className="w-full py-3 px-4 bg-slate-200 text-slate-500 font-semibold rounded-xl flex items-center justify-center gap-2 mt-auto">
+                            <i className="fa-regular fa-clock"></i> Coming Soon
+                          </div>
+                        )}
                       </div>
-                      <h3 className="text-xl font-bold mb-2 text-slate-900">Cerebellar Tumors</h3>
-                      <p className="text-slate-600 mb-8 line-clamp-2 flex-1">
-                        Comparative analysis of Medulloblastoma and Hemangioblastoma, including molecular genetics.
-                      </p>
-                      <button className="w-full py-3 px-4 bg-white/50 hover:bg-white text-slate-800 border border-slate-300 font-semibold rounded-xl transition-all duration-200 transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 mt-auto shadow-sm">
-                         Open Review
-                      </button>
-                    </div>
+                    ))}
                   </div>
                 </main>
               </div>
@@ -123,14 +343,84 @@
           );
         }
 
+        // --- CNS Infections Sub-Menu ---
+        function InfectionsSubMenu({ onSelectGuide, onBack }) {
+          return (
+            <div className="min-h-screen bg-slate-100 font-sans text-slate-800 p-6 md:p-12">
+              <div className="max-w-4xl mx-auto space-y-8 animate-in">
+                
+                <button 
+                  onClick={onBack}
+                  className="group flex items-center gap-2 text-slate-500 hover:text-rose-600 font-bold transition-all"
+                >
+                  <i className="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i> 
+                  <span className="text-sm uppercase tracking-wider">Back to Pathology Hub</span>
+                </button>
+
+                <header className="flex items-center gap-4 pb-6 border-b border-slate-200">
+                  <div className="bg-rose-600 p-3 rounded-xl shadow-lg w-12 h-12 flex items-center justify-center text-white text-xl">
+                    <i className="fa-solid fa-bacterium"></i>
+                  </div>
+                  <div>
+                    <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">CNS Infections</h1>
+                    <p className="text-slate-500 font-medium mt-1">Select an infection category to review.</p>
+                  </div>
+                </header>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  
+                  {/* Meningeal Branch */}
+                  <div 
+                    onClick={() => onSelectGuide('meningeal_infections')}
+                    className="relative overflow-hidden rounded-2xl border-2 p-6 transition-all duration-300 ease-out flex flex-col h-full transform cursor-pointer hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.02] hover:border-rose-500 group bg-white border-slate-200"
+                  >
+                    <div className="bg-rose-50 w-16 h-16 rounded-2xl shadow-sm flex items-center justify-center mb-6 shrink-0 transition-transform duration-300 group-hover:scale-110">
+                      <i className="fa-solid fa-shield-virus text-2xl text-rose-600"></i>
+                    </div>
+                    <h3 className="text-2xl font-bold mb-2 text-slate-900">Meningeal Infections</h3>
+                    <p className="text-slate-600 mb-8 flex-1">
+                      Pathology of the meninges, including acute bacterial, viral, and chronic meningitis.
+                    </p>
+                    <button className="w-full py-3 px-4 bg-slate-100 hover:bg-rose-50 text-slate-800 border border-slate-300 font-semibold rounded-xl transition-colors flex items-center justify-center gap-2 mt-auto">
+                        Open Study Guide
+                    </button>
+                  </div>
+
+                  {/* Parenchymal Branch */}
+                  <div 
+                    onClick={() => onSelectGuide('parenchymal_infections')}
+                    className="relative overflow-hidden rounded-2xl border-2 p-6 transition-all duration-300 ease-out flex flex-col h-full transform cursor-pointer hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.02] hover:border-blue-500 group bg-white border-slate-200"
+                  >
+                    <div className="bg-blue-50 w-16 h-16 rounded-2xl shadow-sm flex items-center justify-center mb-6 shrink-0 transition-transform duration-300 group-hover:scale-110">
+                      <i className="fa-solid fa-brain text-2xl text-blue-600"></i>
+                    </div>
+                    <h3 className="text-2xl font-bold mb-2 text-slate-900">Parenchymal Infections</h3>
+                    <p className="text-slate-600 mb-8 flex-1">
+                      Pathology of brain tissue infections, including Encephalitis and Brain Abscesses.
+                    </p>
+                    <button className="w-full py-3 px-4 bg-slate-100 hover:bg-blue-50 text-slate-800 border border-slate-300 font-semibold rounded-xl transition-colors flex items-center justify-center gap-2 mt-auto">
+                        Open Study Guide
+                    </button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          );
+        }
+
         // --- Study Guide Component (The Mobile-Responsive UI) ---
-        function PathologyTopicGuide({ onBack }) {
+        function PathologyTopicGuide({ topicId, onBack }) {
           const [activeTab, setActiveTab] = useState('quiz');
           const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
           const [openShortIndex, setOpenShortIndex] = useState(null);
           const [openLongIndex, setOpenLongIndex] = useState(0);
 
-          // The 3 required tabs
+          const data = contentDB[topicId];
+
+          // Determine theme color based on topic for a nice UI touch
+          const themeColor = topicId === 'cerebellar_tumors' ? 'purple' : 'rose';
+
           const tabs = [
             { id: 'quiz', label: 'Short Answer Quiz', icon: <i className="fa-solid fa-list-check flex items-center justify-center"></i> },
             { id: 'long_essay', label: 'Essay Questions', icon: <i className="fa-solid fa-book-open flex items-center justify-center"></i> },
@@ -138,16 +428,16 @@
           ];
 
           return (
-            <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row font-sans text-slate-800">
+            <div className={`min-h-screen bg-slate-50 flex flex-col md:flex-row font-sans text-slate-800`}>
               
               {/* MOBILE HEADER (Hidden on Desktop) */}
-              <div className="md:hidden bg-purple-900 text-white p-4 flex justify-between items-center shadow-md z-20">
+              <div className={`md:hidden bg-${themeColor}-900 text-white p-4 flex justify-between items-center shadow-md z-20`}>
                 <div className="flex items-center gap-3">
-                  <button onClick={onBack} className="p-1 hover:bg-purple-800 rounded transition-all duration-200 active:scale-90 w-8 h-8 flex items-center justify-center group">
+                  <button onClick={onBack} className={`p-1 hover:bg-${themeColor}-800 rounded transition-all duration-200 active:scale-90 w-8 h-8 flex items-center justify-center group`}>
                     <i className="fa-solid fa-arrow-left transition-transform duration-300 group-hover:-translate-x-1"></i>
                   </button>
                   <div className="flex items-center gap-2 font-bold text-lg">
-                    <i className="fa-solid fa-microscope text-purple-300"></i>
+                    <i className={`fa-solid fa-microscope text-${themeColor}-300`}></i>
                     <span>Pathology Review</span>
                   </div>
                 </div>
@@ -161,40 +451,40 @@
               {/* SIDEBAR NAVIGATION */}
               <nav className={`
                 ${isMobileMenuOpen ? 'flex' : 'hidden'} 
-                md:flex flex-col w-full md:w-72 bg-purple-900 text-white shadow-xl
+                md:flex flex-col w-full md:w-72 bg-${themeColor}-900 text-white shadow-xl
                 fixed md:sticky top-0 h-screen overflow-y-auto z-10 transition-all duration-300
               `}>
-                <div className="p-4 border-b border-purple-800 flex items-center justify-between">
+                <div className={`p-4 border-b border-${themeColor}-800 flex items-center justify-between`}>
                   <button 
                     onClick={onBack}
-                    className="flex items-center gap-2 text-purple-300 hover:text-white hover:bg-purple-800 px-3 py-2 rounded-lg transition-all duration-200 transform hover:-translate-x-1 active:scale-95 text-sm font-semibold w-full group"
+                    className={`flex items-center gap-2 text-${themeColor}-300 hover:text-white hover:bg-${themeColor}-800 px-3 py-2 rounded-lg transition-all duration-200 transform hover:-translate-x-1 active:scale-95 text-sm font-semibold w-full group`}
                   >
-                    <i className="fa-solid fa-arrow-left transition-transform duration-300 group-hover:-translate-x-1"></i> Back to Dashboard
+                    <i className="fa-solid fa-arrow-left transition-transform duration-300 group-hover:-translate-x-1"></i> Back
                   </button>
                 </div>
                 
-                <div className="hidden md:flex items-center gap-3 p-6 border-b border-purple-800">
-                  <i className="fa-solid fa-microscope text-2xl text-purple-300"></i>
+                <div className={`hidden md:flex items-center gap-3 p-6 border-b border-${themeColor}-800`}>
+                  <i className={`fa-solid fa-microscope text-2xl text-${themeColor}-300`}></i>
                   <div>
                     <h1 className="font-bold text-xl leading-tight">NeuroPathology</h1>
-                    <span className="text-purple-300 text-xs uppercase tracking-wider font-semibold">Study Guide</span>
+                    <span className={`text-${themeColor}-300 text-xs uppercase tracking-wider font-semibold`}>Study Guide</span>
                   </div>
                 </div>
                 
                 <div className="p-4 flex-1">
-                  <p className="text-purple-400 text-xs font-bold mb-4 uppercase tracking-wider px-2">Study Navigation</p>
+                  <p className={`text-${themeColor}-400 text-xs font-bold mb-4 uppercase tracking-wider px-2`}>Study Navigation</p>
                   <ul className="space-y-1">
                     {tabs.map((tab) => (
                       <li key={tab.id}>
                         <button
                           onClick={() => {
                             setActiveTab(tab.id);
-                            setIsMobileMenuOpen(false); // Closes menu automatically on mobile
+                            setIsMobileMenuOpen(false);
                           }}
                           className={`w-full flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200 transform hover:translate-x-2 active:scale-95 text-left group
                             ${activeTab === tab.id 
-                              ? 'bg-purple-600 text-white shadow-md' 
-                              : 'text-purple-200 hover:bg-purple-800 hover:text-white'
+                              ? `bg-${themeColor}-600 text-white shadow-md` 
+                              : `text-${themeColor}-200 hover:bg-${themeColor}-800 hover:text-white`
                             }`}
                         >
                           <span className={`w-5 h-5 flex items-center justify-center transition-transform duration-300 ${activeTab === tab.id ? 'scale-110' : 'group-hover:scale-110'}`}>{tab.icon}</span>
@@ -205,8 +495,8 @@
                   </ul>
                 </div>
                 
-                <div className="p-4 border-t border-purple-800 text-xs text-purple-400 text-center">
-                  Topic: Cerebellar Tumors
+                <div className={`p-4 border-t border-${themeColor}-800 text-xs text-${themeColor}-400 text-center font-bold`}>
+                  Topic: {data.title}
                 </div>
               </nav>
 
@@ -214,41 +504,40 @@
               <main className="flex-1 p-4 md:p-8 overflow-y-auto w-full max-w-5xl mx-auto">
                 <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-10 min-h-[80vh]">
                   
-                  {activeTab === 'quiz' && (
+                  {/* Empty State / Coming Soon */}
+                  {(data.shortQuiz.length === 0 && data.essays.length === 0) && (
+                      <div className="flex flex-col items-center justify-center h-full min-h-[50vh] text-center space-y-4 animate-in">
+                          <i className={`fa-solid fa-person-digging text-6xl text-slate-300`}></i>
+                          <h2 className="text-2xl font-bold text-slate-700">Content Coming Soon</h2>
+                          <p className="text-slate-500 max-w-md">The study guide for <strong>{data.title}</strong> is currently being prepared. Check back later to review this material!</p>
+                      </div>
+                  )}
+
+                  {/* Quiz Tab */}
+                  {(activeTab === 'quiz' && data.shortQuiz.length > 0) && (
                     <div className="space-y-6 animate-in">
                       <div className="border-b border-slate-200 pb-4">
                         <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
-                          <i className="fa-solid fa-list-check text-purple-600"></i> Short Answer Quiz
+                          <i className={`fa-solid fa-list-check text-${themeColor}-600`}></i> Short Answer Quiz
                         </h2>
-                        <p className="text-slate-600 mt-2">Targeted, 2-3 sentence high-yield written responses for Cerebellar Tumors.</p>
+                        <p className="text-slate-600 mt-2">Targeted, 2-3 sentence high-yield written responses for {data.title}.</p>
                       </div>
                       
                       <div className="space-y-3">
-                        {[
-                          { q: "What is the primary demographic for Medulloblastoma, and where does it typically originate?", a: "Medulloblastoma primarily presents in childhood. It is an embryonal neuroepithelial tumor that originates in the cerebellum or the dorsal brain stem." },
-                          { q: "Describe the gross appearance of a Medulloblastoma located in the cerebellar vermis.", a: "In the cerebellar vermis, Medulloblastomas typically appear as pink or grey friable masses. These masses often grow to fill the fourth ventricle." },
-                          { q: "What defines the microscopic structure known as a Homer-Wright rosette?", a: "This microscopic feature consists of primitive tumor cells arranged in a circular pattern. These cells surround a central area of neuropil." },
-                          { q: "Identify the most common cytogenetic aberration found in Medulloblastoma.", a: "The most frequent aberration is the loss of the short arm of chromosome 17 (17p). This often results in an isochromosome 17q through the duplication of the long arm." },
-                          { q: "Which molecular subtype of Medulloblastoma is associated with the best prognosis, and how is it identified?", a: "The WNT-activated subtype is the most favorable genetic variant, occurring in 10% of cases. It is identified by the presence of nuclear β-catenin." },
-                          { q: "Compare the typical age of onset for Medulloblastoma versus Hemangioblastoma.", a: "Medulloblastoma is a childhood tumor, whereas Hemangioblastoma typically occurs in adults. Both are frequently found in the cerebellum." },
-                          { q: "Explain the relationship between Hemangioblastoma and von Hippel-Lindau (VHL) disease.", a: "Approximately 30% of Hemangioblastomas are associated with inherited von Hippel-Lindau disease. This involve the inactivation of the VHL tumor suppressor gene." },
-                          { q: "Why might a Hemangioblastoma appear yellow during a gross examination?", a: "The yellow coloration of a Hemangioblastoma is due to its rich lipid content. This is reflected microscopically by the presence of vacuolated stromal cells." },
-                          { q: "What are the two main microscopic components of a Hemangioblastoma?", a: "The tumor is composed of neoplastic stromal cells, which are large and vacuolated, and abundant vascular cells. Numerous thin-walled vessels are a prominent feature." },
-                          { q: "How does a Hemangioblastoma typically appear on an MRI?", a: "On an MRI, a Hemangioblastoma usually presents as a cyst with an enhancing mural nodule. The nodule typically abuts a pial surface." }
-                        ].map((item, idx) => (
-                          <div key={idx} className="border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:border-purple-300 transition-all duration-300">
+                        {data.shortQuiz.map((item, idx) => (
+                          <div key={idx} className={`border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:border-${themeColor}-300 transition-all duration-300`}>
                             <button
                               onClick={() => setOpenShortIndex(openShortIndex === idx ? null : idx)}
                               className="w-full text-left p-4 bg-white hover:bg-slate-50 flex justify-between items-center focus:outline-none"
                             >
                               <span className="font-semibold text-slate-800 pr-4">Q{idx + 1}: {item.q}</span>
-                              <i className={`fa-solid fa-chevron-down transition-transform duration-300 ${openShortIndex === idx ? 'rotate-180 text-purple-600' : 'text-slate-400'}`}></i>
+                              <i className={`fa-solid fa-chevron-down transition-transform duration-300 ${openShortIndex === idx ? `rotate-180 text-${themeColor}-600` : 'text-slate-400'}`}></i>
                             </button>
                             
                             <div className={`grid transition-all duration-300 ease-in-out ${openShortIndex === idx ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
                               <div className="overflow-hidden">
-                                <div className="p-4 bg-purple-50 border-t border-purple-100 text-slate-700">
-                                  <strong className="text-purple-800 block mb-1">Answer:</strong>
+                                <div className={`p-4 bg-${themeColor}-50 border-t border-${themeColor}-100 text-slate-700`}>
+                                  <strong className={`text-${themeColor}-800 block mb-1`}>Answer:</strong>
                                   {item.a}
                                 </div>
                               </div>
@@ -259,37 +548,35 @@
                     </div>
                   )}
 
-                  {activeTab === 'long_essay' && (
+                  {/* Essays Tab */}
+                  {(activeTab === 'long_essay' && data.essays.length > 0) && (
                     <div className="space-y-6 animate-in">
                       <div className="border-b border-slate-200 pb-4">
                         <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
-                          <i className="fa-solid fa-book-open text-purple-600"></i> Essay Questions
+                          <i className={`fa-solid fa-book-open text-${themeColor}-600`}></i> Essay Questions
                         </h2>
                         <p className="text-slate-600 mt-2">Comprehensive, multi-part pathological discussions.</p>
                       </div>
                       
                       <div className="flex flex-col gap-4">
-                        {[
-                          { title: "Comparative Analysis: Medulloblastoma vs. Hemangioblastoma", question: "Compare and contrast Medulloblastoma and Hemangioblastoma in terms of WHO grading, age of onset, and typical gross presentation.", answer: "Medulloblastoma and Hemangioblastoma represent two distinct ends of the WHO grading spectrum for cerebellar tumors. Medulloblastoma is a Grade IV tumor, indicating a highly malignant embryonal neuroepithelial growth primarily affecting children. Grossly, it often appears as a friable pink or grey mass in the cerebellar vermis that fills the fourth ventricle, or a firm, circumscribed mass in the hemispheres. In contrast, Hemangioblastoma is a Grade I tumor, signifying a benign, slow-growing lesion typically found in adults. Its gross presentation is characterized by high vascularity and a cystic nature, often appearing as a yellow-tinted cyst with a solid vascular nodule abutting the pial surface." },
-                          { title: "Molecular and Genetic Markers in Medulloblastoma", question: "Discuss the significance of genetic analysis in the diagnosis and prognosis of Medulloblastoma, highlighting specific aberrations and subtypes.", answer: "Genetic analysis has become integral to the diagnosis of Medulloblastoma, as molecular variants provide clinical utility beyond traditional morphology. The most common cytogenetic finding, occurring in up to 50% of cases, is the loss of the short arm of chromosome 17 (17p), leading to isochromosome 17q. Beyond these aberrations, the identification of the WNT-activated molecular subtype is crucial for prognosis; although it is the rarest subtype (10%), it is the most favorable. This subtype is specifically recognized by the presence of nuclear β-catenin, allowing clinicians to better categorize the tumor within the integrated WHO diagnosis framework." }
-                        ].map((essay, idx) => (
-                          <div key={idx} className={`border rounded-xl overflow-hidden transition-all duration-300 ${openLongIndex === idx ? 'border-purple-300 shadow-md ring-1 ring-purple-100' : 'border-slate-200 hover:border-purple-200 hover:shadow-md'}`}>
+                        {data.essays.map((essay, idx) => (
+                          <div key={idx} className={`border rounded-xl overflow-hidden transition-all duration-300 ${openLongIndex === idx ? `border-${themeColor}-300 shadow-md ring-1 ring-${themeColor}-100` : `border-slate-200 hover:border-${themeColor}-200 hover:shadow-md`}`}>
                             <button 
-                              className={`w-full text-left p-5 flex justify-between items-start gap-4 transition-colors duration-200 active:bg-purple-100/50 ${openLongIndex === idx ? 'bg-purple-50' : 'bg-white hover:bg-slate-50'}`}
+                              className={`w-full text-left p-5 flex justify-between items-start gap-4 transition-colors duration-200 active:bg-${themeColor}-100/50 ${openLongIndex === idx ? `bg-${themeColor}-50` : 'bg-white hover:bg-slate-50'}`}
                               onClick={() => setOpenLongIndex(openLongIndex === idx ? null : idx)}
                             >
                               <div>
-                                <h3 className={`font-bold text-lg leading-snug transition-colors duration-300 ${openLongIndex === idx ? 'text-purple-900' : 'text-slate-800'}`}>
+                                <h3 className={`font-bold text-lg leading-snug transition-colors duration-300 ${openLongIndex === idx ? `text-${themeColor}-900` : 'text-slate-800'}`}>
                                   Essay {idx + 1}: {essay.title}
                                 </h3>
                                 <p className="text-slate-600 text-sm mt-1">{essay.question}</p>
                               </div>
-                              <i className={`fa-solid fa-chevron-down mt-1 shrink-0 transition-transform duration-300 ${openLongIndex === idx ? 'rotate-180 text-purple-600' : 'text-slate-400'}`}></i>
+                              <i className={`fa-solid fa-chevron-down mt-1 shrink-0 transition-transform duration-300 ${openLongIndex === idx ? `rotate-180 text-${themeColor}-600` : 'text-slate-400'}`}></i>
                             </button>
                             
                             <div className={`grid transition-all duration-300 ease-in-out ${openLongIndex === idx ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
                               <div className="overflow-hidden">
-                                <div className="p-6 bg-white border-t border-purple-100 text-slate-700 leading-relaxed text-lg shadow-inner whitespace-pre-wrap">
+                                <div className={`p-6 bg-white border-t border-${themeColor}-100 text-slate-700 leading-relaxed text-lg shadow-inner whitespace-pre-wrap`}>
                                   {essay.answer}
                                 </div>
                               </div>
@@ -300,30 +587,26 @@
                     </div>
                   )}
 
-                  {activeTab === 'glossary' && (
+                  {/* Glossary Tab */}
+                  {(activeTab === 'glossary' && (data.mnemonics.length > 0 || data.terms.length > 0)) && (
                     <div className="space-y-8 animate-in">
                       <div className="border-b border-slate-200 pb-4">
                         <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
-                          <i className="fa-solid fa-bookmark text-purple-600"></i> Glossary & Mnemonics
+                          <i className={`fa-solid fa-bookmark text-${themeColor}-600`}></i> Glossary & Mnemonics
                         </h2>
                         <p className="text-slate-600 mt-2">Key terms, golden buzzwords, and memory hooks.</p>
                       </div>
 
                       <div className="grid md:grid-cols-2 gap-8 pt-4">
                         {/* Mnemonics */}
-                        <div className="bg-purple-50 rounded-xl p-6 border border-purple-200 shadow-sm">
-                          <h3 className="text-xl font-bold text-purple-900 mb-4 flex items-center gap-2">
+                        <div className={`bg-${themeColor}-50 rounded-xl p-6 border border-${themeColor}-200 shadow-sm`}>
+                          <h3 className={`text-xl font-bold text-${themeColor}-900 mb-4 flex items-center gap-2`}>
                             <i className="fa-solid fa-brain"></i> High-Yield Mnemonics
                           </h3>
                           <div className="space-y-4">
-                            {[
-                              { title: '"WNT is a WIN"', desc: 'To remember that the WNT-activated subtype is the most favorable (WIN) prognosis for Medulloblastoma.' },
-                              { title: '"Children go Mid, Adults go High"', desc: 'Mid (Medulloblastoma) = Cerebellar Vermis (Middle), Childhood.\nHigh (Hemangioblastoma) = High vascularity, Adults.' },
-                              { title: '"17p is Missing (Poor)"', desc: 'To remember that the loss of the short arm of chromosome 17 (p for "petite"/short) is a common aberration in the more aggressive Medulloblastoma.' },
-                              { title: '"VHL: Very Highly Lipidized"', desc: 'To remember that Hemangioblastoma is associated with VHL disease and contains lipid-rich (yellow) vacuolated cells.' }
-                            ].map((item, idx) => (
-                              <div key={idx} className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-purple-500">
-                                <div className="font-bold text-purple-900 text-lg mb-1">{item.title}</div>
+                            {data.mnemonics.map((item, idx) => (
+                              <div key={idx} className={`bg-white p-4 rounded-lg shadow-sm border-l-4 border-${themeColor}-500`}>
+                                <div className={`font-bold text-${themeColor}-900 text-lg mb-1`}>{item.title}</div>
                                 <p className="text-slate-700 text-sm whitespace-pre-line">{item.desc}</p>
                               </div>
                             ))}
@@ -336,17 +619,9 @@
                             <i className="fa-solid fa-list text-slate-600"></i> Key Terms and Buzzwords
                           </h3>
                           <div className="flex flex-col gap-3">
-                            {[
-                              { term: 'Homer-Wright Rosette', def: 'Classic microscopic marker for Medulloblastoma; cells surrounding neuropil.' },
-                              { term: 'Isochromosome 17q', def: 'Common cytogenetic aberration in Medulloblastoma (loss of 17p, gain of 17q).' },
-                              { term: 'Nuclear β-catenin', def: 'Diagnostic marker for the WNT-activated (most favorable) Medulloblastoma.' },
-                              { term: 'Vacuolated Stromal Cells', def: 'Large, lipid-filled cells characteristic of Hemangioblastoma.' },
-                              { term: 'Mural Nodule', def: 'The solid vascular component of a cystic Hemangioblastoma seen on MRI.' },
-                              { term: 'Friable', def: 'Easily crumbled; describes the gross texture of vermis-based Medulloblastomas.' },
-                              { term: 'VHL Gene', def: 'Tumor suppressor gene inactivated in Hemangioblastoma (sporadic and inherited).' }
-                            ].map((item, idx) => (
-                              <div key={idx} className="border border-slate-200 p-3 rounded-lg bg-white hover:border-purple-300 transition-colors">
-                                <h4 className="font-bold text-purple-800 mb-1">{item.term}</h4>
+                            {data.terms.map((item, idx) => (
+                              <div key={idx} className={`border border-slate-200 p-3 rounded-lg bg-white hover:border-${themeColor}-300 transition-colors`}>
+                                <h4 className={`font-bold text-${themeColor}-800 mb-1`}>{item.term}</h4>
                                 <p className="text-slate-600 text-sm">{item.def}</p>
                               </div>
                             ))}
