@@ -98,6 +98,10 @@
             content = <AntidepressantsStudyGuide onBack={() => navigateTo('dashboard')} />;
           } else if (currentView === 'epilepsy') {
             content = <EpilepsyStudyGuide onBack={() => navigateTo('dashboard')} />;
+          } else if (currentView === 'anesthesia') {
+            content = <AnesthesiaStudyGuide onBack={() => navigateTo('dashboard')} />;
+          } else if (currentView === 'localanesthesia') {
+            content = <LocalAnesthesiaStudyGuide onBack={() => navigateTo('dashboard')} />;
           } else {
             content = <Dashboard onSelectGuide={navigateTo} onBackToPortal={backToPortal} />;
           }
@@ -142,6 +146,22 @@
               status: 'active',
               icon: <Zap className="text-2xl text-purple-500" />,
               color: 'bg-purple-50 border-purple-200'
+            },
+            {
+              id: 'anesthesia',
+              title: 'General Anesthesia',
+              description: 'Inhalation & IV anesthetics, MAC, balanced anesthesia, Ketamine, and clinical profiles.',
+              status: 'active',
+              icon: <HeartPulse className="text-2xl text-rose-500" />,
+              color: 'bg-rose-50 border-rose-200'
+            },
+            {
+              id: 'localanesthesia',
+              title: 'Local Anesthetics',
+              description: 'Classification, mechanism of action, pharmacokinetics, toxicity, and clinical administration routes.',
+              status: 'active',
+              icon: <Zap className="text-2xl text-amber-500" />,
+              color: 'bg-amber-50 border-amber-200'
             }
           ];
 
@@ -2679,6 +2699,1260 @@
                 </div>
               </div>
 
+            </div>
+          );
+        }
+
+        // ==========================================
+        // 4. GENERAL ANESTHESIA STUDY GUIDE
+        // ==========================================
+
+        function AnesthesiaStudyGuide({ onBack }) {
+          const [activeTab, setActiveTab] = useState('overview');
+          const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+          const tabs = [
+            { id: 'overview', label: 'Overview & Classification', icon: <List /> },
+            { id: 'inhalation', label: 'Inhalation Anesthetics', icon: <Activity /> },
+            { id: 'iv', label: 'IV Anesthetics', icon: <Pill /> },
+            { id: 'balanced', label: 'Balanced Anesthesia', icon: <Shield /> },
+            { id: 'quiz', label: 'Flashcard Quiz', icon: <HelpCircle /> },
+            { id: 'essays', label: 'Essay Review', icon: <FileText /> },
+            { id: 'glossary', label: 'Glossary & Mnemonics', icon: <Bookmark /> },
+          ];
+
+          return (
+            <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row font-sans text-slate-800">
+
+              {/* Mobile Header */}
+              <div className="md:hidden bg-rose-900 text-white p-4 flex justify-between items-center shadow-md z-20">
+                <div className="flex items-center gap-3">
+                  <button onClick={onBack} className="p-1 hover:bg-rose-800 rounded transition-all duration-200 active:scale-90 w-8 h-8 flex items-center justify-center group">
+                    <ArrowLeft className="transition-transform duration-300 group-hover:-translate-x-1" />
+                  </button>
+                  <div className="flex items-center gap-2 font-bold text-lg">
+                    <HeartPulse className="text-rose-300" />
+                    <span>NeuroPharm Review</span>
+                  </div>
+                </div>
+                <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="w-8 h-8 flex items-center justify-center transition-transform duration-300 active:scale-90">
+                  <div className={`transition-transform duration-300 ${isMobileMenuOpen ? 'rotate-90 scale-110' : 'rotate-0'}`}>
+                    {isMobileMenuOpen ? <X /> : <Menu />}
+                  </div>
+                </button>
+              </div>
+
+              {/* Sidebar Navigation */}
+              <nav className={`
+                ${isMobileMenuOpen ? 'flex' : 'hidden'} 
+                md:flex flex-col w-full md:w-72 bg-rose-900 text-white shadow-xl
+                fixed md:sticky top-0 h-screen overflow-y-auto z-10 transition-all duration-300
+              `}>
+                <div className="p-4 border-b border-rose-800 flex items-center justify-between">
+                  <button
+                    onClick={onBack}
+                    className="flex items-center gap-2 text-rose-300 hover:text-white hover:bg-rose-800 px-3 py-2 rounded-lg transition-all duration-200 transform hover:-translate-x-1 active:scale-95 text-sm font-semibold w-full group"
+                  >
+                    <ArrowLeft className="transition-transform duration-300 group-hover:-translate-x-1" /> Back to Dashboard
+                  </button>
+                </div>
+                <div className="hidden md:flex items-center gap-3 p-6 border-b border-rose-800">
+                  <HeartPulse className="text-2xl text-rose-300" />
+                  <div>
+                    <h1 className="font-bold text-xl leading-tight">NeuroPharm</h1>
+                    <span className="text-rose-300 text-xs uppercase tracking-wider font-semibold">Study Guide</span>
+                  </div>
+                </div>
+
+                <div className="p-4 flex-1">
+                  <p className="text-rose-400 text-xs font-bold mb-4 uppercase tracking-wider px-2">Exam Modules</p>
+                  <ul className="space-y-1">
+                    {tabs.map((tab) => (
+                      <li key={tab.id}>
+                        <button
+                          onClick={() => {
+                            setActiveTab(tab.id);
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className={`w-full flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200 transform hover:translate-x-2 active:scale-95 text-left group
+                            ${activeTab === tab.id
+                              ? 'bg-rose-600 text-white shadow-md'
+                              : 'text-rose-200 hover:bg-rose-800 hover:text-white'
+                            }`}
+                        >
+                          <span className={`w-5 h-5 flex items-center justify-center transition-transform duration-300 ${activeTab === tab.id ? 'scale-110' : 'group-hover:scale-110'}`}>{tab.icon}</span>
+                          <span className="font-medium">{tab.label}</span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="p-4 border-t border-rose-800 text-xs text-rose-400 text-center">
+                  Comprehensive Review: General Anesthesia
+                </div>
+              </nav>
+
+              {/* Main Content Area */}
+              <main className="flex-1 p-4 md:p-8 overflow-y-auto w-full max-w-5xl mx-auto">
+                <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-10 min-h-[80vh]">
+                  {activeTab === 'overview' && <AnesthesiaOverviewView />}
+                  {activeTab === 'inhalation' && <AnesthesiaInhalationView />}
+                  {activeTab === 'iv' && <AnesthesiaIVView />}
+                  {activeTab === 'balanced' && <AnesthesiaBalancedView />}
+                  {activeTab === 'quiz' && <AnesthesiaQuizView />}
+                  {activeTab === 'essays' && <AnesthesiaEssaysView />}
+                  {activeTab === 'glossary' && <AnesthesiaGlossaryView />}
+                </div>
+              </main>
+            </div>
+          );
+        }
+
+        function AnesthesiaOverviewView() {
+          return (
+            <div className="space-y-8 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <List className="text-rose-600 text-3xl" />
+                  I. Overview & Classification
+                </h2>
+                <p className="text-slate-600 mt-2 text-lg">
+                  General anesthetics induce a reversible state of unconsciousness, analgesia, amnesia, skeletal muscle relaxation, and inhibition of visceral reflexes. Primary targets are the midbrain, thalamus, and the reticular activating system (RAS).
+                </p>
+              </div>
+
+              <div className="bg-rose-50 border-l-4 border-rose-500 p-5 rounded-r-xl">
+                <h3 className="text-xl font-bold text-rose-900 mb-2">The Five Goals of General Anesthesia</h3>
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {["Loss of Consciousness", "Analgesia", "Amnesia", "Skeletal Muscle Relaxation", "Inhibition of Visceral Reflexes"].map((goal, i) => (
+                    <span key={i} className="bg-white border border-rose-200 text-rose-800 font-semibold px-3 py-1 rounded-full text-sm shadow-sm">{goal}</span>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-bold text-slate-800 mb-4 bg-rose-50 p-2 rounded-md inline-block">Classification by Route of Administration</h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse text-left">
+                    <thead>
+                      <tr className="bg-slate-100 border-b-2 border-slate-300">
+                        <th className="p-4 font-bold text-slate-700">Category</th>
+                        <th className="p-4 font-bold text-slate-700">Examples</th>
+                        <th className="p-4 font-bold text-slate-700">Primary Use</th>
+                        <th className="p-4 font-bold text-slate-700">Mechanism</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-200">
+                      <tr className="hover:bg-slate-50 transition-colors">
+                        <td className="p-4 font-semibold text-rose-700">Inhalation Agents</td>
+                        <td className="p-4">Halothane, Sevoflurane, Isoflurane, Desflurane, Nitrous Oxide (N₂O)</td>
+                        <td className="p-4">Maintenance of anesthesia</td>
+                        <td className="p-4">GABA<sub>A</sub> facilitation (halogenated) or NMDA antagonism (N₂O)</td>
+                      </tr>
+                      <tr className="hover:bg-slate-50 transition-colors">
+                        <td className="p-4 font-semibold text-rose-700">IV Anesthetics</td>
+                        <td className="p-4">Thiopental, Propofol, Ketamine, Midazolam, Etomidate</td>
+                        <td className="p-4">Rapid induction</td>
+                        <td className="p-4">GABA<sub>A</sub> facilitation (most) or NMDA antagonism (Ketamine)</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div className="bg-slate-100 rounded-xl p-6 border border-slate-200">
+                <h3 className="text-lg font-bold text-slate-800 mb-4 border-b border-slate-300 pb-2">Key Pharmacokinetic Concept: Solubility</h3>
+                <div className="grid md:grid-cols-2 gap-4 text-slate-700">
+                  <div className="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
+                    <strong className="text-rose-700 block mb-1">Blood:Gas Partition Coefficient</strong>
+                    <p className="text-sm">Measures blood solubility. A <strong>lower value</strong> means faster induction and recovery (e.g., Desflurane). The drug rapidly equilibrates between blood and alveoli.</p>
+                  </div>
+                  <div className="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
+                    <strong className="text-rose-700 block mb-1">Fat Solubility (Lipid:Blood)</strong>
+                    <p className="text-sm">High fat solubility causes accumulation in adipose tissue, resulting in a prolonged "hangover" effect after long operations.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        function AnesthesiaInhalationView() {
+          return (
+            <div className="space-y-8 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <Activity className="text-rose-500 text-3xl" />
+                  II. Inhalation Anesthetics
+                </h2>
+                <p className="text-slate-600 mt-2 text-lg">
+                  Used primarily for <strong>maintenance</strong> of anesthesia. Potency is measured by MAC (Minimum Alveolar Concentration).
+                </p>
+              </div>
+
+              <div className="bg-slate-800 text-white rounded-xl p-6 shadow-md">
+                <h3 className="text-xl font-bold mb-2 text-rose-300">MAC — Minimum Alveolar Concentration</h3>
+                <p className="text-slate-300 text-sm leading-relaxed">
+                  The minimum concentration of anesthetic gas in the alveoli required to produce <strong>immobility in 50% of patients</strong> exposed to a painful stimulus (e.g., surgical incision). It is the standard measure of anesthetic potency.
+                </p>
+                <div className="grid md:grid-cols-2 gap-4 mt-4">
+                  <div className="bg-slate-700 p-3 rounded-lg">
+                    <strong className="text-red-400 block mb-1">MAC Decreased by:</strong>
+                    <p className="text-slate-300 text-sm">Opioid adjuvants, elderly patients, hypothermia, hyponatremia.</p>
+                  </div>
+                  <div className="bg-slate-700 p-3 rounded-lg">
+                    <strong className="text-green-400 block mb-1">MAC Increased by:</strong>
+                    <p className="text-slate-300 text-sm">Alcohol abuse, drugs that increase catecholamines (e.g., cocaine), hyperthermia.</p>
+                  </div>
+                </div>
+              </div>
+
+              <h3 className="text-xl font-bold text-slate-800 mb-4 border-b pb-2">Individual Agent Profiles</h3>
+              <div className="grid md:grid-cols-1 gap-5">
+                {/* Halothane */}
+                <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+                  <div className="absolute top-0 right-0 bg-red-100 text-red-800 px-3 py-1 font-bold text-sm rounded-bl-lg">High Risk</div>
+                  <h4 className="text-2xl font-bold text-slate-800 mb-2">Halothane</h4>
+                  <p className="text-slate-600 mb-4 italic text-sm">Potent halogenated agent; largely replaced due to severe adverse effects.</p>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="bg-slate-50 p-3 rounded border border-slate-200">
+                      <strong className="text-slate-700 block mb-1">Mechanism:</strong>
+                      <p className="text-sm text-slate-600">Facilitates GABA<sub>A</sub> receptor activity. Medium induction and recovery speed.</p>
+                    </div>
+                    <div className="bg-red-50 p-3 rounded border border-red-200">
+                      <strong className="text-red-800 block mb-1">Adverse Effects:</strong>
+                      <ul className="text-sm text-slate-700 space-y-1 list-disc list-inside">
+                        <li><strong>Hepatotoxicity</strong> (Halothane Hepatitis — via trifluoroacetic acid)</li>
+                        <li>Sensitizes myocardium to catecholamines → arrhythmias, bradycardia</li>
+                        <li>Trigger for <strong>Malignant Hyperthermia</strong></li>
+                        <li>Hypotension (myocardial depression / vasodilation)</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Sevoflurane */}
+                <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+                  <div className="absolute top-0 right-0 bg-green-100 text-green-800 px-3 py-1 font-bold text-sm rounded-bl-lg">Preferred (Peds)</div>
+                  <h4 className="text-2xl font-bold text-slate-800 mb-2">Sevoflurane</h4>
+                  <p className="text-slate-600 mb-4 italic text-sm">Agent of choice for pediatric anesthesia due to smooth, non-irritating induction.</p>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="bg-slate-50 p-3 rounded border border-slate-200">
+                      <strong className="text-slate-700 block mb-1">Advantages:</strong>
+                      <ul className="text-sm text-slate-700 space-y-1 list-disc list-inside">
+                        <li>Non-irritating to airways (no coughing/laryngospasm)</li>
+                        <li>Smooth, rapid induction</li>
+                        <li>Safer cardiovascular profile than Halothane</li>
+                      </ul>
+                    </div>
+                    <div className="bg-orange-50 p-3 rounded border border-orange-200">
+                      <strong className="text-orange-800 block mb-1">Key Risk — "Compound A":</strong>
+                      <p className="text-sm text-slate-700">Degraded by <strong>soda lime</strong> in anesthesia machines into <strong>Compound A</strong>, a nephrotoxic byproduct.</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Nitrous Oxide */}
+                <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+                  <div className="absolute top-0 right-0 bg-blue-100 text-blue-800 px-3 py-1 font-bold text-sm rounded-bl-lg">Adjuvant</div>
+                  <h4 className="text-2xl font-bold text-slate-800 mb-2">Nitrous Oxide (N₂O) <span className="text-base font-normal text-slate-500">— "Laughing Gas"</span></h4>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="bg-blue-50 p-3 rounded border border-blue-200">
+                      <strong className="text-blue-800 block mb-1">Mechanism & Properties:</strong>
+                      <ul className="text-sm text-slate-700 space-y-1 list-disc list-inside">
+                        <li>NMDA receptor antagonist</li>
+                        <li><strong>Low potency</strong> — cannot produce surgical anesthesia alone</li>
+                        <li>Excellent analgesic and anxiolytic properties</li>
+                        <li>Fastest induction/recovery (lowest blood:gas coefficient)</li>
+                      </ul>
+                    </div>
+                    <div className="bg-red-50 p-3 rounded border border-red-200">
+                      <strong className="text-red-800 block mb-1">Contraindications:</strong>
+                      <p className="text-sm text-slate-700">Expands closed gas spaces in the body. <strong>Contraindicated</strong> in bowel obstruction, pneumothorax, and middle ear surgery.</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Isoflurane / Desflurane */}
+                <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                  <h4 className="text-2xl font-bold text-slate-800 mb-2">Isoflurane & Desflurane</h4>
+                  <div className="grid md:grid-cols-2 gap-4 mt-2">
+                    <div className="bg-slate-50 p-3 rounded border border-slate-200">
+                      <strong className="text-slate-700 block mb-1">Isoflurane:</strong>
+                      <p className="text-sm text-slate-700">Most widely used maintenance agent. Causes airway irritation (coughing/laryngospasm). Not suitable for mask induction.</p>
+                    </div>
+                    <div className="bg-slate-50 p-3 rounded border border-slate-200">
+                      <strong className="text-slate-700 block mb-1">Desflurane:</strong>
+                      <p className="text-sm text-slate-700">Lowest blood:gas partition coefficient → <strong>fastest induction and recovery</strong>. Very pungent; causes significant airway irritation.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        function AnesthesiaIVView() {
+          return (
+            <div className="space-y-8 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <Pill className="text-rose-500 text-3xl" />
+                  III. Intravenous (IV) Anesthetics
+                </h2>
+                <p className="text-slate-600 mt-2 text-lg">
+                  Preferred for rapid <strong>induction</strong> of anesthesia due to quick onset. Most act via GABA<sub>A</sub> facilitation; Ketamine is the exception.
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-1 gap-6">
+                {/* Thiopental */}
+                <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+                  <div className="absolute top-0 right-0 bg-slate-200 text-slate-700 px-3 py-1 font-bold text-sm rounded-bl-lg">Barbiturate</div>
+                  <h4 className="text-2xl font-bold text-slate-800 mb-1">Thiopental <span className="text-base font-normal text-slate-500">(Ultra-short-acting)</span></h4>
+                  <p className="text-slate-600 italic text-sm mb-4">IV barbiturate used for rapid induction.</p>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="bg-slate-50 p-3 rounded border border-slate-200">
+                      <strong className="text-slate-700 block mb-1">Why "Ultra-Short-Acting"?</strong>
+                      <p className="text-sm text-slate-700">Highly lipid-soluble → rapid CNS entry. Action terminates by <strong>redistribution</strong> into fat and skeletal muscle, not by metabolism.</p>
+                    </div>
+                    <div className="bg-red-50 p-3 rounded border border-red-200">
+                      <strong className="text-red-800 block mb-1">Key Contraindication:</strong>
+                      <p className="text-sm text-slate-700">Absolutely <strong>contraindicated in porphyria</strong> (induces ALA synthetase, precipitating acute attacks).</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Propofol */}
+                <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+                  <div className="absolute top-0 right-0 bg-blue-100 text-blue-800 px-3 py-1 font-bold text-sm rounded-bl-lg">Most Popular IV Agent</div>
+                  <h4 className="text-2xl font-bold text-slate-800 mb-1">Propofol</h4>
+                  <p className="text-slate-600 italic text-sm mb-4">GABA<sub>A</sub> facilitator; used for induction and maintenance (TIVA).</p>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="bg-blue-50 p-3 rounded border border-blue-200">
+                      <strong className="text-blue-800 block mb-1">Advantages:</strong>
+                      <ul className="text-sm text-slate-700 list-disc list-inside space-y-1">
+                        <li>Rapid, smooth induction</li>
+                        <li>Rapid recovery with minimal hangover</li>
+                        <li>Anti-emetic properties</li>
+                      </ul>
+                    </div>
+                    <div className="bg-orange-50 p-3 rounded border border-orange-200">
+                      <strong className="text-orange-800 block mb-1">Adverse Effects:</strong>
+                      <ul className="text-sm text-slate-700 list-disc list-inside space-y-1">
+                        <li>Pain on injection</li>
+                        <li>Hypotension</li>
+                        <li>Respiratory depression</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Ketamine */}
+                <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+                  <div className="absolute top-0 right-0 bg-purple-100 text-purple-800 px-3 py-1 font-bold text-sm rounded-bl-lg">NMDA Antagonist</div>
+                  <h4 className="text-2xl font-bold text-slate-800 mb-1">Ketamine <span className="text-base font-normal text-slate-500">— "Dissociative Anesthesia"</span></h4>
+                  <p className="text-slate-600 italic text-sm mb-4">Unique agent: cardiovascular stimulant and bronchodilator. NMDA receptor antagonist.</p>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="bg-purple-50 p-3 rounded border border-purple-200">
+                      <strong className="text-purple-800 block mb-1">Unique Advantages:</strong>
+                      <ul className="text-sm text-slate-700 list-disc list-inside space-y-1">
+                        <li><strong>Cardiovascular stimulant</strong> → increases HR & BP (ideal for shock/poor-risk patients)</li>
+                        <li><strong>Potent bronchodilator</strong> → ideal for asthmatic patients</li>
+                        <li>Profound analgesia (burn dressings in children)</li>
+                        <li>Patient may appear awake (eyes open) but unresponsive</li>
+                      </ul>
+                    </div>
+                    <div className="bg-red-50 p-3 rounded border border-red-200">
+                      <strong className="text-red-800 block mb-1">Disadvantages:</strong>
+                      <ul className="text-sm text-slate-700 list-disc list-inside space-y-1">
+                        <li>Increases <strong>cerebral blood flow & ICP</strong> → contraindicated in head injuries</li>
+                        <li><strong>Emergence phenomenon</strong>: hallucinations, disorientation on recovery</li>
+                        <li>Mitigated by pre-treatment with benzodiazepines (e.g., Diazepam)</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Midazolam / Etomidate */}
+                <div className="grid md:grid-cols-2 gap-5">
+                  <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+                    <div className="absolute top-0 right-0 bg-teal-100 text-teal-800 px-3 py-1 font-bold text-sm rounded-bl-lg">BZD / Pre-op</div>
+                    <h4 className="text-xl font-bold text-slate-800 mb-2">Midazolam</h4>
+                    <ul className="text-sm text-slate-700 space-y-2 list-disc list-inside">
+                      <li>Rapid onset, short duration</li>
+                      <li>Provides sedation and <strong>amnesia</strong> for minor procedures</li>
+                      <li>Used as a pre-anesthetic adjunct</li>
+                      <li><strong>Antidote:</strong> <span className="font-bold text-teal-700">Flumazenil</span></li>
+                    </ul>
+                  </div>
+                  <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+                    <div className="absolute top-0 right-0 bg-orange-100 text-orange-800 px-3 py-1 font-bold text-sm rounded-bl-lg">Cardiac Safe</div>
+                    <h4 className="text-xl font-bold text-slate-800 mb-2">Etomidate</h4>
+                    <ul className="text-sm text-slate-700 space-y-2 list-disc list-inside">
+                      <li>GABA<sub>A</sub> facilitator</li>
+                      <li>Minimal cardiovascular/respiratory depression</li>
+                      <li>Preferred for <strong>cardiac patients</strong> requiring induction</li>
+                      <li>Inhibits adrenal cortisol synthesis (not for long-term use)</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        function AnesthesiaBalancedView() {
+          return (
+            <div className="space-y-8 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <Shield className="text-rose-600 text-3xl" />
+                  IV. Balanced Anesthesia
+                </h2>
+                <p className="text-slate-600 mt-2 text-lg">
+                  A combination strategy using multiple drug classes to achieve all goals of anesthesia while minimizing the adverse effects of any single agent.
+                </p>
+              </div>
+
+              <div className="bg-rose-50 border border-rose-200 rounded-xl p-6">
+                <h3 className="text-xl font-bold text-rose-900 mb-4">Core Principle</h3>
+                <p className="text-slate-700 leading-relaxed">
+                  Rather than relying on one agent at high doses (which increases toxicity risk), balanced anesthesia uses lower doses of multiple drugs — each targeting a different component of the anesthetic state.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-bold text-slate-800 mb-4 border-b pb-2">Components of a Balanced Regimen</h3>
+                <div className="space-y-4">
+                  {[
+                    { step: "1. Pre-anesthetic Medication", drugs: "Benzodiazepines (Midazolam), Opioids", goal: "Reduce anxiety, provide pre-operative sedation and analgesia, reduce MAC requirements.", color: "bg-blue-50 border-blue-200", textColor: "text-blue-800" },
+                    { step: "2. Rapid IV Induction", drugs: "Thiopental, Propofol, or Ketamine", goal: "Quickly transition the patient to unconsciousness before intubation.", color: "bg-rose-50 border-rose-200", textColor: "text-rose-800" },
+                    { step: "3. Maintenance (Inhalation)", drugs: "Sevoflurane, Isoflurane, or N₂O", goal: "Sustain the anesthetic state with fine, minute-to-minute control over depth.", color: "bg-green-50 border-green-200", textColor: "text-green-800" },
+                    { step: "4. Neuromuscular Blockade", drugs: "Succinylcholine, Rocuronium", goal: "Provide skeletal muscle relaxation for surgical access and intubation.", color: "bg-purple-50 border-purple-200", textColor: "text-purple-800" },
+                  ].map((item, i) => (
+                    <div key={i} className={`${item.color} border rounded-xl p-5`}>
+                      <h4 className={`font-bold text-lg ${item.textColor} mb-1`}>{item.step}</h4>
+                      <p className="text-sm text-slate-600"><strong>Drugs:</strong> {item.drugs}</p>
+                      <p className="text-sm text-slate-700 mt-1"><strong>Goal:</strong> {item.goal}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-slate-100 rounded-xl p-6 border border-slate-200">
+                <h3 className="text-lg font-bold text-slate-800 mb-3">Inhalation vs. IV: Role Comparison</h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse text-left bg-white rounded-lg overflow-hidden shadow-sm">
+                    <thead className="bg-slate-700 text-white">
+                      <tr>
+                        <th className="p-3 font-bold">Feature</th>
+                        <th className="p-3 font-bold">Inhalation Agents</th>
+                        <th className="p-3 font-bold">IV Agents</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      <tr className="hover:bg-slate-50"><td className="p-3 font-semibold text-slate-600">Primary Role</td><td className="p-3 text-slate-700">Maintenance</td><td className="p-3 text-slate-700">Induction</td></tr>
+                      <tr className="hover:bg-slate-50"><td className="p-3 font-semibold text-slate-600">Control of Depth</td><td className="p-3 text-slate-700">Fine, minute-to-minute</td><td className="p-3 text-slate-700">Less precise after bolus</td></tr>
+                      <tr className="hover:bg-slate-50"><td className="p-3 font-semibold text-slate-600">Onset</td><td className="p-3 text-slate-700">Slower (via lungs)</td><td className="p-3 text-slate-700">Rapid (direct to bloodstream)</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        function AnesthesiaQuizView() {
+          const [openIndex, setOpenIndex] = useState(null);
+
+          const questions = [
+            {
+              q: "Define 'Balanced Anesthesia' and state its primary objectives.",
+              a: "Balanced Anesthesia involves the administration of a combination of drugs (sedatives, opioids, IV, and inhalation agents) to achieve all requirements for general anesthesia while minimizing the adverse effects of individual drugs. It typically includes preanesthetic medication, IV anesthetics for rapid induction, and inhalation agents for maintenance."
+            },
+            {
+              q: "Explain the concept of Minimum Alveolar Concentration (MAC) and how it is used in clinical practice.",
+              a: "MAC is the minimum concentration of anesthetic gas in the alveoli required to produce immobility in 50% of patients exposed to a painful stimulus, such as a surgical incision. It serves as a measure of potency; MAC is decreased by adjuvants like opioids or in elderly patients, while it is increased by alcohol abuse or drugs that increase catecholamines."
+            },
+            {
+              q: "Contrast the primary clinical roles of inhalation anesthetics versus intravenous (IV) anesthetics.",
+              a: "Inhalation anesthetics (e.g., Isoflurane, Nitrous Oxide) are primarily used for the maintenance of anesthesia because they allow for slow, minute-to-minute control over the depth of the anesthetic state. IV anesthetics (e.g., Thiopental, Propofol) are used for rapid induction to quickly transition the patient into unconsciousness."
+            },
+            {
+              q: "How do halogenated inhalation agents and barbiturates differ in their mechanism of neuronal inhibition compared to Ketamine?",
+              a: "Halogenated agents, Propofol, and barbiturates inhibit neuronal activity by facilitating the inhibitory effects of GABA at GABA-A receptors. In contrast, Ketamine and Nitrous Oxide inhibit excitatory effects by targeting the glutamate NMDA receptors."
+            },
+            {
+              q: "What factors determine the speed of induction and recovery for inhalation anesthetics?",
+              a: "The speed of induction and recovery depends largely on blood solubility; agents with a low blood:gas partition coefficient (like Desflurane) allow for rapid changes in anesthetic depth. Fat solubility also plays a role, as agents with high lipid solubility can accumulate in fat, leading to a 'hangover' effect during prolonged operations."
+            },
+            {
+              q: "Identify the specific cardiovascular and hepatic risks associated with the use of Halothane.",
+              a: "Halothane can cause hypotension through myocardial depression or vasodilation and may sensitize the myocardium to catecholamines, leading to bradycardia or arrhythmias. It is also hepatotoxic due to the formation of trifluoroacetic acid during metabolism and is a known trigger for malignant hyperthermia."
+            },
+            {
+              q: "Why is Nitrous Oxide (N₂O) contraindicated in patients with bowel obstructions or pneumothorax?",
+              a: "Nitrous Oxide expands closed gas spaces within the body, which significantly increases pressure in areas like the middle ear. Consequently, it is contraindicated in conditions like bowel obstruction or pneumothorax where gas expansion could cause tissue damage or rupture."
+            },
+            {
+              q: "Describe the pharmacokinetic process that makes Thiopental an 'ultra-short-acting' agent despite its slow metabolism.",
+              a: "Thiopental has a rapid onset because it is highly lipid-soluble and crosses the blood-brain barrier quickly. Its 'ultra-short-acting' nature is due to redistribution, where the drug moves from the brain into fat and skeletal muscle, terminating its central effect before it is actually metabolized."
+            },
+            {
+              q: "What is 'dissociative anesthesia,' and which agent is responsible for inducing this state?",
+              a: "Dissociative anesthesia is a hypnotic state induced by Ketamine, characterized by dissociation, amnesia, and profound analgesia, where the patient may appear awake (eyes open) but is unresponsive to commands. It is unique because Ketamine acts as a cardiovascular stimulant and a potent bronchodilator."
+            },
+            {
+              q: "Explain the clinical advantage of using Midazolam in a balanced anesthesia regimen and how its toxicity is managed.",
+              a: "Midazolam is preferred for its rapid onset and short duration, providing sedation and amnesia for minor procedures or as a pre-anesthetic. In the event of toxicity or excessive respiratory depression, its effects can be specifically reversed using the antidote Flumazenil."
+            }
+          ];
+
+          return (
+            <div className="space-y-6 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <HelpCircle className="text-rose-500 text-3xl" />
+                  V. Quick Recall Quiz
+                </h2>
+                <p className="text-slate-600 mt-2">
+                  Test your knowledge. Click on a question to reveal the answer. Active recall is the best way to memorize!
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                {questions.map((item, idx) => (
+                  <div key={idx} className="border border-slate-200 rounded-lg overflow-hidden shadow-sm hover:border-rose-300 transition-all duration-300 hover:shadow-md">
+                    <button
+                      onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
+                      className="w-full text-left p-4 bg-white hover:bg-rose-50/50 flex justify-between items-center focus:outline-none transition-colors duration-200 active:bg-rose-100/50"
+                    >
+                      <span className="font-semibold text-slate-800 pr-4">{idx + 1}. {item.q}</span>
+                      <ChevronDown className={`shrink-0 transition-transform duration-300 ${openIndex === idx ? 'rotate-180 text-rose-500' : 'text-slate-400'}`} />
+                    </button>
+
+                    <div className={`grid transition-all duration-300 ease-in-out ${openIndex === idx ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                      <div className="overflow-hidden">
+                        <div className="p-4 bg-rose-50 border-t border-rose-100 text-slate-700">
+                          <strong className="text-rose-800 block mb-1">Answer:</strong>
+                          {item.a}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        }
+
+        function AnesthesiaEssaysView() {
+          const [openIndex, setOpenIndex] = useState(0);
+
+          const essays = [
+            {
+              title: "Compare and contrast the clinical profiles and adverse effect profiles of Halothane and Sevoflurane.",
+              answer: "Halothane and Sevoflurane are both halogenated inhalation agents used primarily for the maintenance of anesthesia, but they differ significantly in their safety and irritability profiles. Halothane is a potent agent with a medium rate of induction and recovery. However, its use has declined due to severe adverse effects, including significant hepatotoxicity (halothane hepatitis caused by trifluoroacetic acid), sensitization of the heart to catecholamines (leading to arrhythmias), and its potential to trigger malignant hyperthermia.\n\nSevoflurane is often preferred, particularly in pediatric anesthesia, because it is non-irritating to the respiratory tract, unlike Isoflurane or Desflurane which can cause coughing and laryngospasm. While Sevoflurane carries a lower risk of the cardiovascular and hepatic issues associated with Halothane, it has a specific metabolic concern: it can be degraded by contact with soda lime (used in anesthesia machines) into 'Compound A,' which is nephrotoxic. Overall, Sevoflurane provides a smoother induction and a safer profile for the cardiovascular system compared to the older Halothane."
+            },
+            {
+              title: "Discuss the pharmacological profile of Ketamine, emphasizing its advantages in specific patient populations and its primary disadvantages.",
+              answer: "Ketamine is a non-barbiturate IV anesthetic that functions as an NMDA receptor antagonist, producing a state known as dissociative anesthesia. Unlike most anesthetics that depress the cardiovascular system, Ketamine is a cardiovascular stimulant that increases heart rate and blood pressure. This makes it the agent of choice for 'poor risk' patients in shock states. Additionally, it is a potent bronchodilator, making it suitable for patients at high risk for bronchospasm, such as those with asthma. Its profound analgesic properties also make it ideal for painful procedures like dressing burn wounds in children.\n\nThe primary disadvantages of Ketamine involve its effects on the central nervous system. It increases cerebral blood flow and intracranial tension, meaning it must be avoided in patients with head injuries. Furthermore, during recovery, patients may experience the 'emergence phenomenon,' characterized by hallucinations and disorientation. This side effect is typically mitigated by pre-treating the patient with benzodiazepines like diazepam."
+            },
+            {
+              title: "Explain the concept of Balanced Anesthesia and how it achieves the goals of general anesthesia safely.",
+              answer: "Balanced anesthesia is the strategy of administering a combination of drugs — sedatives, opioids, IV induction agents, and inhalation maintenance agents — to achieve all five requirements of general anesthesia while minimizing the adverse effects of any single drug.\n\nA typical balanced regimen proceeds in stages. First, pre-anesthetic medication (e.g., Midazolam, opioids) reduces patient anxiety, provides pre-operative sedation, and reduces MAC requirements. Second, a rapid IV agent such as Propofol or Thiopental is used for induction, transitioning the patient quickly into unconsciousness. Third, an inhalation agent (e.g., Sevoflurane or Isoflurane) is used for maintenance, offering fine, minute-to-minute control over anesthetic depth. Finally, neuromuscular blockers (e.g., Succinylcholine) provide skeletal muscle relaxation.\n\nThis approach is superior to relying on a single agent because each component provides its target effect at a lower, safer dose. For example, opioids reduce the inhalation agent requirement (lowering MAC), and Midazolam's amnestic properties complement the anesthesia without requiring higher doses of the primary agent."
+            }
+          ];
+
+          return (
+            <div className="space-y-6 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <FileText className="text-rose-600 text-3xl" />
+                  VI. Essay Review
+                </h2>
+                <p className="text-slate-600 mt-2">
+                  Detailed synthesis questions for long-form exam preparation.
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-4">
+                {essays.map((essay, idx) => (
+                  <div key={idx} className={`border rounded-xl overflow-hidden transition-all duration-300 ${openIndex === idx ? 'border-rose-300 shadow-md ring-1 ring-rose-100' : 'border-slate-200 hover:border-rose-200 hover:shadow-md'}`}>
+                    <button
+                      className={`w-full text-left p-5 flex justify-between items-start gap-4 transition-colors duration-200 active:bg-rose-100/50 ${openIndex === idx ? 'bg-rose-50' : 'bg-white hover:bg-slate-50'}`}
+                      onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
+                    >
+                      <h3 className={`font-bold text-lg leading-snug transition-colors duration-300 ${openIndex === idx ? 'text-rose-900' : 'text-slate-700'}`}>
+                        Essay {idx + 1}: {essay.title}
+                      </h3>
+                      <ChevronDown className={`mt-1 shrink-0 transition-transform duration-300 ${openIndex === idx ? 'rotate-180 text-rose-600' : 'text-slate-400'}`} />
+                    </button>
+
+                    <div className={`grid transition-all duration-300 ease-in-out ${openIndex === idx ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                      <div className="overflow-hidden">
+                        <div className="p-6 bg-white border-t border-rose-100 text-slate-700 leading-relaxed text-lg shadow-inner whitespace-pre-wrap">
+                          {essay.answer}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        }
+
+        function AnesthesiaGlossaryView() {
+          const terms = [
+            { term: "MAC", def: "Minimum Alveolar Concentration; the standard measure of inhalation anesthetic potency (immobility in 50% of patients)." },
+            { term: "Compound A", def: "A nephrotoxic byproduct formed when Sevoflurane reacts with soda lime in anesthesia machines." },
+            { term: "Emergence Phenomenon", def: "Post-operative hallucinations and disorientation associated with Ketamine recovery." },
+            { term: "Dissociative Anesthesia", def: "A hypnotic state (from Ketamine) where the patient may appear awake with eyes open but is unresponsive and amnestic." },
+            { term: "Blood:Gas Partition Coefficient", def: "A measure of blood solubility; lower values = faster induction and recovery (e.g., Desflurane)." },
+            { term: "Redistribution", def: "The process by which Thiopental moves from the brain into fat/muscle, ending its CNS action before hepatic metabolism occurs." },
+            { term: "Malignant Hyperthermia", def: "A rare, life-threatening hypermetabolic reaction to halogenated anesthetics (especially Halothane) and succinylcholine." },
+            { term: "Balanced Anesthesia", def: "The use of multiple drug classes together to achieve all anesthesia goals while minimizing individual drug toxicity." },
+            { term: "Porphyria", def: "A metabolic disorder that can be precipitated by Thiopental (and barbiturates) due to ALA synthetase induction." },
+            { term: "Flumazenil", def: "The specific pharmacological antidote for benzodiazepine (Midazolam) toxicity." }
+          ];
+
+          const mnemonics = [
+            { trigger: '"S" for Sevoflurane & Smooth', drug: "Sevoflurane", hook: "Smooth, non-irritant induction. Preferred for Small children." },
+            { trigger: '"H" for Halothane & Hepatotoxic', drug: "Halothane", hook: "High risk of liver damage (Halothane Hepatitis via trifluoroacetic acid)." },
+            { trigger: '"K" for Ketamine & Keep Pressure Up', drug: "Ketamine", hook: "Increases HR and BP — unlike every other anesthetic." },
+            { trigger: '"N" for Nitrous & Not Potent', drug: "Nitrous Oxide", hook: "Low potency; must be combined with other agents. Cannot achieve surgical anesthesia alone." },
+            { trigger: "The BBP Group", drug: "Barbiturates, Benzodiazepines, Propofol", hook: "All three work via GABA facilitation." },
+          ];
+
+          return (
+            <div className="space-y-8 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <Bookmark className="text-rose-500 text-3xl" />
+                  VII. Glossary & Mnemonics
+                </h2>
+                <p className="text-slate-600 mt-2">
+                  High-yield terms and memory hooks for quick recall.
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-8">
+                {/* Mnemonics */}
+                <div className="bg-rose-50 rounded-xl p-6 border border-rose-200 shadow-sm">
+                  <h3 className="text-xl font-bold text-rose-900 mb-4 flex items-center gap-2">
+                    <Brain /> Memory Hooks
+                  </h3>
+                  <div className="space-y-3">
+                    {mnemonics.map((m, idx) => (
+                      <div key={idx} className="bg-white p-3 rounded shadow-sm border-l-4 border-rose-500">
+                        <div className="font-bold text-rose-900 text-lg mb-1">"{m.trigger}"</div>
+                        <div className="text-slate-700 text-sm">
+                          <span className="font-semibold">{m.drug}:</span> {m.hook}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Buzzword hooks */}
+                <div className="bg-yellow-50 rounded-xl p-6 border border-yellow-200 shadow-sm">
+                  <h3 className="text-xl font-bold text-yellow-900 mb-4 flex items-center gap-2">
+                    <Zap /> Golden Buzzwords
+                  </h3>
+                  <ul className="space-y-3">
+                    {[
+                      { hook: "Thiopental", detail: "Ultra-short-acting by redistribution, not metabolism." },
+                      { hook: "Ketamine", detail: "Only IV anesthetic that stimulates the cardiovascular system." },
+                      { hook: "N₂O", detail: "Expands gas spaces — contraindicated in bowel obstruction & pneumothorax." },
+                      { hook: "Halothane", detail: "Sensitizes myocardium to catecholamines → arrhythmias." },
+                      { hook: "Desflurane", detail: "Fastest induction/recovery (lowest blood:gas coefficient)." },
+                    ].map((item, idx) => (
+                      <li key={idx} className="bg-white p-3 rounded shadow-sm border border-yellow-100">
+                        <strong className="text-yellow-700">{item.hook}:</strong> <span className="text-slate-700 text-sm">{item.detail}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              {/* Key Terms */}
+              <div>
+                <h3 className="text-2xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-block">Key Terms Definitions</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {terms.map((t, idx) => (
+                    <div key={idx} className="border border-slate-200 p-4 rounded-lg bg-white hover:border-rose-300 transition-colors">
+                      <h4 className="font-bold text-rose-800 mb-1">{t.term}</h4>
+                      <p className="text-slate-600 text-sm">{t.def}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+            </div>
+          );
+        }
+
+        // ==========================================
+        // 5. LOCAL ANESTHETICS STUDY GUIDE
+        // ==========================================
+
+        function LocalAnesthesiaStudyGuide({ onBack }) {
+          const [activeTab, setActiveTab] = useState('classification');
+          const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+          const tabs = [
+            { id: 'classification', label: 'Classification', icon: <List /> },
+            { id: 'mechanism', label: 'Mechanism of Action', icon: <Activity /> },
+            { id: 'pharmacokinetics', label: 'Pharmacokinetics', icon: <Zap /> },
+            { id: 'administration', label: 'Administration Routes', icon: <Pill /> },
+            { id: 'toxicity', label: 'Toxicity & Adverse Effects', icon: <AlertTriangle /> },
+            { id: 'quiz', label: 'Flashcard Quiz', icon: <HelpCircle /> },
+            { id: 'essays', label: 'Essay Review', icon: <FileText /> },
+            { id: 'glossary', label: 'Glossary & Mnemonics', icon: <Bookmark /> },
+          ];
+
+          return (
+            <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row font-sans text-slate-800">
+              <div className="md:hidden bg-amber-900 text-white p-4 flex justify-between items-center shadow-md z-20">
+                <div className="flex items-center gap-3">
+                  <button onClick={onBack} className="p-1 hover:bg-amber-800 rounded transition-all duration-200 active:scale-90 w-8 h-8 flex items-center justify-center group">
+                    <ArrowLeft className="transition-transform duration-300 group-hover:-translate-x-1" />
+                  </button>
+                  <div className="flex items-center gap-2 font-bold text-lg">
+                    <Zap className="text-amber-300" />
+                    <span>NeuroPharm Review</span>
+                  </div>
+                </div>
+                <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="w-8 h-8 flex items-center justify-center transition-transform duration-300 active:scale-90">
+                  <div className={`transition-transform duration-300 ${isMobileMenuOpen ? 'rotate-90 scale-110' : 'rotate-0'}`}>
+                    {isMobileMenuOpen ? <X /> : <Menu />}
+                  </div>
+                </button>
+              </div>
+              <nav className={`${isMobileMenuOpen ? 'flex' : 'hidden'} md:flex flex-col w-full md:w-72 bg-amber-900 text-white shadow-xl fixed md:sticky top-0 h-screen overflow-y-auto z-10 transition-all duration-300`}>
+                <div className="p-4 border-b border-amber-800">
+                  <button onClick={onBack} className="flex items-center gap-2 text-amber-300 hover:text-white hover:bg-amber-800 px-3 py-2 rounded-lg transition-all duration-200 transform hover:-translate-x-1 active:scale-95 text-sm font-semibold w-full group">
+                    <ArrowLeft className="transition-transform duration-300 group-hover:-translate-x-1" /> Back to Dashboard
+                  </button>
+                </div>
+                <div className="hidden md:flex items-center gap-3 p-6 border-b border-amber-800">
+                  <Zap className="text-2xl text-amber-300" />
+                  <div>
+                    <h1 className="font-bold text-xl leading-tight">NeuroPharm</h1>
+                    <span className="text-amber-300 text-xs uppercase tracking-wider font-semibold">Study Guide</span>
+                  </div>
+                </div>
+                <div className="p-4 flex-1">
+                  <p className="text-amber-400 text-xs font-bold mb-4 uppercase tracking-wider px-2">Exam Modules</p>
+                  <ul className="space-y-1">
+                    {tabs.map((tab) => (
+                      <li key={tab.id}>
+                        <button onClick={() => { setActiveTab(tab.id); setIsMobileMenuOpen(false); }}
+                          className={`w-full flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200 transform hover:translate-x-2 active:scale-95 text-left group ${activeTab === tab.id ? 'bg-amber-600 text-white shadow-md' : 'text-amber-200 hover:bg-amber-800 hover:text-white'}`}>
+                          <span className={`w-5 h-5 flex items-center justify-center transition-transform duration-300 ${activeTab === tab.id ? 'scale-110' : 'group-hover:scale-110'}`}>{tab.icon}</span>
+                          <span className="font-medium">{tab.label}</span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="p-4 border-t border-amber-800 text-xs text-amber-400 text-center">Comprehensive Review: Local Anesthetics</div>
+              </nav>
+              <main className="flex-1 p-4 md:p-8 overflow-y-auto w-full max-w-5xl mx-auto">
+                <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-10 min-h-[80vh]">
+                  {activeTab === 'classification' && <LAClassificationView />}
+                  {activeTab === 'mechanism' && <LAMechanismView />}
+                  {activeTab === 'pharmacokinetics' && <LAPharmacokineticsView />}
+                  {activeTab === 'administration' && <LAAdministrationView />}
+                  {activeTab === 'toxicity' && <LAToxicityView />}
+                  {activeTab === 'quiz' && <LAQuizView />}
+                  {activeTab === 'essays' && <LAEssaysView />}
+                  {activeTab === 'glossary' && <LAGlossaryView />}
+                </div>
+              </main>
+            </div>
+          );
+        }
+
+        function LAClassificationView() {
+          return (
+            <div className="space-y-8 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <List className="text-amber-600 text-3xl" />I. Classification of Local Anesthetics
+                </h2>
+                <p className="text-slate-600 mt-2 text-lg">Local anesthetics induce a <strong>reversible loss of sensation</strong> in a localized area without loss of consciousness. They are classified by their chemical linkage into two major groups.</p>
+              </div>
+              <div className="bg-amber-50 border-l-4 border-amber-500 p-5 rounded-r-xl">
+                <h3 className="text-xl font-bold text-amber-900 mb-2">Core Definition</h3>
+                <p className="text-slate-700">A local anesthetic produces a reversible loss of sensation in a specific, localized area of the body <strong>without causing loss of consciousness or sleep</strong>. Reversibility is the defining characteristic — sensation must return fully without permanent nerve damage.</p>
+              </div>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="bg-white border-2 border-orange-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="bg-orange-100 text-orange-800 px-3 py-1 font-bold text-sm rounded-full">ESTERS</div>
+                    <span className="text-slate-500 text-sm italic">One "i" in the name</span>
+                  </div>
+                  <div className="space-y-3">
+                    <div><strong className="text-slate-700 block mb-1">Examples:</strong>
+                      <div className="flex flex-wrap gap-2">
+                        {["Procaine", "Benzocaine", "Cocaine", "Tetracaine"].map(d => (
+                          <span key={d} className="bg-orange-50 border border-orange-200 text-orange-800 px-2 py-1 rounded text-sm font-medium">{d}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="bg-orange-50 p-3 rounded-lg border border-orange-100 space-y-1 text-sm text-slate-700">
+                      <p><strong>Metabolism:</strong> Hydrolyzed by <strong>plasma pseudocholinesterase</strong></p>
+                      <p><strong>Duration:</strong> Shorter acting</p>
+                      <p><strong>Allergy risk:</strong> High — PABA byproduct causes allergic reactions</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-white border-2 border-amber-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="bg-amber-100 text-amber-800 px-3 py-1 font-bold text-sm rounded-full">AMIDES</div>
+                    <span className="text-slate-500 text-sm italic">Two "i"s in the name</span>
+                  </div>
+                  <div className="space-y-3">
+                    <div><strong className="text-slate-700 block mb-1">Examples:</strong>
+                      <div className="flex flex-wrap gap-2">
+                        {["Lidocaine", "Bupivacaine", "Ropivacaine", "Mepivacaine"].map(d => (
+                          <span key={d} className="bg-amber-50 border border-amber-200 text-amber-800 px-2 py-1 rounded text-sm font-medium">{d}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="bg-amber-50 p-3 rounded-lg border border-amber-100 space-y-1 text-sm text-slate-700">
+                      <p><strong>Metabolism:</strong> Metabolized by the <strong>liver</strong></p>
+                      <p><strong>Duration:</strong> Longer acting</p>
+                      <p><strong>Toxicity risk:</strong> Higher systemic toxicity, especially in liver disease</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-slate-100 rounded-xl p-6 border border-slate-200">
+                <h3 className="text-lg font-bold text-slate-800 mb-4">Quick Comparison Table</h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse text-left bg-white rounded-lg overflow-hidden shadow-sm">
+                    <thead className="bg-slate-700 text-white">
+                      <tr><th className="p-3 font-bold">Feature</th><th className="p-3 font-bold">Esters</th><th className="p-3 font-bold">Amides</th></tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      <tr className="hover:bg-slate-50"><td className="p-3 font-semibold text-slate-600">Examples</td><td className="p-3">Procaine, Cocaine, Benzocaine</td><td className="p-3">Lidocaine, Bupivacaine, Ropivacaine</td></tr>
+                      <tr className="hover:bg-slate-50"><td className="p-3 font-semibold text-slate-600">Metabolism</td><td className="p-3">Plasma pseudocholinesterase</td><td className="p-3">Liver (hepatic)</td></tr>
+                      <tr className="hover:bg-slate-50"><td className="p-3 font-semibold text-slate-600">Duration</td><td className="p-3">Shorter</td><td className="p-3">Longer</td></tr>
+                      <tr className="hover:bg-slate-50"><td className="p-3 font-semibold text-slate-600">Allergy Risk</td><td className="p-3">Yes (PABA byproduct)</td><td className="p-3">Minimal</td></tr>
+                      <tr className="hover:bg-slate-50"><td className="p-3 font-semibold text-slate-600">Systemic Toxicity</td><td className="p-3">Lower</td><td className="p-3">Higher (esp. liver disease)</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        function LAMechanismView() {
+          return (
+            <div className="space-y-8 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <Activity className="text-amber-600 text-3xl" />II. Mechanism of Action
+                </h2>
+                <p className="text-slate-600 mt-2 text-lg">Local anesthetics block nerve conduction by inhibiting Na⁺ channels, preventing action potential generation and propagation.</p>
+              </div>
+              <div className="bg-slate-800 text-white rounded-xl p-6 shadow-md">
+                <h3 className="text-xl font-bold mb-3 text-amber-300">The Core Mechanism</h3>
+                <p className="text-slate-300 leading-relaxed">Local anesthetics bind to receptors on the <strong className="text-white">inner surface</strong> of Na⁺ channels within nerve membranes. This blocks the channel, inhibiting the generation and propagation of action potentials and stopping the nerve signal.</p>
+                <div className="grid md:grid-cols-2 gap-4 mt-5">
+                  <div className="bg-slate-700 p-4 rounded-lg">
+                    <strong className="text-amber-400 block mb-2">Unionized Form → Crosses Membrane</strong>
+                    <p className="text-slate-300 text-sm">Only the lipid-soluble unionized form can cross the nerve membrane to reach the intracellular binding site.</p>
+                  </div>
+                  <div className="bg-slate-700 p-4 rounded-lg">
+                    <strong className="text-amber-400 block mb-2">Ionized Form → Blocks Channel</strong>
+                    <p className="text-slate-300 text-sm">Once inside, the drug re-ionizes. The ionized (cationic) form is the active species that actually blocks the Na⁺ channel internally.</p>
+                  </div>
+                </div>
+              </div>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="bg-amber-50 rounded-xl p-6 border border-amber-200 shadow-sm">
+                  <h3 className="text-xl font-bold text-amber-900 mb-4">Use-Dependence</h3>
+                  <p className="text-slate-700 text-sm leading-relaxed">Local anesthetics preferentially block Na⁺ channels that are <strong>activated or inactivated</strong> (open or recently closed) rather than resting channels. Therefore, <strong>rapidly-firing sensory nerves</strong> are blocked first and most effectively.</p>
+                </div>
+                <div className="bg-orange-50 rounded-xl p-6 border border-orange-200 shadow-sm">
+                  <h3 className="text-xl font-bold text-orange-900 mb-4">Nerve Fiber Sensitivity</h3>
+                  <p className="text-slate-700 text-sm leading-relaxed mb-3">Sensitivity follows: <strong>"Small, Fast, and Sensitive"</strong></p>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center gap-3 bg-white p-2 rounded border border-orange-200"><span className="bg-red-500 text-white px-2 py-0.5 rounded font-bold text-xs">First</span><span>Small fibers — Pain, Temperature (Aδ, C fibers)</span></div>
+                    <div className="flex items-center gap-3 bg-white p-2 rounded border border-orange-200"><span className="bg-orange-400 text-white px-2 py-0.5 rounded font-bold text-xs">Then</span><span>Touch, Pressure</span></div>
+                    <div className="flex items-center gap-3 bg-white p-2 rounded border border-orange-200"><span className="bg-slate-400 text-white px-2 py-0.5 rounded font-bold text-xs">Last</span><span>Large motor fibers (most resistant)</span></div>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-red-50 rounded-xl p-6 border border-red-200">
+                <h3 className="text-xl font-bold text-red-900 mb-3 flex items-center gap-2"><AlertTriangle /> Effect of Infection on LA Efficacy</h3>
+                <p className="text-slate-700 leading-relaxed">Infections increase <strong>extracellular acidity</strong> (lower pH), shifting equilibrium toward the <strong>ionized form</strong>. Because the ionized form cannot cross the nerve membrane, the drug cannot reach its site of action — significantly <strong>reducing anesthetic efficacy</strong>. Adding sodium bicarbonate (NaHCO₃) can counter this by raising pH and increasing the unionized fraction.</p>
+              </div>
+            </div>
+          );
+        }
+
+        function LAPharmacokineticsView() {
+          return (
+            <div className="space-y-8 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <Zap className="text-amber-500 text-3xl" />III. Pharmacokinetics & Chemical Determinants
+                </h2>
+                <p className="text-slate-600 mt-2 text-lg">Three chemical properties determine the clinical performance of every local anesthetic: lipid solubility, pKa, and protein binding.</p>
+              </div>
+              <div className="grid md:grid-cols-3 gap-5">
+                <div className="bg-white border-2 border-amber-300 rounded-xl p-5 shadow-sm text-center">
+                  <div className="text-3xl font-black text-amber-600 mb-2">Lipid Solubility</div>
+                  <div className="text-lg font-bold text-slate-700 mb-2">= POTENCY</div>
+                  <p className="text-sm text-slate-600">Higher lipid solubility → more drug enters the membrane → greater potency. Bupivacaine is 7× more lipid-soluble than lidocaine.</p>
+                </div>
+                <div className="bg-white border-2 border-orange-300 rounded-xl p-5 shadow-sm text-center">
+                  <div className="text-3xl font-black text-orange-600 mb-2">Low pKa</div>
+                  <div className="text-lg font-bold text-slate-700 mb-2">= FAST ONSET</div>
+                  <p className="text-sm text-slate-600">Lower pKa → more drug in unionized form at physiological pH → faster membrane crossing. Lidocaine (pKa 7.9) acts faster than Bupivacaine (pKa 8.1).</p>
+                </div>
+                <div className="bg-white border-2 border-yellow-300 rounded-xl p-5 shadow-sm text-center">
+                  <div className="text-3xl font-black text-yellow-600 mb-2">Protein Binding</div>
+                  <div className="text-lg font-bold text-slate-700 mb-2">= DURATION</div>
+                  <p className="text-sm text-slate-600">Higher protein binding → drug stays bound longer. Bupivacaine (95% bound) lasts longer than Lidocaine (65% bound).</p>
+                </div>
+              </div>
+              <div className="bg-slate-100 rounded-xl p-6 border border-slate-200">
+                <h3 className="text-lg font-bold text-slate-800 mb-4">Lidocaine vs. Bupivacaine: Direct Comparison</h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse text-left bg-white rounded-lg overflow-hidden shadow-sm">
+                    <thead className="bg-amber-800 text-white">
+                      <tr><th className="p-3 font-bold">Property</th><th className="p-3 font-bold">Lidocaine</th><th className="p-3 font-bold">Bupivacaine</th></tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      <tr className="hover:bg-slate-50"><td className="p-3 font-semibold text-slate-600">pKa</td><td className="p-3">7.9</td><td className="p-3">8.1</td></tr>
+                      <tr className="hover:bg-slate-50"><td className="p-3 font-semibold text-slate-600">% Unionized at pH 7.4</td><td className="p-3">~25%</td><td className="p-3">~15%</td></tr>
+                      <tr className="hover:bg-slate-50"><td className="p-3 font-semibold text-slate-600">Onset</td><td className="p-3 text-green-700 font-semibold">Faster</td><td className="p-3 text-red-700 font-semibold">Slower</td></tr>
+                      <tr className="hover:bg-slate-50"><td className="p-3 font-semibold text-slate-600">Protein Binding</td><td className="p-3">65%</td><td className="p-3">95%</td></tr>
+                      <tr className="hover:bg-slate-50"><td className="p-3 font-semibold text-slate-600">Duration</td><td className="p-3 text-red-700 font-semibold">Shorter</td><td className="p-3 text-green-700 font-semibold">Longer</td></tr>
+                      <tr className="hover:bg-slate-50"><td className="p-3 font-semibold text-slate-600">Relative Potency</td><td className="p-3">1×</td><td className="p-3">7× more potent</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
+                <h3 className="text-xl font-bold text-blue-900 mb-3">Vasoconstrictors — Extending Duration</h3>
+                <p className="text-slate-700 mb-3 leading-relaxed">Most local anesthetics (except cocaine) cause <strong>vasodilation</strong>, increasing systemic absorption and shortening duration. Adding a <strong>vasoconstrictor</strong> (e.g., adrenaline/epinephrine) counteracts this:</p>
+                <div className="grid md:grid-cols-3 gap-3 text-sm">
+                  <div className="bg-white p-3 rounded border border-blue-200 text-center"><strong className="text-blue-700 block">↓ Absorption</strong>Reduces systemic uptake</div>
+                  <div className="bg-white p-3 rounded border border-blue-200 text-center"><strong className="text-blue-700 block">↑ Duration</strong>Prolongs local effect</div>
+                  <div className="bg-white p-3 rounded border border-blue-200 text-center"><strong className="text-blue-700 block">↓ Toxicity</strong>Less drug reaches circulation</div>
+                </div>
+                <div className="mt-4 bg-red-50 border border-red-200 p-3 rounded-lg">
+                  <strong className="text-red-800 block mb-1">⚠ Contraindication:</strong>
+                  <p className="text-sm text-slate-700">Vasoconstrictors are <strong>strictly contraindicated</strong> in anesthesia of extremities (fingers, toes, nose, penis) — restricted blood flow can cause <strong>gangrene</strong>. Use <strong>Felypressin</strong> instead for cardiac patients.</p>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        function LAAdministrationView() {
+          const routes = [
+            { name: "Surface (Topical) Anesthesia", drugs: "Lidocaine solutions, jellies, creams", indication: "Minor procedures on skin or mucous membranes.", color: "bg-green-50 border-green-200", badge: "bg-green-100 text-green-800" },
+            { name: "Infiltration Anesthesia", drugs: "Lidocaine, Procaine", indication: "Injected subcutaneously to reach nerve terminals directly.", color: "bg-blue-50 border-blue-200", badge: "bg-blue-100 text-blue-800" },
+            { name: "Nerve Block", drugs: "Bupivacaine, Lidocaine", indication: "Injected close to major nerve trunks (e.g., brachial plexus). Used in dentistry and surgery.", color: "bg-purple-50 border-purple-200", badge: "bg-purple-100 text-purple-800" },
+            { name: "IV Regional Anesthesia", drugs: "Lidocaine (dilute)", indication: "Limb surgeries. Uses a double-cuff system to isolate venous system before injection.", color: "bg-orange-50 border-orange-200", badge: "bg-orange-100 text-orange-800" },
+            { name: "Spinal Anesthesia", drugs: "Bupivacaine, Lidocaine", indication: "Abdominal, pelvic, or leg surgeries. Injected into subarachnoid space below L2 vertebra.", color: "bg-red-50 border-red-200", badge: "bg-red-100 text-red-800" },
+            { name: "Epidural Anesthesia", drugs: "Bupivacaine, Ropivacaine", indication: "Similar indications to spinal. Injected outside the dura mater to block spinal roots.", color: "bg-amber-50 border-amber-200", badge: "bg-amber-100 text-amber-800" },
+          ];
+          return (
+            <div className="space-y-8 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <Pill className="text-amber-500 text-3xl" />IV. Routes of Administration
+                </h2>
+                <p className="text-slate-600 mt-2 text-lg">Local anesthetics can be administered through multiple routes, each tailored to the surgical requirement and anatomical target.</p>
+              </div>
+              <div className="grid md:grid-cols-2 gap-5">
+                {routes.map((r, i) => (
+                  <div key={i} className={`${r.color} border rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow`}>
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className={`${r.badge} px-2 py-0.5 text-xs font-bold rounded-full`}>{i + 1}</span>
+                      <h4 className="font-bold text-slate-800 text-lg">{r.name}</h4>
+                    </div>
+                    <p className="text-sm text-slate-600 mb-1"><strong>Drugs:</strong> {r.drugs}</p>
+                    <p className="text-sm text-slate-700">{r.indication}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="bg-slate-800 text-white rounded-xl p-6 shadow-md">
+                <h3 className="text-xl font-bold text-amber-300 mb-3">Spinal vs. Epidural — Key Distinction</h3>
+                <div className="grid md:grid-cols-2 gap-4 text-sm">
+                  <div className="bg-slate-700 p-4 rounded-lg">
+                    <strong className="text-white block mb-2">Spinal Anesthesia</strong>
+                    <ul className="text-slate-300 space-y-1 list-disc list-inside">
+                      <li>Injected into the <strong>subarachnoid space</strong></li>
+                      <li>Below L2 vertebra</li>
+                      <li>Acts on spinal roots and cord</li>
+                      <li>Risk: "Spinal headache" from CSF leakage → use pencil-point needle</li>
+                    </ul>
+                  </div>
+                  <div className="bg-slate-700 p-4 rounded-lg">
+                    <strong className="text-white block mb-2">Epidural Anesthesia</strong>
+                    <ul className="text-slate-300 space-y-1 list-disc list-inside">
+                      <li>Injected <strong>outside the dura mater</strong></li>
+                      <li>Blocks spinal roots</li>
+                      <li>Similar indications to spinal</li>
+                      <li>Lower risk of CSF leakage / headache</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        function LAToxicityView() {
+          return (
+            <div className="space-y-8 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <AlertTriangle className="text-red-500 text-3xl" />V. Systemic Toxicity and Adverse Effects
+                </h2>
+                <p className="text-slate-600 mt-2 text-lg">Systemic toxicity typically results from high systemic absorption or accidental intravenous injection. Effects manifest in the CNS and CVS in a dose-dependent manner.</p>
+              </div>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="bg-red-50 rounded-xl p-6 border border-red-200 shadow-sm">
+                  <h3 className="text-xl font-bold text-red-900 mb-4 flex items-center gap-2"><Brain /> CNS Toxicity</h3>
+                  <p className="text-slate-700 text-sm mb-4 italic">Follows a progression: stimulation then depression</p>
+                  <div className="flex flex-wrap items-center gap-2 text-sm font-medium">
+                    <span className="bg-white px-3 py-1 rounded shadow-sm border border-red-100">Sleepiness</span>
+                    <span className="text-slate-400">→</span>
+                    <span className="bg-white px-3 py-1 rounded shadow-sm border border-red-100">Restlessness</span>
+                    <span className="text-slate-400">→</span>
+                    <span className="bg-white px-3 py-1 rounded shadow-sm border border-red-100">Metallic Taste</span>
+                    <span className="text-slate-400">→</span>
+                    <span className="bg-orange-100 px-3 py-1 rounded shadow-sm border border-orange-300 text-orange-800">Tremors</span>
+                    <span className="text-slate-400">→</span>
+                    <span className="bg-red-100 px-3 py-1 rounded shadow-sm border border-red-300 text-red-800">Convulsions</span>
+                    <span className="text-slate-400">→</span>
+                    <span className="bg-slate-800 px-3 py-1 rounded shadow-sm text-white">Resp. Depression / Death</span>
+                  </div>
+                  <div className="mt-4 bg-white p-3 rounded border border-red-200">
+                    <strong className="text-red-700">Treatment of Convulsions:</strong> <span className="text-slate-700 text-sm"> Diazepam (IV benzodiazepine)</span>
+                  </div>
+                </div>
+                <div className="bg-orange-50 rounded-xl p-6 border border-orange-200 shadow-sm">
+                  <h3 className="text-xl font-bold text-orange-900 mb-4 flex items-center gap-2"><HeartPulse /> CVS Toxicity</h3>
+                  <ul className="space-y-3 text-slate-700 text-sm">
+                    <li className="bg-white p-3 rounded border border-orange-100"><strong className="block text-orange-800">General Effects:</strong>Hypotension (vasodilation) and bradycardia.</li>
+                    <li className="bg-white p-3 rounded border border-orange-100"><strong className="block text-red-800">Bupivacaine:</strong>Extremely cardiotoxic at high doses — avoid high concentrations.</li>
+                    <li className="bg-white p-3 rounded border border-orange-100"><strong className="block text-green-800">Ropivacaine (safer alternative):</strong>Less cardiotoxic than Bupivacaine. Also more selective for sensory nerves over motor nerves.</li>
+                    <li className="bg-white p-3 rounded border border-orange-100"><strong className="block text-orange-800">Ester Allergy Risk:</strong>Ester-type LAs (procaine) produce <strong>PABA</strong> as a metabolite, which can cause allergic reactions.</li>
+                  </ul>
+                </div>
+              </div>
+              <div className="bg-slate-100 rounded-xl p-6 border border-slate-200">
+                <h3 className="text-lg font-bold text-slate-800 mb-4">Drug Interaction: Lidocaine + Propranolol</h3>
+                <p className="text-slate-700 leading-relaxed">Propranolol <strong>reduces hepatic blood flow</strong>, which impairs the clearance of lidocaine (an amide metabolized by the liver). This leads to <strong>accumulation of lidocaine</strong> and an increased risk of systemic CNS and cardiovascular toxicity.</p>
+              </div>
+            </div>
+          );
+        }
+
+        function LAQuizView() {
+          const [openIndex, setOpenIndex] = useState(null);
+          const questions = [
+            {
+              q: "How is a local anesthetic defined in a clinical context?",
+              a: "A local anesthetic is a drug that induces a reversible loss of sensation in a specific, localized area of the body. Crucially, this effect is achieved without causing a loss of consciousness or inducing sleep in the patient."
+            },
+            {
+              q: "Contrast the metabolism of ester-type and amide-type local anesthetics.",
+              a: "Esters (such as procaine) are hydrolyzed by plasma pseudocholinesterase and have a shorter duration of action. Amides (such as lidocaine) are metabolized by the liver, resulting in a longer duration of action and a higher liability for systemic toxicity, especially in patients with liver disease."
+            },
+            {
+              q: "Explain the primary mechanism of action for local anesthetics at the cellular level.",
+              a: "Local anesthetics bind to receptors on the inner surface of sodium (Na+) channels within nerve membranes. This binding blocks the channels, which inhibits the generation and propagation of action potentials, effectively stopping the nerve signal."
+            },
+            {
+              q: "Why are sensory nerves generally more sensitive to local anesthetics than motor nerves?",
+              a: "Local anesthetics are 'use-dependent,' meaning they block Na+ channels in activated or deactivated states more effectively than in resting states; therefore, rapid-firing sensory nerves are blocked first. Additionally, small nerve fibers (pain, temperature) are more sensitive than large fibers (pressure, motor) due to their physical size."
+            },
+            {
+              q: "What is the significance of the unionized form of a local anesthetic?",
+              a: "While the ionized form is responsible for blocking the Na+ channel from the inside, only the unionized form is lipid-soluble enough to cross the nerve membrane. Therefore, the unionized form is essential for the drug to reach its intracellular site of action."
+            },
+            {
+              q: "How does the presence of an infection at the injection site affect the efficacy of lidocaine?",
+              a: "Infections increase extracellular acidity, which shifts the equilibrium of the local anesthetic toward the ionized form. Because the ionized form cannot cross the nerve membrane, the activity and effectiveness of the anesthetic are significantly decreased."
+            },
+            {
+              q: "What is the clinical rationale for adding a vasoconstrictor to a local anesthetic solution?",
+              a: "Most local anesthetics (except cocaine) induce vasodilation, which increases systemic absorption and shortens the duration of the effect. Adding a vasoconstrictor decreases absorption, thereby prolonging the duration of action and reducing the risk of systemic toxicity."
+            },
+            {
+              q: "Identify the specific contraindications for using vasoconstrictors in local anesthesia.",
+              a: "Vasoconstrictors are strictly contraindicated in the anesthesia of extremities such as fingers, toes, and the nose. Using them in these areas can lead to severe restricted blood flow and subsequent gangrene."
+            },
+            {
+              q: "Describe the difference between spinal and epidural anesthesia in terms of injection site.",
+              a: "Spinal anesthesia is injected into the subarachnoid space below the L2 vertebrae to act on spinal roots and the spinal cord. In contrast, epidural anesthesia is injected outside the dura mater to block spinal roots, offering similar indications with a lower risk of certain side effects."
+            },
+            {
+              q: "Explain the drug interaction between lidocaine and propranolol.",
+              a: "Propranolol reduces hepatic blood flow, which impairs the clearance of lidocaine since lidocaine is metabolized by the liver. This interaction leads to an accumulation of lidocaine and an increased risk of systemic toxicity."
+            }
+          ];
+          return (
+            <div className="space-y-6 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <HelpCircle className="text-amber-500 text-3xl" />VI. Quick Recall Quiz
+                </h2>
+                <p className="text-slate-600 mt-2">Test your knowledge. Click on a question to reveal the answer. Active recall is the best way to memorize!</p>
+              </div>
+              <div className="space-y-3">
+                {questions.map((item, idx) => (
+                  <div key={idx} className="border border-slate-200 rounded-lg overflow-hidden shadow-sm hover:border-amber-300 transition-all duration-300 hover:shadow-md">
+                    <button onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
+                      className="w-full text-left p-4 bg-white hover:bg-amber-50/50 flex justify-between items-center focus:outline-none transition-colors duration-200 active:bg-amber-100/50">
+                      <span className="font-semibold text-slate-800 pr-4">{idx + 1}. {item.q}</span>
+                      <ChevronDown className={`shrink-0 transition-transform duration-300 ${openIndex === idx ? 'rotate-180 text-amber-500' : 'text-slate-400'}`} />
+                    </button>
+                    <div className={`grid transition-all duration-300 ease-in-out ${openIndex === idx ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                      <div className="overflow-hidden">
+                        <div className="p-4 bg-amber-50 border-t border-amber-100 text-slate-700">
+                          <strong className="text-amber-800 block mb-1">Answer:</strong>{item.a}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        }
+
+        function LAEssaysView() {
+          const [openIndex, setOpenIndex] = useState(0);
+          const essays = [
+            {
+              title: "Analyze the chemical factors (pKa, pH, and lipid solubility) that determine the onset, potency, and duration of local anesthetics.",
+              answer: "The clinical performance of a local anesthetic is dictated by its chemical properties. Potency is directly related to lipid solubility; for example, Bupivacaine is seven times more lipid-soluble than lidocaine, making it significantly more potent. The speed of onset is determined by the drug's pKa and the surrounding extracellular pH. A lower pKa results in a higher percentage of the drug existing in the unionized (lipid-soluble) form at physiological pH, allowing it to cross the nerve membrane faster. This is why lidocaine (pKa 7.9, 25% unionized) has a more rapid onset than bupivacaine (pKa 8.1, 15% unionized).\n\nFurthermore, duration of action is heavily influenced by plasma protein binding. Bupivacaine is 95% bound to plasma proteins, whereas lidocaine is only 65% bound, explaining bupivacaine's longer clinical effect. Finally, extracellular conditions such as acidity (from infection) or the addition of sodium bicarbonate (NaHCO3) can shift the equilibrium between ionized and unionized forms, thereby inhibiting or accelerating the onset of the block, respectively."
+            },
+            {
+              title: "Discuss the systemic toxicity and adverse effects of local anesthetics, with specific reference to the CNS and CVS.",
+              answer: "Systemic toxicity typically occurs due to high systemic absorption or accidental intravenous injection. In the Central Nervous System (CNS), low concentrations may cause symptoms such as sleepiness, restlessness, numbness, and a metallic taste. However, high concentrations lead to a sequence of stimulation followed by depression, characterized by tremors, convulsions (which may be treated with Diazepam), respiratory depression, coma, and potentially death.\n\nIn the Cardiovascular System (CVS), local anesthetics generally cause hypotension due to vasodilation and bradycardia. Bupivacaine is noted for being extremely cardiotoxic in high doses. To mitigate some CVS risks, Ropivacaine may be used as it is less cardiotoxic and more selective for sensory nerves than motor nerves. Additionally, ester-type anesthetics (like procaine) carry a specific risk of allergic reactions because they are derivatives of Para-Aminobenzoic Acid (PABA)."
+            },
+            {
+              title: "Compare and contrast the various methods of administration for local anesthesia, including their specific clinical indications.",
+              answer: "Local anesthetics can be administered through several routes depending on the surgical requirement. Surface anesthesia involves applying solutions, jellies, or creams (e.g., lidocaine) to skin or mucous membranes for minor procedures. Infiltration involves injecting the drug subcutaneously to reach nerve terminals. Nerve blocks are used in dentistry and surgery by injecting the drug close to major nerve trunks, such as the brachial plexus.\n\nFor limb surgeries, IV regional anesthesia employs a double-cuff system to isolate the venous system before injection. Spinal anesthesia is reserved for abdominal, pelvic, or leg surgeries where general anesthesia is contraindicated; it is injected into the subarachnoid space below L2. Epidural anesthesia is similar but injected outside the dura. While spinal anesthesia may cause side effects like 'spinal headaches' due to CSF leakage (mitigated by pencil point needles), epidural anesthesia generally presents a lower risk of such complications."
+            }
+          ];
+          return (
+            <div className="space-y-6 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <FileText className="text-amber-600 text-3xl" />VII. Essay Review
+                </h2>
+                <p className="text-slate-600 mt-2">Detailed synthesis questions for long-form exam preparation.</p>
+              </div>
+              <div className="flex flex-col gap-4">
+                {essays.map((essay, idx) => (
+                  <div key={idx} className={`border rounded-xl overflow-hidden transition-all duration-300 ${openIndex === idx ? 'border-amber-300 shadow-md ring-1 ring-amber-100' : 'border-slate-200 hover:border-amber-200 hover:shadow-md'}`}>
+                    <button className={`w-full text-left p-5 flex justify-between items-start gap-4 transition-colors duration-200 active:bg-amber-100/50 ${openIndex === idx ? 'bg-amber-50' : 'bg-white hover:bg-slate-50'}`}
+                      onClick={() => setOpenIndex(openIndex === idx ? null : idx)}>
+                      <h3 className={`font-bold text-lg leading-snug transition-colors duration-300 ${openIndex === idx ? 'text-amber-900' : 'text-slate-700'}`}>
+                        Essay {idx + 1}: {essay.title}
+                      </h3>
+                      <ChevronDown className={`mt-1 shrink-0 transition-transform duration-300 ${openIndex === idx ? 'rotate-180 text-amber-600' : 'text-slate-400'}`} />
+                    </button>
+                    <div className={`grid transition-all duration-300 ease-in-out ${openIndex === idx ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                      <div className="overflow-hidden">
+                        <div className="p-6 bg-white border-t border-amber-100 text-slate-700 leading-relaxed text-lg shadow-inner whitespace-pre-wrap">{essay.answer}</div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        }
+
+        function LAGlossaryView() {
+          const terms = [
+            { term: "Reversibility", def: "The defining characteristic of LA — sensation must return fully without permanent nerve damage." },
+            { term: "Use-Dependence", def: "LA is more effective in nerves that are frequently firing (opening their Na+ channels)." },
+            { term: "Pseudocholinesterase", def: "The plasma enzyme responsible for breaking down ester-type local anesthetics." },
+            { term: "PABA (Para-Aminobenzoic Acid)", def: "A byproduct of ester metabolism often responsible for allergic reactions." },
+            { term: "Pencil Point Needle", def: "A specialized needle used in spinal anesthesia to prevent CSF leakage and subsequent headaches." },
+            { term: "Felypressin", def: "A vasoconstrictor preferred for cardiac patients because it does not affect heart rate or blood pressure." },
+            { term: "pKa", def: "The pH at which 50% of the drug is ionized and 50% unionized. Lower pKa = faster onset at physiological pH." },
+            { term: "Ropivacaine", def: "An amide LA that is less cardiotoxic than Bupivacaine and more selective for sensory over motor nerves." },
+            { term: "Bupivacaine", def: "Highly potent, long-acting amide LA (95% protein-bound). Extremely cardiotoxic at high doses." },
+            { term: "Lidocaine", def: "Prototype amide LA (pKa 7.9, 65% protein-bound). Faster onset but shorter duration than Bupivacaine." },
+          ];
+          const mnemonics = [
+            { trigger: "Amides have two 'i's", drug: "Lidocaine, Bupivacaine, Ropivacaine", hook: "All amide drug names contain two 'i's." },
+            { trigger: "Esters have one 'i'", drug: "Procaine, Benzocaine, Cocaine", hook: "All ester drug names contain only one 'i'." },
+            { trigger: "Small, Fast & Sensitive", drug: "Small nerve fibers (pain/temp)", hook: "Small fibers and fast-firing nerves are blocked first by LA." },
+            { trigger: "Inner Surface", drug: "All LAs", hook: "LA always binds to the INNER surface of the Na+ channel." },
+            { trigger: "Unionized = Crossing / Ionized = Blocking", drug: "All LAs", hook: "Unionized form crosses the membrane; ionized form blocks the channel inside." },
+            { trigger: "Low pKa = Fast Onset", drug: "Lidocaine vs. Bupivacaine", hook: "Inverse relationship — lower pKa = more unionized at body pH = faster crossing." },
+          ];
+          return (
+            <div className="space-y-8 animate-in fade-in duration-500">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                  <Bookmark className="text-amber-500 text-3xl" />VIII. Glossary and Mnemonics
+                </h2>
+                <p className="text-slate-600 mt-2">High-yield terms and memory hooks for quick recall.</p>
+              </div>
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className="bg-amber-50 rounded-xl p-6 border border-amber-200 shadow-sm">
+                  <h3 className="text-xl font-bold text-amber-900 mb-4 flex items-center gap-2"><Brain /> Memory Hooks</h3>
+                  <div className="space-y-3">
+                    {mnemonics.map((m, idx) => (
+                      <div key={idx} className="bg-white p-3 rounded shadow-sm border-l-4 border-amber-500">
+                        <div className="font-bold text-amber-900 text-base mb-1">"{m.trigger}"</div>
+                        <div className="text-slate-700 text-sm"><span className="font-semibold">{m.drug}:</span> {m.hook}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="bg-yellow-50 rounded-xl p-6 border border-yellow-200 shadow-sm">
+                  <h3 className="text-xl font-bold text-yellow-900 mb-4 flex items-center gap-2"><Zap /> Golden Buzzwords</h3>
+                  <ul className="space-y-3">
+                    {[
+                      { hook: "Inner Surface", detail: "LA always binds to the INNER surface of the Na+ channel." },
+                      { hook: "Unionized = Crossing", detail: "Only the unionized form crosses the lipid bilayer." },
+                      { hook: "Ionized = Blocking", detail: "The ionized (cationic) form is the active species that blocks the channel." },
+                      { hook: "Lipid Solubility = Potency", detail: "Direct relationship — more lipid soluble = more potent." },
+                      { hook: "Low pKa = Fast Onset", detail: "Inverse relationship — lower pKa = more unionized = faster onset." },
+                    ].map((item, idx) => (
+                      <li key={idx} className="bg-white p-3 rounded shadow-sm border border-yellow-100">
+                        <strong className="text-yellow-700">{item.hook}:</strong> <span className="text-slate-700 text-sm">{item.detail}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-block">Key Terms Definitions</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {terms.map((t, idx) => (
+                    <div key={idx} className="border border-slate-200 p-4 rounded-lg bg-white hover:border-amber-300 transition-colors">
+                      <h4 className="font-bold text-amber-800 mb-1">{t.term}</h4>
+                      <p className="text-slate-600 text-sm">{t.def}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           );
         }
