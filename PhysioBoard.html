@@ -99,6 +99,62 @@
                       Open Review
                     </button>
                   </div>
+
+                  {/* Card 3: Cerebral Dominance */}
+                  <div onClick={() => onSelect('cerebral')} className="bg-[#ebfbf3] border-2 border-emerald-300 p-6 rounded-3xl cursor-pointer hover:border-slate-900 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 flex flex-col group">
+                    <div className="bg-white w-16 h-16 rounded-2xl flex items-center justify-center shadow-sm mb-6">
+                      <i className="fa-solid fa-brain text-2xl text-emerald-500 group-hover:scale-110 transition-transform duration-300"></i>
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-900 mb-3">Cerebral Dominance</h3>
+                    <p className="text-slate-600 text-sm leading-relaxed mb-8 flex-grow">
+                      Review functional asymmetry, lateralization, and the specialized roles of cortical association areas.
+                    </p>
+                    <button className="w-full bg-white/60 border border-slate-300 text-slate-900 font-semibold py-3 rounded-xl group-hover:bg-white group-hover:border-slate-400 transition-colors duration-300">
+                      Open Review
+                    </button>
+                  </div>
+
+                  {/* Card 4: Speech & Language */}
+                  <div onClick={() => onSelect('speech')} className="bg-[#ebfbf3] border-2 border-emerald-300 p-6 rounded-3xl cursor-pointer hover:border-slate-900 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 flex flex-col group">
+                    <div className="bg-white w-16 h-16 rounded-2xl flex items-center justify-center shadow-sm mb-6">
+                      <i className="fa-solid fa-comments text-2xl text-emerald-500 group-hover:scale-110 transition-transform duration-300"></i>
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-900 mb-3">Speech, Language & Aphasia</h3>
+                    <p className="text-slate-600 text-sm leading-relaxed mb-8 flex-grow">
+                      Master the cortical centers for communication, speech pathways, and the clinical manifestations of aphasia and dysarthria.
+                    </p>
+                    <button className="w-full bg-white/60 border border-slate-300 text-slate-900 font-semibold py-3 rounded-xl group-hover:bg-white group-hover:border-slate-400 transition-colors duration-300">
+                      Open Review
+                    </button>
+                  </div>
+
+                  {/* Card 5: Limbic System */}
+                  <div onClick={() => onSelect('limbic')} className="bg-[#ebfbf3] border-2 border-emerald-300 p-6 rounded-3xl cursor-pointer hover:border-slate-900 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 flex flex-col group">
+                    <div className="bg-white w-16 h-16 rounded-2xl flex items-center justify-center shadow-sm mb-6">
+                      <i className="fa-solid fa-heart-pulse text-2xl text-emerald-500 group-hover:scale-110 transition-transform duration-300"></i>
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-900 mb-3">Functions of Limbic System</h3>
+                    <p className="text-slate-600 text-sm leading-relaxed mb-8 flex-grow">
+                      Explore the physiological roles of the limbic system in memory, motivation, emotion, and autonomic regulation.
+                    </p>
+                    <button className="w-full bg-white/60 border border-slate-300 text-slate-900 font-semibold py-3 rounded-xl group-hover:bg-white group-hover:border-slate-400 transition-colors duration-300">
+                      Open Review
+                    </button>
+                  </div>
+
+                  {/* Card 6: Hypothalamus */}
+                  <div onClick={() => onSelect('hypo')} className="bg-[#ebfbf3] border-2 border-emerald-300 p-6 rounded-3xl cursor-pointer hover:border-slate-900 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 flex flex-col group">
+                    <div className="bg-white w-16 h-16 rounded-2xl flex items-center justify-center shadow-sm mb-6">
+                      <i className="fa-solid fa-scale-balanced text-2xl text-emerald-500 group-hover:scale-110 transition-transform duration-300"></i>
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-900 mb-3">Functions of Hypothalamus</h3>
+                    <p className="text-slate-600 text-sm leading-relaxed mb-8 flex-grow">
+                      Master the central coordinator of homeostasis, including endocrine activity, autonomic regulation, appetite, and temperature.
+                    </p>
+                    <button className="w-full bg-white/60 border border-slate-300 text-slate-900 font-semibold py-3 rounded-xl group-hover:bg-white group-hover:border-slate-400 transition-colors duration-300">
+                      Open Review
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -111,24 +167,58 @@
             { id: 'mechanisms', label: 'Mechanisms', icon: 'list-ul' },
             { id: 'clinical', label: 'Clinical/Pathology', icon: 'shield-halved' },
             { id: 'traps', label: 'Exam Traps', icon: 'triangle-exclamation' },
-            { id: 'rapid', label: 'Rapid Fire', icon: 'bolt' },
+            { id: 'short', label: 'Short Essay', icon: 'stopwatch' },
             { id: 'flashcards', label: 'Flashcard Quiz', icon: 'circle-question' },
-            { id: 'essay', label: 'Essay Review', icon: 'file-lines' },
+            { id: 'long', label: 'Long Essay', icon: 'file-lines' },
             { id: 'glossary', label: 'Glossary & Mnemonics', icon: 'bookmark' },
           ];
 
           const sleepTabs = [
-            { id: 'short', label: 'Short-Answer Quiz', icon: 'stopwatch' },
-            { id: 'long', label: 'Essay Review', icon: 'file-lines' },
+            { id: 'short', label: 'Short Essay', icon: 'stopwatch' },
+            { id: 'long', label: 'Long Essay', icon: 'file-lines' },
             { id: 'traps', label: 'Exam Traps', icon: 'triangle-exclamation' },
             { id: 'keywords', label: 'Keywords & Mnemonics', icon: 'lightbulb' },
           ];
 
-          const tabs = view === 'sleep' ? sleepTabs : reticularTabs;
+          const cerebralTabs = [
+            { id: 'overview', label: 'Overview & Laterality', icon: 'sitemap' },
+            { id: 'mechanisms', label: 'Association Areas', icon: 'cogs' },
+            { id: 'clinical', label: 'Clinical & Lesions', icon: 'stethoscope' },
+            { id: 'short', label: 'Short Essay', icon: 'stopwatch' },
+            { id: 'long', label: 'Long Essay', icon: 'file-lines' },
+            { id: 'glossary', label: 'Glossary & Mnemonics', icon: 'bookmark' },
+          ];
+
+          const speechTabs = [
+            { id: 'overview', label: 'Cortical Centers', icon: 'sitemap' },
+            { id: 'mechanisms', label: 'Speech Pathways', icon: 'cogs' },
+            { id: 'clinical', label: 'Aphasia & Dysarthria', icon: 'stethoscope' },
+            { id: 'short', label: 'Short Essay', icon: 'stopwatch' },
+            { id: 'long', label: 'Long Essay', icon: 'file-lines' },
+            { id: 'glossary', label: 'Glossary & Mnemonics', icon: 'bookmark' },
+          ];
+
+          const limbicTabs = [
+            { id: 'short', label: 'Short Essay', icon: 'stopwatch' },
+            { id: 'long', label: 'Long Essay', icon: 'file-lines' },
+            { id: 'glossary', label: 'Glossary & Mnemonics', icon: 'bookmark' },
+          ];
+
+          const hypoTabs = [
+            { id: 'overview', label: 'Overview & Anatomy', icon: 'sitemap' },
+            { id: 'mechanisms', label: 'Homeostasis & Functions', icon: 'cogs' },
+            { id: 'clinical', label: 'Clinical & Lesions', icon: 'stethoscope' },
+            { id: 'short', label: 'Short Essay', icon: 'stopwatch' },
+            { id: 'long', label: 'Long Essay', icon: 'file-lines' },
+            { id: 'glossary', label: 'Glossary & Mnemonics', icon: 'bookmark' },
+          ];
+
+          const tabs = view === 'sleep' ? sleepTabs : view === 'cerebral' ? cerebralTabs : view === 'speech' ? speechTabs : view === 'limbic' ? limbicTabs : view === 'hypo' ? hypoTabs : reticularTabs;
           const [activeTab, setActiveTab] = useState(tabs[0].id);
           const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
           
-          const moduleTitle = view === 'sleep' ? 'Sleep & Arousal' : 'Functions of Reticular Formation & Electrical Activity of Brain';
+          const moduleTitle = view === 'sleep' ? 'Sleep & Arousal' : view === 'cerebral' ? 'Cerebral Dominance & Cortical Association Areas' : view === 'speech' ? 'Speech, Language & Aphasia' : view === 'limbic' ? 'Functions of Limbic System' : view === 'hypo' ? 'Functions of Hypothalamus' : 'Functions of Reticular Formation & Electrical Activity of Brain';
+          const headerIcon = view === 'sleep' ? 'bed' : view === 'cerebral' ? 'brain' : view === 'speech' ? 'comments' : view === 'limbic' ? 'heart-pulse' : view === 'hypo' ? 'scale-balanced' : 'bolt';
 
           return (
             <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row font-sans text-slate-800">
@@ -140,7 +230,7 @@
                     <Icon name="arrow-left" className="transition-transform duration-300 group-hover:-translate-x-1" />
                   </button>
                   <div className="flex items-center gap-2 font-bold text-lg">
-                    <Icon name={view === 'sleep' ? 'bed' : 'bolt'} className="text-emerald-300" />
+                    <Icon name={headerIcon} className="text-emerald-300" />
                     <span className="truncate max-w-[200px]">NeuroPhysio Review</span>
                   </div>
                 </div>
@@ -165,7 +255,7 @@
                   
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center text-white shadow-lg">
-                      <Icon name={view === 'sleep' ? 'bed' : 'bolt'} className="text-xl" />
+                      <Icon name={headerIcon} className="text-xl" />
                     </div>
                     <div>
                       <h1 className="text-2xl font-bold text-white tracking-wide">NeuroPhysio</h1>
@@ -219,15 +309,15 @@
 
               {/* 3. Main Content Area */}
               <main className="flex-1 p-4 md:p-8 overflow-y-auto w-full max-w-5xl mx-auto">
-                <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 md:p-12 min-h-[800px] animate-in">
+                <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 md:p-12 min-h-[800px] animate-in fade-in duration-500">
                   {view === 'action-potentials' && (
                     <>
                       {activeTab === 'mechanisms' && <MechanismsTab />}
                       {activeTab === 'clinical' && <ClinicalTab />}
                       {activeTab === 'traps' && <ExamTrapsTab />}
-                      {activeTab === 'rapid' && <RapidFireTab />}
+                      {activeTab === 'short' && <ReticularShortTab />}
                       {activeTab === 'flashcards' && <FlashcardsTab />}
-                      {activeTab === 'essay' && <EssayTab />}
+                      {activeTab === 'long' && <ReticularLongTab />}
                       {activeTab === 'glossary' && <GlossaryTab />}
                     </>
                   )}
@@ -237,6 +327,43 @@
                       {activeTab === 'long' && <SleepLongTab />}
                       {activeTab === 'traps' && <SleepTrapsTab />}
                       {activeTab === 'keywords' && <SleepKeywordsTab />}
+                    </>
+                  )}
+                  {view === 'cerebral' && (
+                    <>
+                      {activeTab === 'overview' && <CerebralOverviewTab />}
+                      {activeTab === 'mechanisms' && <CerebralMechanismsTab />}
+                      {activeTab === 'clinical' && <CerebralClinicalTab />}
+                      {activeTab === 'short' && <CerebralShortTab />}
+                      {activeTab === 'long' && <CerebralLongTab />}
+                      {activeTab === 'glossary' && <CerebralGlossaryTab />}
+                    </>
+                  )}
+                  {view === 'speech' && (
+                    <>
+                      {activeTab === 'overview' && <SpeechOverviewTab />}
+                      {activeTab === 'mechanisms' && <SpeechMechanismsTab />}
+                      {activeTab === 'clinical' && <SpeechClinicalTab />}
+                      {activeTab === 'short' && <SpeechShortTab />}
+                      {activeTab === 'long' && <SpeechLongTab />}
+                      {activeTab === 'glossary' && <SpeechGlossaryTab />}
+                    </>
+                  )}
+                  {view === 'limbic' && (
+                    <>
+                      {activeTab === 'short' && <LimbicShortTab />}
+                      {activeTab === 'long' && <LimbicLongTab />}
+                      {activeTab === 'glossary' && <LimbicGlossaryTab />}
+                    </>
+                  )}
+                  {view === 'hypo' && (
+                    <>
+                      {activeTab === 'overview' && <HypoOverviewTab />}
+                      {activeTab === 'mechanisms' && <HypoMechanismsTab />}
+                      {activeTab === 'clinical' && <HypoClinicalTab />}
+                      {activeTab === 'short' && <HypoShortTab />}
+                      {activeTab === 'long' && <HypoLongTab />}
+                      {activeTab === 'glossary' && <HypoGlossaryTab />}
                     </>
                   )}
                 </div>
@@ -486,7 +613,7 @@
           );
         }
 
-        function RapidFireTab() {
+        function ReticularShortTab() {
           const qas = [
             { q: "Describe the anatomical extent of the reticular formation.", a: "The reticular formation is a network of neurons in the brain stem that extends upward to the thalamus and hypothalamus. Its lower end is continuous with the interneurons of the spinal cord." },
             { q: "How do the pontine and medullary reticular nuclei differ regarding intrinsic activity?", a: "The pontine reticular nuclei possess intrinsic activity, meaning they generate signals spontaneously. In contrast, the medullary reticular nuclei have no intrinsic activity and must be stimulated by other brain regions." },
@@ -501,35 +628,32 @@
           ];
 
           const [openIndex, setOpenIndex] = useState(null);
-
-          const toggle = (index) => {
-            setOpenIndex(openIndex === index ? null : index);
-          };
+          const toggle = (index) => setOpenIndex(openIndex === index ? null : index);
 
           return (
             <div className="animate-in">
-              <div className="flex justify-between items-end mb-6">
-                <SectionTitle>Rapid Fire Q&A</SectionTitle>
-              </div>
+              <SectionTitle>Short Essay</SectionTitle>
+              <p className="text-slate-600 mb-6">Test your recall of key physiology concepts.</p>
               <div className="space-y-4">
                 {qas.map((qa, i) => {
                   const isOpen = openIndex === i;
                   return (
-                    <div key={i} className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden transition-all duration-300">
+                    <div key={i} className={`bg-white border rounded-xl shadow-sm overflow-hidden transition-all duration-300 ${isOpen ? 'border-emerald-500 ring-1 ring-emerald-500' : 'border-slate-200 hover:border-emerald-300'}`}>
                       <button 
                         onClick={() => toggle(i)}
-                        className="w-full flex items-center justify-between p-4 cursor-pointer font-semibold text-slate-800 hover:bg-slate-50 transition-colors text-left"
+                        className="w-full flex items-center justify-between p-5 cursor-pointer text-left bg-white"
                       >
-                        <span className="flex gap-3 items-start pr-4">
-                          <span className="text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded flex-shrink-0">Q{i+1}</span>
-                          {qa.q}
+                        <span className="flex gap-3 items-start pr-4 text-slate-800 font-semibold">
+                          <span className="text-slate-800 font-bold">{i + 1}.</span>
+                          <span>{qa.q}</span>
                         </span>
-                        <Icon name="chevron-down" className={`text-slate-400 transition-transform duration-300 flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`} />
+                        <Icon name="chevron-up" className={`text-emerald-600 transition-transform duration-300 flex-shrink-0 ${isOpen ? '' : 'rotate-180'}`} />
                       </button>
                       <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
                         <div className="overflow-hidden">
-                          <div className="px-4 pb-4 pt-2 text-slate-600 border-t border-slate-100 ml-[3.25rem]">
-                            <span className="font-bold text-emerald-700 mr-2">A:</span>{qa.a}
+                          <div className="p-5 pt-4 border-t border-emerald-100 bg-emerald-50 text-slate-700 text-sm leading-relaxed">
+                            <span className="block font-bold text-emerald-800 mb-2">Answer:</span>
+                            <div>{qa.a}</div>
                           </div>
                         </div>
                       </div>
@@ -611,65 +735,84 @@
           );
         }
 
-        function EssayTab() {
-          return (
-            <div className="space-y-8 animate-in">
-              <SectionTitle>Essay Review & Marking Schemes</SectionTitle>
-
-              <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
-                <h3 className="text-xl font-bold text-slate-800 mb-4">
-                  <span className="text-emerald-600 mr-2">Essay 1:</span>
-                  Compare and contrast the Pontine and Medullary Reticular Nuclei.
-                </h3>
-                <div className="prose prose-slate max-w-none text-slate-600">
-                  <p><strong>Answer:</strong> The pontine and medullary reticular nuclei act antagonistically to regulate motor and cortical activity. The pontine nuclei, located in the pons and midbrain, function as the "Reticular Excitatory Area" or bulboreticular facilitatory area. They possess intrinsic activity and send descending signals via the ventral reticulospinal tract to increase antigravity muscle tone. Their ascending fibers form the RAS, responsible for cortical arousal.</p>
+        function ReticularLongTab() {
+          const essays = [
+            {
+              q: "Compare and contrast the Pontine and Medullary Reticular Nuclei.",
+              a: (
+                <>
+                  <p>The pontine and medullary reticular nuclei act antagonistically to regulate motor and cortical activity. The pontine nuclei, located in the pons and midbrain, function as the "Reticular Excitatory Area" or bulboreticular facilitatory area. They possess intrinsic activity and send descending signals via the ventral reticulospinal tract to increase antigravity muscle tone. Their ascending fibers form the RAS, responsible for cortical arousal.</p>
                   <p className="mt-4">Conversely, the medullary nuclei, located in the medulla oblongata, serve as the "Reticular Inhibitory Area." They lack intrinsic activity and function by inhibiting the pontine facilitatory area. Their descending signals travel through the lateral reticulospinal tract to decrease muscle tone. While the pontine area is stimulated by the neocerebellum and vestibular nuclei, the medullary area is activated by the paleocerebellum, red nucleus, and inhibitory cortical areas.</p>
-                </div>
-              </div>
-
-              <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
-                <h3 className="text-xl font-bold text-slate-800 mb-4">
-                  <span className="text-emerald-600 mr-2">Essay 2:</span>
-                  Discuss the functional importance of the Ascending Reticular Activating System (RAS) and the factors that influence its activity.
-                </h3>
-                <div className="prose prose-slate max-w-none text-slate-600">
-                  <p><strong>Answer:</strong> The RAS is essential for maintaining life-sustaining states of consciousness, arousal, and attention. By discharging to the thalamus and cortex, it potentiates electrical activity across the brain, facilitating the transition from relaxed wakefulness to alert attention. Without a functional RAS, an individual enters a coma or a state of severely impaired consciousness.</p>
+                </>
+              )
+            },
+            {
+              q: "Discuss the functional importance of the Ascending Reticular Activating System (RAS) and the factors that influence its activity.",
+              a: (
+                <>
+                  <p>The RAS is essential for maintaining life-sustaining states of consciousness, arousal, and attention. By discharging to the thalamus and cortex, it potentiates electrical activity across the brain, facilitating the transition from relaxed wakefulness to alert attention. Without a functional RAS, an individual enters a coma or a state of severely impaired consciousness.</p>
                   <p className="mt-4">The system is highly sensitive to external and internal stimuli. It is stimulated by peripheral pain, cortical feedback during emotional or cognitive processes, and chemical stimulants like caffeine and sympathomimetic drugs. Conversely, it is inhibited by the absence of sensory input, sleep center signals, and chemical depressants like alcohol or general anesthesia. This sensitivity allows the brain to modulate alertness based on environmental demands and internal physiological states.</p>
-                </div>
-              </div>
+                </>
+              )
+            },
+            {
+              q: "Case Study: Clinical Interpretation of an EEG Shift",
+              a: (
+                <>
+                  <p className="mb-4 bg-white/60 p-3 rounded border border-emerald-200"><strong>Prompt:</strong> A 45-year-old patient undergoes an EEG. The technician notes a transition from 10 cycles/sec waves in the occipital region to 20 cycles/sec waves in the frontal and parietal regions. Explain the physiological and behavioral changes the patient likely underwent to cause this shift, and name the specific waves involved.</p>
+                  <p>The patient underwent a transition from Alpha (α) waves (10 Hz) to Beta (β) waves (20 Hz). Behaviorally, the patient was initially awake, relaxed, and had their eyes closed (producing Alpha waves predominantly in the occipital region). The shift to Beta waves indicates that the patient opened their eyes or engaged in mental exertion/focused attention. Physiologically, this phenomenon is called <em>Alpha desynchronization</em> (or Alpha block), driven by the Ascending Reticular Activating System (RAS) stimulating the cerebral cortex, resulting in higher frequency, lower amplitude waves.</p>
+                </>
+              )
+            },
+            {
+              q: "Describe the structural organization of the Reticular Formation, detailing its sensory inputs and the antagonistic relationship of its motor outputs.",
+              a: (
+                <>
+                  <p>The Reticular Formation is a widespread network of interconnected neurons in the brain stem. Its sensory inputs arrive via collaterals from almost all long ascending sensory tracts (spinothalamic, trigeminal, visual, auditory) which facilitate background arousal through convergence and divergence.</p>
+                  <p className="mt-4">Motor output is divided antagonistically: The <em>Pontine reticular nuclei</em> act as the Reticular Excitatory Area (REA), possessing intrinsic, spontaneous electrical activity, projecting via the ventral reticulospinal tract to facilitate extensor muscle tone. Conversely, the <em>Medullary reticular nuclei</em> act as the inhibitory area, lacking intrinsic activity (requiring activation from higher suppressor centers), projecting via the lateral reticulospinal tract to decrease muscle tone.</p>
+                </>
+              )
+            },
+            {
+              q: "Identify the specific anatomical origins of Alpha (α) waves versus Delta (δ) waves within the central nervous system.",
+              a: (
+                <p>Alpha waves are generated by rhythmic discharges originating from the non-specific thalamic nuclei projecting to the cerebral cortex (a thalamocortical loop). Conversely, Delta waves originate inherently from the cortical neurons themselves, largely independent of lower thalamic or brainstem pacemakers. If the thalamus is separated from the cortex, Alpha waves cease, but Delta waves persist.</p>
+              )
+            }
+          ];
 
-              <div className="bg-white border-l-4 border-emerald-500 rounded-r-2xl p-8 shadow-sm">
-                <h3 className="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
-                  <Icon name="user-doctor" className="text-emerald-600" /> Case Study: Clinical Interpretation
-                </h3>
-                <div className="bg-slate-50 p-4 rounded-xl mb-4 border border-slate-200">
-                  <p className="font-semibold text-slate-700">Prompt: A 45-year-old patient undergoes an EEG. The technician notes a transition from 10 cycles/sec waves in the occipital region to 20 cycles/sec waves in the frontal and parietal regions. Explain the physiological and behavioral changes the patient likely underwent to cause this shift, and name the specific waves involved.</p>
-                </div>
-                <div className="prose prose-slate max-w-none text-slate-600">
-                  <p><strong>Answer Scheme:</strong> The patient underwent a transition from Alpha (α) waves (10 Hz) to Beta (β) waves (20 Hz). Behaviorally, the patient was initially awake, relaxed, and had their eyes closed (producing Alpha waves predominantly in the occipital region). The shift to Beta waves indicates that the patient opened their eyes or engaged in mental exertion/focused attention. Physiologically, this phenomenon is called <em>Alpha desynchronization</em> (or Alpha block), driven by the Ascending Reticular Activating System (RAS) stimulating the cerebral cortex, resulting in higher frequency, lower amplitude waves.</p>
-                </div>
-              </div>
+          const [openIndex, setOpenIndex] = useState(null);
+          const toggle = (index) => setOpenIndex(openIndex === index ? null : index);
 
-              <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
-                <h3 className="text-xl font-bold text-slate-800 mb-4">
-                  <span className="text-emerald-600 mr-2">Core Essay 1:</span>
-                  Neuroanatomy of the Reticular Formation
-                </h3>
-                <div className="prose prose-slate max-w-none text-slate-600">
-                  <p><strong>Prompt:</strong> Describe the structural organization of the Reticular Formation, detailing its sensory inputs and the antagonistic relationship of its motor outputs.</p>
-                  <p className="mt-2"><strong>Answer Scheme:</strong> The Reticular Formation is a widespread network of interconnected neurons in the brain stem. Its sensory inputs arrive via collaterals from almost all long ascending sensory tracts (spinothalamic, trigeminal, visual, auditory) which facilitate background arousal through convergence and divergence. Motor output is divided antagonistically: The <em>Pontine reticular nuclei</em> act as the Reticular Excitatory Area (REA), possessing intrinsic, spontaneous electrical activity, projecting via the ventral reticulospinal tract to facilitate extensor muscle tone. Conversely, the <em>Medullary reticular nuclei</em> act as the inhibitory area, lacking intrinsic activity (requiring activation from higher suppressor centers), projecting via the lateral reticulospinal tract to decrease muscle tone.</p>
-                </div>
-              </div>
-
-              <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
-                <h3 className="text-xl font-bold text-slate-800 mb-4">
-                  <span className="text-emerald-600 mr-2">Core Essay 2:</span>
-                  Origins of EEG Waves
-                </h3>
-                <div className="prose prose-slate max-w-none text-slate-600">
-                  <p><strong>Prompt:</strong> Identify the specific anatomical origins of Alpha (α) waves versus Delta (δ) waves within the central nervous system.</p>
-                  <p className="mt-2"><strong>Answer Scheme:</strong> Alpha waves are generated by rhythmic discharges originating from the non-specific thalamic nuclei projecting to the cerebral cortex (a thalamocortical loop). Conversely, Delta waves originate inherently from the cortical neurons themselves, largely independent of lower thalamic or brainstem pacemakers. If the thalamus is separated from the cortex, Alpha waves cease, but Delta waves persist.</p>
-                </div>
+          return (
+            <div className="animate-in">
+              <SectionTitle>Long Essay Review</SectionTitle>
+              <div className="space-y-4">
+                {essays.map((essay, i) => {
+                  const isOpen = openIndex === i;
+                  return (
+                    <div key={i} className={`bg-white border rounded-xl shadow-sm overflow-hidden transition-all duration-300 ${isOpen ? 'border-emerald-500 ring-1 ring-emerald-500' : 'border-slate-200 hover:border-emerald-300'}`}>
+                      <button 
+                        onClick={() => toggle(i)}
+                        className="w-full flex items-center justify-between p-5 cursor-pointer text-left bg-white"
+                      >
+                        <span className="flex gap-3 items-start pr-4 text-slate-800 font-semibold">
+                          <span className="text-slate-800 font-bold">{i + 1}.</span>
+                          <span>{essay.q}</span>
+                        </span>
+                        <Icon name="chevron-up" className={`text-emerald-600 transition-transform duration-300 flex-shrink-0 ${isOpen ? '' : 'rotate-180'}`} />
+                      </button>
+                      <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                        <div className="overflow-hidden">
+                          <div className="p-5 pt-4 border-t border-emerald-100 bg-emerald-50 text-slate-700 text-sm leading-relaxed">
+                            <span className="block font-bold text-emerald-800 mb-2">Answer:</span>
+                            <div>{essay.a}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           );
@@ -762,36 +905,32 @@
           ];
 
           const [openIndex, setOpenIndex] = useState(null);
-
-          const toggle = (index) => {
-            setOpenIndex(openIndex === index ? null : index);
-          };
+          const toggle = (index) => setOpenIndex(openIndex === index ? null : index);
 
           return (
             <div className="animate-in">
-              <div className="flex justify-between items-end mb-6">
-                <SectionTitle>Short-Answer Quiz</SectionTitle>
-              </div>
+              <SectionTitle>Short Essay</SectionTitle>
               <p className="text-slate-600 mb-6">Test your recall of key sleep physiology concepts.</p>
               <div className="space-y-4">
                 {qas.map((qa, i) => {
                   const isOpen = openIndex === i;
                   return (
-                    <div key={i} className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden transition-all duration-300">
+                    <div key={i} className={`bg-white border rounded-xl shadow-sm overflow-hidden transition-all duration-300 ${isOpen ? 'border-emerald-500 ring-1 ring-emerald-500' : 'border-slate-200 hover:border-emerald-300'}`}>
                       <button 
                         onClick={() => toggle(i)}
-                        className="w-full flex items-center justify-between p-4 cursor-pointer font-semibold text-slate-800 hover:bg-slate-50 transition-colors text-left"
+                        className="w-full flex items-center justify-between p-5 cursor-pointer text-left bg-white"
                       >
-                        <span className="flex gap-3 items-start pr-4">
-                          <span className="text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded flex-shrink-0">Q{i+1}</span>
-                          {qa.q}
+                        <span className="flex gap-3 items-start pr-4 text-slate-800 font-semibold">
+                          <span className="text-slate-800 font-bold">{i + 1}.</span>
+                          <span>{qa.q}</span>
                         </span>
-                        <Icon name="chevron-down" className={`text-slate-400 transition-transform duration-300 flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`} />
+                        <Icon name="chevron-up" className={`text-emerald-600 transition-transform duration-300 flex-shrink-0 ${isOpen ? '' : 'rotate-180'}`} />
                       </button>
                       <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
                         <div className="overflow-hidden">
-                          <div className="px-4 pb-4 pt-2 text-slate-600 border-t border-slate-100 ml-[3.25rem]">
-                            <span className="font-bold text-emerald-700 mr-2">A:</span>{qa.a}
+                          <div className="p-5 pt-4 border-t border-emerald-100 bg-emerald-50 text-slate-700 text-sm leading-relaxed">
+                            <span className="block font-bold text-emerald-800 mb-2">Answer:</span>
+                            <div>{qa.a}</div>
                           </div>
                         </div>
                       </div>
@@ -804,31 +943,60 @@
         }
 
         function SleepLongTab() {
+          const essays = [
+            {
+              q: "Compare and contrast the physiological and mental characteristics of NREM and REM sleep.",
+              a: (
+                <>
+                  <p>NREM and REM sleep serve distinct biological purposes and exhibit vastly different physiological profiles. NREM, or "Slow Wave Sleep," is primarily dedicated to physical rest. It is characterized by a "quieting" of the body: heart rate, blood pressure, and basal metabolic rate decrease by 10-30% due to parasympathetic dominance. Physically, muscle tone is slightly inhibited, eyes are miosed, and growth hormone secretion increases. Mentally, dreams are rare and generally not remembered. NREM is divided into four stages, moving from light theta waves to deep, slow-frequency delta waves.</p>
+                  <p className="mt-4">In contrast, REM sleep is dedicated to mental rest and memory consolidation. It is characterized by physiological instability: pulse, blood pressure, and respiration become irregular or increase due to sympathetic activity. While brain activity is high (resembling wakefulness on an EEG), the body experiences "REM atonia," a marked inhibition of spinal muscle control to prevent the acting out of dreams. Unlike NREM, dreams in REM are vivid and remembered. REM also features penile erections and teeth grinding, which are absent in NREM. While NREM dominates the early night, REM bouts become longer toward the morning.</p>
+                </>
+              )
+            },
+            {
+              q: "Discuss the neurochemical regulation of the transitions between wakefulness, NREM, and REM sleep.",
+              a: (
+                <>
+                  <p>The transitions between states of consciousness are controlled by a complex interplay of neurotransmitters and specific brain nuclei. Wakefulness is promoted by the Reticular Activating System (RAS) and the posterior hypothalamus. Chemically, this state is maintained by high levels of Norepinephrine (from the locus coeruleus), Serotonin (from the raphe nuclei), and Histamine (from tuberomamillary neurons). These chemicals activate the thalamus and cortex, while the inhibitory neurotransmitter GABA is reduced.</p>
+                  <p className="mt-4">The transition to NREM sleep occurs when GABA-releasing neurons in the preoptic area of the hypothalamus become active, inhibiting the arousal centers and reducing Histamine release. This leads to a deactivation of the thalamus and cortex. NREM sleep represents a state where aminergic (Norepinephrine/Serotonin) and cholinergic (Acetylcholine) activities are balanced.</p>
+                  <p className="mt-4">REM sleep is triggered when cholinergic neurons in the pontine reticular formation discharge signals directly to the cerebral cortex. During REM, Acetylcholine levels are high, while Norepinephrine and Serotonin levels are at their lowest. The "switch" between these states is further regulated by Orexin, produced in the lateral hypothalamus, which stabilizes the activity of the brainstem nuclei.</p>
+                </>
+              )
+            }
+          ];
+
+          const [openIndex, setOpenIndex] = useState(null);
+          const toggle = (index) => setOpenIndex(openIndex === index ? null : index);
+
           return (
-            <div className="space-y-8 animate-in">
-              <SectionTitle>Essay Review & Comprehensive Answers</SectionTitle>
-
-              <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
-                <h3 className="text-xl font-bold text-slate-800 mb-4">
-                  <span className="text-emerald-600 mr-2">Question 1:</span>
-                  Compare and contrast the physiological and mental characteristics of NREM and REM sleep.
-                </h3>
-                <div className="prose prose-slate max-w-none text-slate-600 space-y-4">
-                  <p><strong>Answer:</strong> NREM and REM sleep serve distinct biological purposes and exhibit vastly different physiological profiles. NREM, or "Slow Wave Sleep," is primarily dedicated to physical rest. It is characterized by a "quieting" of the body: heart rate, blood pressure, and basal metabolic rate decrease by 10-30% due to parasympathetic dominance. Physically, muscle tone is slightly inhibited, eyes are miosed, and growth hormone secretion increases. Mentally, dreams are rare and generally not remembered. NREM is divided into four stages, moving from light theta waves to deep, slow-frequency delta waves.</p>
-                  <p>In contrast, REM sleep is dedicated to mental rest and memory consolidation. It is characterized by physiological instability: pulse, blood pressure, and respiration become irregular or increase due to sympathetic activity. While brain activity is high (resembling wakefulness on an EEG), the body experiences "REM atonia," a marked inhibition of spinal muscle control to prevent the acting out of dreams. Unlike NREM, dreams in REM are vivid and remembered. REM also features penile erections and teeth grinding, which are absent in NREM. While NREM dominates the early night, REM bouts become longer toward the morning.</p>
-                </div>
-              </div>
-
-              <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
-                <h3 className="text-xl font-bold text-slate-800 mb-4">
-                  <span className="text-emerald-600 mr-2">Question 2:</span>
-                  Discuss the neurochemical regulation of the transitions between wakefulness, NREM, and REM sleep.
-                </h3>
-                <div className="prose prose-slate max-w-none text-slate-600 space-y-4">
-                  <p><strong>Answer:</strong> The transitions between states of consciousness are controlled by a complex interplay of neurotransmitters and specific brain nuclei. Wakefulness is promoted by the Reticular Activating System (RAS) and the posterior hypothalamus. Chemically, this state is maintained by high levels of Norepinephrine (from the locus coeruleus), Serotonin (from the raphe nuclei), and Histamine (from tuberomamillary neurons). These chemicals activate the thalamus and cortex, while the inhibitory neurotransmitter GABA is reduced.</p>
-                  <p>The transition to NREM sleep occurs when GABA-releasing neurons in the preoptic area of the hypothalamus become active, inhibiting the arousal centers and reducing Histamine release. This leads to a deactivation of the thalamus and cortex. NREM sleep represents a state where aminergic (Norepinephrine/Serotonin) and cholinergic (Acetylcholine) activities are balanced.</p>
-                  <p>REM sleep is triggered when cholinergic neurons in the pontine reticular formation discharge signals directly to the cerebral cortex. During REM, Acetylcholine levels are high, while Norepinephrine and Serotonin levels are at their lowest. The "switch" between these states is further regulated by Orexin, produced in the lateral hypothalamus, which stabilizes the activity of the brainstem nuclei.</p>
-                </div>
+            <div className="animate-in">
+              <SectionTitle>Long Essay Review</SectionTitle>
+              <div className="space-y-4">
+                {essays.map((essay, i) => {
+                  const isOpen = openIndex === i;
+                  return (
+                    <div key={i} className={`bg-white border rounded-xl shadow-sm overflow-hidden transition-all duration-300 ${isOpen ? 'border-emerald-500 ring-1 ring-emerald-500' : 'border-slate-200 hover:border-emerald-300'}`}>
+                      <button 
+                        onClick={() => toggle(i)}
+                        className="w-full flex items-center justify-between p-5 cursor-pointer text-left bg-white"
+                      >
+                        <span className="flex gap-3 items-start pr-4 text-slate-800 font-semibold">
+                          <span className="text-slate-800 font-bold">{i + 1}.</span>
+                          <span>{essay.q}</span>
+                        </span>
+                        <Icon name="chevron-up" className={`text-emerald-600 transition-transform duration-300 flex-shrink-0 ${isOpen ? '' : 'rotate-180'}`} />
+                      </button>
+                      <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                        <div className="overflow-hidden">
+                          <div className="p-5 pt-4 border-t border-emerald-100 bg-emerald-50 text-slate-700 text-sm leading-relaxed">
+                            <span className="block font-bold text-emerald-800 mb-2">Answer:</span>
+                            <div>{essay.a}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           );
@@ -1039,6 +1207,1410 @@
                       <li>
                         <strong className="text-emerald-900 bg-emerald-100 px-1 rounded">"A" for REM</strong>
                         <p className="mt-0.5"><strong>A</strong>cetylcholine is the primary neurotransmitter that triggers REM sleep.</p>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        // --- Cerebral Dominance & Association Areas Components ---
+
+        function CerebralOverviewTab() {
+          return (
+            <div className="space-y-6 animate-in">
+              <SectionTitle>Overview & Cerebral Lateralization</SectionTitle>
+              
+              <div className="bg-blue-50 border border-blue-200 text-blue-900 p-6 rounded-2xl shadow-sm mb-6">
+                <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
+                  <Icon name="arrows-split-up-and-left" /> Modern Evolution of Dominance
+                </h3>
+                <p className="leading-relaxed">
+                  The outdated concept of a "dominant" vs. "non-dominant" hemisphere has been replaced by the idea of <strong>Complementary Specialization</strong> (Cerebral Lateralization). While one hemisphere may dominate language, the other is not less developed; it is instead specialized for different, equally crucial functions.
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* Categorical Hemisphere */}
+                <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                  <h4 className="font-bold text-emerald-700 text-lg mb-3 flex items-center gap-2">
+                    <Icon name="calculator" /> Categorical Hemisphere
+                  </h4>
+                  <ul className="space-y-2 text-sm text-slate-700">
+                    <li className="flex gap-2"><Icon name="check" className="text-emerald-500 mt-0.5" /> <strong>Processing Style:</strong> Fine-detail, fragmentary, and sequential.</li>
+                    <li className="flex gap-2"><Icon name="check" className="text-emerald-500 mt-0.5" /> <strong>Primary Role:</strong> Logic, language, and analytic tasks (The "Thinker").</li>
+                  </ul>
+                  <div className="mt-4 p-3 bg-slate-50 rounded-lg text-sm text-slate-600 border border-slate-100">
+                    <p className="font-bold text-slate-800 mb-1">Handedness Statistics:</p>
+                    <p>Dominant in <strong>96%</strong> of right-handed individuals and <strong>70%</strong> of left-handed individuals (usually the Left Hemisphere).</p>
+                  </div>
+                </div>
+
+                {/* Representational Hemisphere */}
+                <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                  <h4 className="font-bold text-emerald-700 text-lg mb-3 flex items-center gap-2">
+                    <Icon name="palette" /> Representational Hemisphere
+                  </h4>
+                  <ul className="space-y-2 text-sm text-slate-700">
+                    <li className="flex gap-2"><Icon name="check" className="text-emerald-500 mt-0.5" /> <strong>Processing Style:</strong> "Big-picture", holistic, and artistic perspective.</li>
+                    <li className="flex gap-2"><Icon name="check" className="text-emerald-500 mt-0.5" /> <strong>Primary Role:</strong> Visuospatial relations, recognizing faces, spatial orientation, musical talent, and processing emotions.</li>
+                  </ul>
+                  <div className="mt-4 p-3 bg-amber-50 rounded-lg text-sm text-amber-800 border border-amber-200">
+                    <Icon name="lightbulb" className="mr-1" /> <strong>Mnemonic:</strong> "Representational is Real-world" (Space, Faces, Rhythm).
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        function CerebralMechanismsTab() {
+          return (
+            <div className="space-y-6 animate-in">
+              <SectionTitle>Cortical Association Areas</SectionTitle>
+              <p className="text-slate-600 mb-4">
+                Association areas occupy most of the human cerebral cortex. They process and integrate information from motor/sensory areas and subcortical structures.
+              </p>
+
+              {/* POT Area */}
+              <div className="bg-emerald-50 border border-emerald-200 text-emerald-900 p-6 rounded-2xl shadow-sm">
+                <h3 className="text-xl font-bold mb-3 flex items-center gap-2">
+                  <Icon name="cubes" /> Parieto-Occipito-Temporal (POT) Association Area
+                </h3>
+                <p className="text-sm mb-4 bg-white/60 p-3 rounded-lg border border-emerald-100">
+                  <strong>Boundaries:</strong> Somatosensory cortex (anteriorly), Visual cortex (posteriorly), Auditory cortex (laterally).
+                </p>
+                <div className="grid sm:grid-cols-2 gap-4 text-sm">
+                  <div className="bg-white p-3 rounded-xl shadow-sm border border-emerald-100">
+                    <p className="font-bold">Spatial Analysis</p>
+                    <p className="text-emerald-700 mt-1">Analyzes spatial coordinates of the body and surroundings.</p>
+                  </div>
+                  <div className="bg-white p-3 rounded-xl shadow-sm border border-emerald-100">
+                    <p className="font-bold">Language Comprehension</p>
+                    <p className="text-emerald-700 mt-1">Houses <strong>Wernicke's Area</strong> (posterior superior temporal gyrus).</p>
+                  </div>
+                  <div className="bg-white p-3 rounded-xl shadow-sm border border-emerald-100">
+                    <p className="font-bold">Visual Language Interpretation</p>
+                    <p className="text-emerald-700 mt-1"><strong>Angular Gyrus</strong> (posterior to Wernicke's) allows reading/making sense of written words.</p>
+                  </div>
+                  <div className="bg-white p-3 rounded-xl shadow-sm border border-emerald-100">
+                    <p className="font-bold">Object Naming</p>
+                    <p className="text-emerald-700 mt-1">Specialized area between anterior occipital & posterior temporal lobes.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Prefrontal Area */}
+              <div className="bg-emerald-50 border border-emerald-200 text-emerald-900 p-6 rounded-2xl shadow-sm">
+                <h3 className="text-xl font-bold mb-3 flex items-center gap-2">
+                  <Icon name="chess-knight" /> Prefrontal Association Area
+                </h3>
+                <ul className="space-y-3 text-sm">
+                  <li><strong>Executive Functions:</strong> The brain's center for managing daily tasks. Involves working memory, cognitive flexibility, and inhibition control.</li>
+                  <li><strong>Working Memory:</strong> Allows for elaborating thoughts, solving complex problems, and organizing events in time order.</li>
+                  <li><strong>Motor Expression:</strong> Contains <strong>Broca's Area</strong>, initiating and executing plans for expressing individual words.</li>
+                  <li><strong>Emotional Control:</strong> Connects with the limbic system to regulate emotional behavior.</li>
+                </ul>
+              </div>
+
+              {/* Limbic Area */}
+              <div className="bg-emerald-50 border border-emerald-200 text-emerald-900 p-6 rounded-2xl shadow-sm">
+                <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
+                  <Icon name="heart-pulse" /> Limbic (Temporal) Association Area
+                </h3>
+                <p className="text-sm">
+                  <strong>Location:</strong> Anterior pole of the temporal lobe and ventral portion of the frontal lobe.<br/>
+                  <strong>Primary Concerns:</strong> Regulation of behavior, emotions, and motivation.
+                </p>
+              </div>
+            </div>
+          );
+        }
+
+        function CerebralClinicalTab() {
+          return (
+            <div className="space-y-6 animate-in">
+              <SectionTitle>Clinical & Adverse Effects</SectionTitle>
+
+              {/* Lesions in Categorical vs Representational */}
+              <div className="grid md:grid-cols-2 gap-6 mb-6">
+                <div className="bg-rose-50 border border-rose-200 text-rose-900 p-6 rounded-2xl shadow-sm">
+                  <h4 className="font-bold text-lg mb-2 flex items-center gap-2">
+                    <Icon name="triangle-exclamation" /> Categorical Lesions
+                  </h4>
+                  <p className="text-sm mb-2">Disrupts language and logical processing. Patients struggle with speech production, language comprehension, and logical reasoning.</p>
+                </div>
+                
+                <div className="bg-rose-50 border border-rose-200 text-rose-900 p-6 rounded-2xl shadow-sm">
+                  <h4 className="font-bold text-lg mb-2 flex items-center gap-2">
+                    <Icon name="eye-slash" /> Representational Lesions
+                  </h4>
+                  <p className="text-sm">Deficits in spatial awareness. Manifests as <strong>Agnosia</strong> (inability to recognize objects) and inability to understand the "color" or emotion of speech (like missing the point of a joke).</p>
+                </div>
+              </div>
+
+              {/* Amorphosynthesis */}
+              <div className="bg-amber-50 border border-amber-200 text-amber-900 p-6 rounded-2xl shadow-sm">
+                <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
+                  <Icon name="user-injured" /> Contralateral Neglect (Amorphosynthesis)
+                </h3>
+                <p className="text-sm mb-3">
+                  A severe condition resulting from a lesion in the <strong>POT association area</strong> of the representational hemisphere.
+                </p>
+                <div className="bg-white/60 p-4 rounded-xl text-sm border border-amber-100">
+                  <p><strong>Clinical Presentation:</strong> Unilateral inattention. Patients ignore stimuli from the opposite side of their body, often forgetting its existence entirely (e.g., only shaving or dressing one side of their body).</p>
+                </div>
+              </div>
+
+              {/* Prefrontal Lesions */}
+              <div className="bg-rose-50 border border-rose-200 text-rose-900 p-6 rounded-2xl shadow-sm">
+                <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
+                  <Icon name="brain" /> Prefrontal Lesion Effects
+                </h3>
+                <ul className="list-disc pl-5 space-y-2 text-sm">
+                  <li><strong>Personality Changes:</strong> Loss of self-control, leading to impulsive and often aggressive social behavior.</li>
+                  <li><strong>Executive Dysfunction:</strong> Lack of initiation, inability to solve complex problems, or string together sequential tasks.</li>
+                  <li><strong>Memory:</strong> Loss of working/recent memory capabilities.</li>
+                </ul>
+              </div>
+            </div>
+          );
+        }
+
+        function CerebralShortTab() {
+          const qas = [
+            { q: "How has the concept of \"dominant\" and \"non-dominant\" hemispheres evolved?", a: "It has been replaced by \"complementary specialization\" or cerebral lateralization, recognizing both are equally developed but specialized for different functions." },
+            { q: "Contrast the processing styles of the left and right cerebral hemispheres.", a: "Left: Fine-detail, fragmentary, sequential. Right: Big-picture, holistic, emotional perspective." },
+            { q: "What is the statistical relationship between handedness and the categorical hemisphere?", a: "The left hemisphere is categorical in 96% of right-handed individuals, and remains dominant in 70% of left-handed individuals." },
+            { q: "Identify the specific functions localized within the representational hemisphere.", a: "Visuospatial relations, recognizing faces, identifying objects by form, perceiving body orientation in space, musical talent, and processing emotions." },
+            { q: "What are the primary responsibilities of cortical association areas?", a: "They occupy most of the cortex and are responsible for processing and integrating information received from motor/sensory areas and subcortical structures." },
+            { q: "Describe the clinical condition known as \"Amorphosynthesis\".", a: "A condition caused by a POT lesion leading to unilateral inattention/neglect. Patients ignore stimuli from the opposite side of their body, forgetting its existence." },
+            { q: "Explain the functional importance of the angular gyrus.", a: "Located posterior to Wernicke’s area, it interprets visual language (reading). Without it, a person can understand spoken language but cannot derive meaning from written words." },
+            { q: "Define the \"executive functions\" managed by the prefrontal area.", a: "Skills used to manage daily tasks: making plans, solving problems, adapting to new situations. Pillars include working memory, cognitive flexibility, and inhibition control." },
+            { q: "How does a lesion in the prefrontal association area affect a person’s behavior?", a: "Leads to loss of self-control, impulsive/aggressive social behavior, lack of initiation, and inability to sequence tasks or solve complex problems." },
+            { q: "Where is the limbic association area located, and what are its concerns?", a: "Located in the anterior pole of the temporal lobe and ventral portion of the frontal lobe. Primary concerns: regulation of behavior, emotions, and motivation." }
+          ];
+
+          const [openIndex, setOpenIndex] = useState(null);
+          const toggle = (index) => setOpenIndex(openIndex === index ? null : index);
+
+          return (
+            <div className="animate-in">
+              <SectionTitle>Short Essay</SectionTitle>
+              <p className="text-slate-600 mb-6">Click on a question to reveal the answer using active recall.</p>
+              
+              <div className="space-y-4">
+                {qas.map((qa, i) => {
+                  const isOpen = openIndex === i;
+                  return (
+                    <div key={i} className={`bg-white border rounded-xl shadow-sm overflow-hidden transition-all duration-300 ${isOpen ? 'border-emerald-500 ring-1 ring-emerald-500' : 'border-slate-200 hover:border-emerald-300'}`}>
+                      <button 
+                        onClick={() => toggle(i)}
+                        className="w-full flex items-center justify-between p-5 cursor-pointer text-left bg-white"
+                      >
+                        <span className="flex gap-3 items-start pr-4 text-slate-800 font-semibold">
+                          <span className="text-slate-800 font-bold">{i + 1}.</span>
+                          <span>{qa.q}</span>
+                        </span>
+                        <Icon name="chevron-up" className={`text-emerald-600 transition-transform duration-300 flex-shrink-0 ${isOpen ? '' : 'rotate-180'}`} />
+                      </button>
+                      <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                        <div className="overflow-hidden">
+                          <div className="p-5 pt-4 border-t border-emerald-100 bg-emerald-50 text-slate-700 text-sm leading-relaxed">
+                            <span className="block font-bold text-emerald-800 mb-2">Answer:</span>
+                            <div>{qa.a}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        }
+
+        function CerebralLongTab() {
+          const essays = [
+            {
+              q: "Compare and contrast the clinical manifestations of lesions in the categorical hemisphere versus the representational hemisphere.",
+              a: (
+                <>
+                  <p>Lesions in the categorical hemisphere (usually left) primarily disrupt language and logical processing, resulting in various language disorders (aphasia). Patients struggle with speech production or logical reasoning.</p>
+                  <p className="mt-4">Conversely, lesions in the representational hemisphere (usually right) result in visuospatial deficits. This manifests as agnosia (inability to recognize objects), contralateral neglect (amorphosynthesis), and impairs the ability to comprehend the "color" or emotion of speech, reflecting a loss of holistic processing.</p>
+                </>
+              )
+            },
+            {
+              q: "Describe the functional components and anatomical boundaries of the parieto-occipito-temporal (POT) association area.",
+              a: (
+                <>
+                  <p>The POT area is bounded by the somatosensory cortex (anteriorly), visual cortex (posteriorly), and auditory cortex (laterally). It serves four distinct roles:</p>
+                  <ol className="list-decimal pl-5 mt-2 space-y-1">
+                    <li><strong>Spatial Analysis:</strong> Coordinates of body/surroundings.</li>
+                    <li><strong>Language Comprehension:</strong> Houses Wernicke’s area in the posterior superior temporal gyrus.</li>
+                    <li><strong>Visual Language Interpretation:</strong> Angular gyrus allows for reading.</li>
+                    <li><strong>Object Naming:</strong> Specialized area between occipital and temporal lobes.</li>
+                  </ol>
+                </>
+              )
+            },
+            {
+              q: "Discuss the role of the prefrontal association area in cognition and motor expression.",
+              a: (
+                <>
+                  <p>The prefrontal association area is the brain's center for high-level executive functions. It houses working memory, allowing for elaborating thoughts, solving complex problems, and organizing events in time. For motor expression, it contains Broca’s Area, initiating plans for expressing individual words.</p>
+                  <p className="mt-4">Through limbic connections, it controls emotional behavior. Damage results in loss of task sequencing, recent memory loss, and impulsive personality changes.</p>
+                </>
+              )
+            }
+          ];
+
+          const [openIndex, setOpenIndex] = useState(null);
+          const toggle = (index) => setOpenIndex(openIndex === index ? null : index);
+
+          return (
+            <div className="animate-in">
+              <SectionTitle>Long Essay Review</SectionTitle>
+              <div className="space-y-4">
+                {essays.map((essay, i) => {
+                  const isOpen = openIndex === i;
+                  return (
+                    <div key={i} className={`bg-white border rounded-xl shadow-sm overflow-hidden transition-all duration-300 ${isOpen ? 'border-emerald-500 ring-1 ring-emerald-500' : 'border-slate-200 hover:border-emerald-300'}`}>
+                      <button 
+                        onClick={() => toggle(i)}
+                        className="w-full flex items-center justify-between p-5 cursor-pointer text-left bg-white"
+                      >
+                        <span className="flex gap-3 items-start pr-4 text-slate-800 font-semibold">
+                          <span className="text-slate-800 font-bold">{i + 1}.</span>
+                          <span>{essay.q}</span>
+                        </span>
+                        <Icon name="chevron-up" className={`text-emerald-600 transition-transform duration-300 flex-shrink-0 ${isOpen ? '' : 'rotate-180'}`} />
+                      </button>
+                      <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                        <div className="overflow-hidden">
+                          <div className="p-5 pt-4 border-t border-emerald-100 bg-emerald-50 text-slate-700 text-sm leading-relaxed">
+                            <span className="block font-bold text-emerald-800 mb-2">Answer:</span>
+                            <div>{essay.a}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        }
+
+        function CerebralGlossaryTab() {
+          return (
+            <div className="space-y-8 animate-in text-slate-700">
+              <SectionTitle>Glossary & Mnemonics</SectionTitle>
+
+              <div className="grid md:grid-cols-2 gap-8">
+                {/* Glossary Terms */}
+                <div className="space-y-4">
+                  <h3 className="font-bold text-xl text-emerald-800 flex items-center gap-2 mb-4">
+                    <Icon name="book-open" /> Key Terms
+                  </h3>
+                  
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <p className="font-bold text-slate-800">Agnosia</p>
+                    <p className="text-sm mt-1">The inability to recognize objects by a particular sensory modality, typically following a representational hemisphere lesion.</p>
+                  </div>
+                  
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <p className="font-bold text-slate-800">Amorphosynthesis (Contralateral Neglect)</p>
+                    <p className="text-sm mt-1">A failure to recognize the contralateral side of the body, leading to neglect of space and stimuli on that side.</p>
+                  </div>
+                  
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <p className="font-bold text-slate-800">Angular Gyrus</p>
+                    <p className="text-sm mt-1">The cortical region posterior to Wernicke’s area required for interpreting visual language (reading).</p>
+                  </div>
+
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <p className="font-bold text-slate-800">Executive Functions</p>
+                    <p className="text-sm mt-1">High-level cognitive skills including planning, problem-solving, working memory, and inhibition control.</p>
+                  </div>
+                </div>
+
+                {/* Mnemonics & Buzzwords */}
+                <div className="space-y-4">
+                  <h3 className="font-bold text-xl text-emerald-800 flex items-center gap-2 mb-4">
+                    <Icon name="lightbulb" /> Mnemonics & Hooks
+                  </h3>
+
+                  <div className="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-xl shadow-sm">
+                    <p className="font-bold text-amber-900 mb-2">"Categorical is Calculated"</p>
+                    <p className="text-sm text-amber-800">
+                      The Categorical hemisphere is for <strong>C</strong>omputation, <strong>C</strong>omprehension (language), and logic.
+                    </p>
+                  </div>
+                  
+                  <div className="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-xl shadow-sm">
+                    <p className="font-bold text-amber-900 mb-2">"Representational is Real-world"</p>
+                    <p className="text-sm text-amber-800">
+                      The Representational hemisphere deals with <strong>R</strong>eal-world space, <strong>R</strong>ecognition of faces, and <strong>R</strong>hythm (music).
+                    </p>
+                  </div>
+
+                  <div className="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-xl shadow-sm">
+                    <p className="font-bold text-emerald-900 mb-2">The "POT" Area</p>
+                    <ul className="text-sm text-emerald-800 space-y-1">
+                      <li><strong>P</strong>osition (spatial coordinates)</li>
+                      <li><strong>O</strong>bjects (naming)</li>
+                      <li><strong>T</strong>alk (Wernicke's/Language)</li>
+                    </ul>
+                  </div>
+
+                  <div className="bg-blue-50 p-4 rounded-xl border border-blue-200 mt-6 shadow-sm">
+                    <p className="font-bold text-blue-900 text-sm uppercase tracking-wide border-b border-blue-200 pb-2 mb-2">Golden Buzzwords</p>
+                    <ul className="text-sm space-y-3 text-blue-800">
+                      <li><strong>"Complementary Specialization":</strong> Use this instead of "dominance" to sound authoritative on cerebral lateralization.</li>
+                      <li><strong>"Holistic vs. Fragmentary":</strong> The "Big Picture" (Right) vs. "Fine Detail" (Left).</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        // --- Speech, Language & Aphasia Components ---
+
+        function SpeechOverviewTab() {
+          return (
+            <div className="space-y-6 animate-in">
+              <SectionTitle>Cortical Centers for Language</SectionTitle>
+              
+              <div className="bg-blue-50 border border-blue-200 text-blue-900 p-6 rounded-2xl shadow-sm mb-6">
+                <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
+                  <Icon name="comment-dots" /> What is "Speech"?
+                </h3>
+                <p className="leading-relaxed">
+                  Speech is the highest cortical function of the <strong>categorical hemisphere</strong>, serving as the means of communication between persons. It represents the ability to express words, either spoken or written, in response to visual and auditory stimuli.
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="bg-emerald-50 border border-emerald-200 p-6 rounded-2xl shadow-sm">
+                  <h4 className="font-bold text-emerald-800 text-lg mb-3 flex items-center gap-2">
+                    <Icon name="ear-listen" /> Sensory Centers (Input)
+                  </h4>
+                  <ul className="space-y-4 text-sm text-emerald-900">
+                    <li>
+                      <strong className="block text-emerald-700">Wernicke’s Area</strong>
+                      Located in the superior temporal gyrus. It is the sensory center for speech responsible for comprehension and choosing proper words.
+                    </li>
+                    <li>
+                      <strong className="block text-emerald-700">Visual Association Area</strong>
+                      Located in the occipital lobe. Essential for the sensory aspect of communication; interprets and understands the meaning of written words.
+                    </li>
+                    <li>
+                      <strong className="block text-emerald-700">Angular Gyrus</strong>
+                      Processes information from words that are read and converts them into auditory forms for Wernicke's to understand.
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="bg-emerald-50 border border-emerald-200 p-6 rounded-2xl shadow-sm">
+                  <h4 className="font-bold text-emerald-800 text-lg mb-3 flex items-center gap-2">
+                    <Icon name="bullhorn" /> Motor Centers (Output)
+                  </h4>
+                  <ul className="space-y-4 text-sm text-emerald-900">
+                    <li>
+                      <strong className="block text-emerald-700">Broca’s Area</strong>
+                      Located in the lower premotor area. The motor center for speech responsible for word formation and storing programs for coordinated muscle contractions of the lips and tongue.
+                    </li>
+                    <li>
+                      <strong className="block text-emerald-700">Exner’s Area</strong>
+                      Located in the upper part of the premotor area (Area 6). The "hand skills area" stores programs for written words by coordinating hand muscle contractions.
+                    </li>
+                    <li>
+                      <strong className="block text-emerald-700">Arcuate Fasciculus</strong>
+                      The transmission bridge. Carries formulated thoughts from Wernicke’s area to Broca’s area to activate motor programs.
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        function SpeechMechanismsTab() {
+          return (
+            <div className="space-y-6 animate-in">
+              <SectionTitle>Physiological Pathway of Spoken Speech</SectionTitle>
+              
+              <div className="relative border-l-2 border-emerald-200 pl-6 ml-4 space-y-8 py-4">
+                
+                <div className="relative">
+                  <div className="absolute -left-[35px] bg-emerald-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow-sm">1</div>
+                  <h3 className="text-lg font-bold text-emerald-800">Sound Perception</h3>
+                  <p className="text-slate-600 mt-1">The process begins with the perception of sounds in the <strong>primary auditory area</strong>.</p>
+                </div>
+
+                <div className="relative">
+                  <div className="absolute -left-[35px] bg-emerald-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow-sm">2</div>
+                  <h3 className="text-lg font-bold text-emerald-800">Word Interpretation</h3>
+                  <p className="text-slate-600 mt-1">Signals are discharged to the <strong>auditory association area</strong> in the temporal lobe, where individual words are interpreted.</p>
+                </div>
+
+                <div className="relative">
+                  <div className="absolute -left-[35px] bg-emerald-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow-sm">3</div>
+                  <h3 className="text-lg font-bold text-emerald-800">Comprehension & Thought Formulation</h3>
+                  <p className="text-slate-600 mt-1">Information moves to <strong>Wernicke’s Area</strong> (the sensory center). Here, comprehension occurs and the specific thoughts and words to be spoken are determined.</p>
+                </div>
+
+                <div className="relative">
+                  <div className="absolute -left-[35px] bg-emerald-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow-sm">4</div>
+                  <h3 className="text-lg font-bold text-emerald-800">Transmission</h3>
+                  <p className="text-slate-600 mt-1">Formulated thoughts are transmitted from Wernicke’s area to Broca’s area via a fiber bundle called the <strong>arcuate fasciculus</strong>.</p>
+                </div>
+
+                <div className="relative">
+                  <div className="absolute -left-[35px] bg-emerald-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow-sm">5</div>
+                  <h3 className="text-lg font-bold text-emerald-800">Motor Program Activation</h3>
+                  <p className="text-slate-600 mt-1">In <strong>Broca’s Area</strong> (the motor center), skilled motor programs for word formation are activated, sequencing contractions for lips, tongue, and larynx.</p>
+                </div>
+
+                <div className="relative">
+                  <div className="absolute -left-[35px] bg-emerald-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow-sm">6</div>
+                  <h3 className="text-lg font-bold text-emerald-800">Execution</h3>
+                  <p className="text-slate-600 mt-1">Broca's sends patterns through the <strong>insula</strong> to the <strong>motor cortex</strong>. Signals travel down the <strong>corticobulbar tract</strong> to initiate physical articulation.</p>
+                </div>
+
+              </div>
+            </div>
+          );
+        }
+
+        function SpeechClinicalTab() {
+          return (
+            <div className="space-y-6 animate-in">
+              <SectionTitle>Clinical Pathologies: Aphasia & Dysarthria</SectionTitle>
+
+              <div className="grid md:grid-cols-2 gap-6 mb-6">
+                <div className="bg-rose-50 border border-rose-200 text-rose-900 p-6 rounded-2xl shadow-sm">
+                  <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
+                    <Icon name="brain" /> Aphasia
+                  </h3>
+                  <p className="text-sm">An abnormality of speech caused by <strong>lesions in cortical speech centers</strong>, affecting comprehension or word formation <em>without</em> motor paralysis.</p>
+                </div>
+                
+                <div className="bg-amber-50 border border-amber-200 text-amber-900 p-6 rounded-2xl shadow-sm">
+                  <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
+                    <Icon name="lips" /> Dysarthria
+                  </h3>
+                  <p className="text-sm">A defect in the <strong>act of articulation</strong> caused by neuromuscular issues (UMNL or basal ganglia damage) rather than cortical language processing errors.</p>
+                </div>
+              </div>
+
+              <SubTitle>Types of Aphasia</SubTitle>
+              <div className="grid sm:grid-cols-3 gap-4 text-sm mb-8">
+                <div className="bg-white p-4 rounded-xl shadow-sm border border-rose-100">
+                  <p className="font-bold text-rose-800">Wernicke's Aphasia</p>
+                  <p className="text-slate-600 mt-2">"Fluent Aphasia". Talk excessively but speech makes no sense (Word Salad). Suffers from word deafness/blindness; cannot comprehend ideas.</p>
+                </div>
+                <div className="bg-white p-4 rounded-xl shadow-sm border border-rose-100">
+                  <p className="font-bold text-rose-800">Broca's Aphasia</p>
+                  <p className="text-slate-600 mt-2">"Non-fluent Aphasia". Understands language perfectly but cannot express it. Speech is slow, labored, limited to 2-3 words.</p>
+                </div>
+                <div className="bg-white p-4 rounded-xl shadow-sm border border-rose-100">
+                  <p className="font-bold text-rose-800">Anomic Aphasia</p>
+                  <p className="text-slate-600 mt-2">Damage to Angular Gyrus. Difficulty naming seen objects and understanding written words (auditory comprehension intact).</p>
+                </div>
+              </div>
+
+              <SubTitle>Taxonomy of Dysarthria</SubTitle>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse bg-white rounded-xl overflow-hidden shadow-sm border border-slate-200">
+                  <thead className="bg-blue-50 text-blue-900">
+                    <tr>
+                      <th className="p-3 border-b border-blue-100">Type</th>
+                      <th className="p-3 border-b border-blue-100">Neurological Cause</th>
+                      <th className="p-3 border-b border-blue-100">Speech Characteristics</th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-sm">
+                    <tr className="border-b border-slate-100"><td className="p-3 font-bold">Spastic</td><td className="p-3">Upper Motor Neuron Lesion (UMNL)</td><td className="p-3">Slow, labored, and stiff speech.</td></tr>
+                    <tr className="border-b border-slate-100"><td className="p-3 font-bold">Flaccid</td><td className="p-3">Lower Motor Neuron Lesion (LMNL)</td><td className="p-3">Weak, breathy, and nasal speech.</td></tr>
+                    <tr className="border-b border-slate-100"><td className="p-3 font-bold text-amber-700">Ataxic</td><td className="p-3 font-semibold">Neocerebellar Lesion</td><td className="p-3 italic">"Staccato speech" (lack of coordination).</td></tr>
+                    <tr className="border-b border-slate-100"><td className="p-3 font-bold">Hypokinetic</td><td className="p-3">Parkinsonism</td><td className="p-3">Slow, monotonous, and low-volume.</td></tr>
+                    <tr className="border-b border-slate-100"><td className="p-3 font-bold text-rose-700">Hyperkinetic</td><td className="p-3 font-semibold">Basal Ganglia Damage</td><td className="p-3 italic">"Bursting speech" (quick involuntary movements).</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          );
+        }
+
+        function SpeechShortTab() {
+          const qas = [
+            { q: "Define \"Speech\" as a cortical function.", a: "Speech is the highest cortical function of the categorical hemisphere, serving as the means of communication between persons. It represents the ability to express words in response to visual and auditory stimuli." },
+            { q: "What is the specific role of the Visual Association Area in communication?", a: "Located in the occipital lobe, this area is essential for the sensory aspect of communication. Its primary function is the interpretation and understanding of the meaning of written words." },
+            { q: "Contrast the primary site and function of Wernicke’s area versus Broca’s area.", a: "Wernicke’s area (superior temporal gyrus) is the sensory center for comprehension and choosing words. Broca’s area (lower premotor area) is the motor center for word formation and storing muscle contraction programs." },
+            { q: "How does Exner’s area contribute to the motor aspects of communication?", a: "Situated in the upper premotor area (Area 6), Exner’s area is the \"hand skills area.\" It stores programs for written words by coordinating hand muscle contractions and sends these patterns via the corticospinal tract." },
+            { q: "Describe the role of the Arcuate Fasciculus in the mechanism of spoken speech.", a: "This bundle acts as the transmission bridge between sensory and motor centers. It carries signals from Wernicke’s area (thoughts formulated) to Broca’s area (motor programs activated)." },
+            { q: "What occurs in the Angular Gyrus during the process of reading (written speech)?", a: "The angular gyrus processes information from words that are read and converts them into auditory forms. These forms are then transmitted to Wernicke’s area for full comprehension." },
+            { q: "Differentiate between Aphasia and Dysarthria.", a: "Aphasia is an abnormality of speech caused by lesions in cortical speech centers (affects language processing). Dysarthria is a defect in the act of articulation caused by neuromuscular issues (e.g., UMNL or basal ganglia damage)." },
+            { q: "What are the clinical characteristics of Wernicke’s Aphasia?", a: "Patients talk excessively, but their speech makes no sense (fluent but meaningless) because they cannot choose appropriate words. They suffer from \"word deafness\" or \"word blindness,\" failing to comprehend ideas." },
+            { q: "Define Anomic Aphasia and identify its primary lesion site.", a: "Anomic aphasia results from damage to the angular gyrus in the categorical hemisphere. Patients have difficulty naming seen objects and understanding written words, though spoken speech remains intact." },
+            { q: "Describe the speech pattern associated with Ataxic Dysarthria.", a: "Caused by a neocerebellar lesion, it leads to a lack of coordination in articulation muscles. Characterized by \"staccato speech,\" where the rhythm and flow of words are broken and disconnected." }
+          ];
+
+          const [openIndex, setOpenIndex] = useState(null);
+          const toggle = (index) => setOpenIndex(openIndex === index ? null : index);
+
+          return (
+            <div className="animate-in">
+              <SectionTitle>Short Essay</SectionTitle>
+              <p className="text-slate-600 mb-6">Click on a question to reveal the answer using active recall.</p>
+              
+              <div className="space-y-4">
+                {qas.map((qa, i) => {
+                  const isOpen = openIndex === i;
+                  return (
+                    <div key={i} className={`bg-white border rounded-xl shadow-sm overflow-hidden transition-all duration-300 ${isOpen ? 'border-emerald-500 ring-1 ring-emerald-500' : 'border-slate-200 hover:border-emerald-300'}`}>
+                      <button 
+                        onClick={() => toggle(i)}
+                        className="w-full flex items-center justify-between p-5 cursor-pointer text-left bg-white"
+                      >
+                        <span className="flex gap-3 items-start pr-4 text-slate-800 font-semibold">
+                          <span className="text-slate-800 font-bold">{i + 1}.</span>
+                          <span>{qa.q}</span>
+                        </span>
+                        <Icon name="chevron-up" className={`text-emerald-600 transition-transform duration-300 flex-shrink-0 ${isOpen ? '' : 'rotate-180'}`} />
+                      </button>
+                      <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                        <div className="overflow-hidden">
+                          <div className="p-5 pt-4 border-t border-emerald-100 bg-emerald-50 text-slate-700 text-sm leading-relaxed">
+                            <span className="block font-bold text-emerald-800 mb-2">Answer:</span>
+                            <div>{qa.a}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        }
+
+        function SpeechLongTab() {
+          const essays = [
+            {
+              q: "Trace the Physiological Pathway of Spoken Speech.",
+              a: (
+                <>
+                  <p>The process begins with the perception of sounds in the <strong>primary auditory area</strong>. Signals are discharged to the <strong>auditory association area</strong> in the temporal lobe, where individual words are interpreted. Information then moves to <strong>Wernicke’s area</strong> (the sensory center), where auditory comprehension occurs and the specific thoughts to be spoken are determined.</p>
+                  <p className="mt-4">Once formulated, signals are transmitted from Wernicke’s area to <strong>Broca’s area</strong> via the <strong>arcuate fasciculus</strong>. In Broca’s area (the motor center), skilled motor programs for word formation are activated, involving coordinated contractions for the lips, tongue, and larynx. Finally, Broca’s sends patterns through the <strong>insula</strong> to the <strong>motor cortex</strong>. Signals travel down the <strong>corticobulbar tract</strong> to produce spoken words.</p>
+                </>
+              )
+            },
+            {
+              q: "Comparative Analysis of Motor Aphasias: Contrast Broca’s Aphasia and Agraphia.",
+              a: (
+                <>
+                  <p>Both Broca’s Aphasia and Agraphia are classified as <strong>motor (expressive) aphasias</strong>; the patient understands language but cannot express it. </p>
+                  <p className="mt-4"><strong>Broca’s Aphasia</strong> results from a lesion in Broca’s area (lower premotor area). The patient understands spoken/written words but cannot express themselves through speech. Speech is slow, labored, and limited to 2-3 words. It affects "vocal" output via the corticobulbar tract.</p>
+                  <p className="mt-4"><strong>Agraphia</strong> results from a lesion in <strong>Exner’s area</strong> (hand skills area in the upper premotor area). The deficit is specific to writing; they cannot express themselves through written words despite knowing what they wish to write. It affects "manual" output via the corticospinal tract.</p>
+                </>
+              )
+            },
+            {
+              q: "Classify the different types of dysarthria based on their neurological causes.",
+              a: (
+                <>
+                  <p>Dysarthria is an abnormality of speech due to defects in articulation rather than language processing. It is categorized into several types:</p>
+                  <ul className="list-disc pl-5 mt-2 space-y-2">
+                    <li><strong>Spastic:</strong> Upper Motor Neuron Lesion (UMNL). Slow, labored, stiff speech.</li>
+                    <li><strong>Flaccid:</strong> Lower Motor Neuron Lesion (LMNL). Weak, breathy, nasal speech.</li>
+                    <li><strong>Ataxic:</strong> Neocerebellar lesion. Staccato speech due to lack of coordination.</li>
+                    <li><strong>Hypokinetic:</strong> Parkinsonism. Slow, monotonous, low-volume speech.</li>
+                    <li><strong>Hyperkinetic:</strong> Basal ganglia damage. "Bursting speech" due to quick involuntary movements.</li>
+                  </ul>
+                  <p className="mt-4">A final category, <strong>Mixed Dysarthria</strong>, involves a combination of these causes, typically seen in extensive neurological damage.</p>
+                </>
+              )
+            }
+          ];
+
+          const [openIndex, setOpenIndex] = useState(null);
+          const toggle = (index) => setOpenIndex(openIndex === index ? null : index);
+
+          return (
+            <div className="animate-in">
+              <SectionTitle>Long Essay Review</SectionTitle>
+              <div className="space-y-4">
+                {essays.map((essay, i) => {
+                  const isOpen = openIndex === i;
+                  return (
+                    <div key={i} className={`bg-white border rounded-xl shadow-sm overflow-hidden transition-all duration-300 ${isOpen ? 'border-emerald-500 ring-1 ring-emerald-500' : 'border-slate-200 hover:border-emerald-300'}`}>
+                      <button 
+                        onClick={() => toggle(i)}
+                        className="w-full flex items-center justify-between p-5 cursor-pointer text-left bg-white"
+                      >
+                        <span className="flex gap-3 items-start pr-4 text-slate-800 font-semibold">
+                          <span className="text-slate-800 font-bold">{i + 1}.</span>
+                          <span>{essay.q}</span>
+                        </span>
+                        <Icon name="chevron-up" className={`text-emerald-600 transition-transform duration-300 flex-shrink-0 ${isOpen ? '' : 'rotate-180'}`} />
+                      </button>
+                      <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                        <div className="overflow-hidden">
+                          <div className="p-5 pt-4 border-t border-emerald-100 bg-emerald-50 text-slate-700 text-sm leading-relaxed">
+                            <span className="block font-bold text-emerald-800 mb-2">Answer:</span>
+                            <div>{essay.a}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        }
+
+        function SpeechGlossaryTab() {
+          return (
+            <div className="space-y-8 animate-in text-slate-700">
+              <SectionTitle>Glossary & Mnemonics</SectionTitle>
+
+              <div className="grid md:grid-cols-2 gap-8">
+                {/* Glossary Terms */}
+                <div className="space-y-4">
+                  <h3 className="font-bold text-xl text-emerald-800 flex items-center gap-2 mb-4">
+                    <Icon name="book-open" /> Golden Buzzwords
+                  </h3>
+                  
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <p className="font-bold text-slate-800">Categorical Hemisphere</p>
+                    <p className="text-sm mt-1">The cerebral hemisphere (usually left) where speech and higher language functions are centralized.</p>
+                  </div>
+
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <p className="font-bold text-slate-800">Word Blindness (Visual Aphasia)</p>
+                    <p className="text-sm mt-1">The ability to see written words but the total inability to understand their meaning.</p>
+                  </div>
+
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <p className="font-bold text-slate-800">Word Deafness (Auditory Aphasia)</p>
+                    <p className="text-sm mt-1">The ability to hear spoken words but the inability to interpret their meaning.</p>
+                  </div>
+
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <p className="font-bold text-slate-800">Fluent Aphasia</p>
+                    <p className="text-sm mt-1">Another name for Sensory (Wernicke's) Aphasia; speech is produced easily but is often nonsensical.</p>
+                  </div>
+
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <p className="font-bold text-slate-800">Non-fluent Aphasia</p>
+                    <p className="text-sm mt-1">Another name for Motor (Broca's) Aphasia; speech is slow, difficult, and sparse.</p>
+                  </div>
+
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <p className="font-bold text-slate-800">Global Aphasia</p>
+                    <p className="text-sm mt-1">The most severe form of aphasia, involving extensive lesions destroying both receptive and expressive functions.</p>
+                  </div>
+
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <p className="font-bold text-slate-800">Staccato Speech</p>
+                    <p className="text-sm mt-1">The hallmark of cerebellar (ataxic) dysarthria; jerky, disconnected vocalization.</p>
+                  </div>
+
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <p className="font-bold text-slate-800">Bursting Speech</p>
+                    <p className="text-sm mt-1">Rapid, involuntary speech patterns associated with hyperkinetic dysarthria and basal ganglia damage.</p>
+                  </div>
+                </div>
+
+                {/* Mnemonics & Hooks */}
+                <div className="space-y-4">
+                  <h3 className="font-bold text-xl text-emerald-800 flex items-center gap-2 mb-4">
+                    <Icon name="lightbulb" /> Mnemonics for Recall
+                  </h3>
+
+                  <div className="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-xl shadow-sm">
+                    <p className="font-bold text-emerald-900 mb-2">"B" is for Broca</p>
+                    <p className="text-sm text-emerald-800">
+                      <strong>B</strong> is for <strong>B</strong>ig Mouth (Motor). Broca's area is for word formation and speaking. If it's <strong>B</strong>roken, you can't speak.
+                    </p>
+                  </div>
+                  
+                  <div className="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-xl shadow-sm">
+                    <p className="font-bold text-emerald-900 mb-2">"W" is for Wernicke</p>
+                    <p className="text-sm text-emerald-800">
+                      <strong>W</strong> is for <strong>W</strong>hat? (Sensory). Wernicke's is for comprehension. If damaged, you ask "What?" because you don't understand, or you speak "Word Salad" (fluent but meaningless).
+                    </p>
+                  </div>
+
+                  <div className="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-xl shadow-sm">
+                    <p className="font-bold text-emerald-900 mb-2">Exner = Exterior Writing</p>
+                    <p className="text-sm text-emerald-800">
+                      Think of Exner's area as the center for <strong>Ex</strong>ternalizing thoughts through the hand (Writing).
+                    </p>
+                  </div>
+
+                  <div className="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-xl shadow-sm">
+                    <p className="font-bold text-emerald-900 mb-2">Angular Gyrus = Auditory Generator</p>
+                    <p className="text-sm text-emerald-800">
+                      In reading, the <strong>A</strong>ngular <strong>G</strong>yrus converts visual words into <strong>A</strong>uditory forms for Wernicke to understand.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        // --- Functions of Limbic System Components ---
+
+        function LimbicShortTab() {
+          const qas = [
+            { q: "What is the functional significance of the Papez circuit in emotional processing?", a: "The Papez circuit is an excitatory neuronal circuit characterized by reverberating circuits that produce prolonged after-discharges. This mechanism is thought to explain the prolonged nature of emotions." },
+            { q: "How does the hippocampus contribute to memory, and what is the result of a bilateral lesion to this area?", a: "The hippocampus is the primary site for encoding short-term memory and its subsequent consolidation. A bilateral lesion of the hippocampus results in anterograde amnesia, the inability to form new memories." },
+            { q: "Which specific areas of the brain are responsible for the conscious discrimination of odors?", a: "While the piriform cortex handles general perception, the conscious discrimination of odor depends on the neocortex, specifically the orbitofrontal and frontal cortices." },
+            { q: "Describe the physiological effects and primary neurotransmitter associated with the Reward (approach) system.", a: "Stimulation of the reward system leads to feelings of pleasure and satisfaction, encouraging the individual to continue an act. The primary neurotransmitter involved is dopamine, though norepinephrine and serotonin also play roles." },
+            { q: "What behavioral changes occur following lesions to the amygdaloid nuclei regarding food intake?", a: "Lesions to the amygdaloid nuclei result in moderate hyperphagia (increased eating) and amniophagia. Amniophagia is characterized by the indiscriminate ingestion of all types of food." },
+            { q: "Identify the main centers and the primary neurotransmitter involved in the Punishment (avoidance) system.", a: "The main center is located in the periventricular nucleus of the hypothalamus and extends to the periaqueductal gray area. The primary neurotransmitter for this system is acetylcholine, and its stimulation leads to fear and displeasure." },
+            { q: "How does the limbic system influence maternal and sexual behavior?", a: "The limbic system is essential for normal maternal behavior and emotional expression during the sexual act. These behaviors are controlled by the limbic system and hypothalamus, and are further modified by the prefrontal cortex and social or psychic factors." },
+            { q: "Explain the relationship between the hypothalamus and the expression of rage.", a: "The genesis of rage and aggression is associated with the stimulation of the lateral nucleus of the hypothalamus. This is often triggered in conjunction with the stimulation of certain areas of the amygdala." },
+            { q: "What role does the entorhinal cortex play in the olfactory system?", a: "Within the olfactory system, the entorhinal cortex is specifically concerned with olfactory memories. It works alongside the piriform cortex and amygdala to process olfactory sensations." },
+            { q: "Define the term \"reverberating circuits\" within the context of the limbic system.", a: "These are excitatory neuronal pathways found in the Papez circuit that allow for prolonged after-discharge. This repetitive signaling explains why emotional states tend to persist rather than dissipate immediately." }
+          ];
+
+          const [openIndex, setOpenIndex] = useState(null);
+          const toggle = (index) => setOpenIndex(openIndex === index ? null : index);
+
+          return (
+            <div className="animate-in">
+              <SectionTitle>Short Essay</SectionTitle>
+              <p className="text-slate-600 mb-6">Click on a question to reveal the answer using active recall.</p>
+              
+              <div className="space-y-4">
+                {qas.map((qa, i) => {
+                  const isOpen = openIndex === i;
+                  return (
+                    <div key={i} className={`bg-white border rounded-xl shadow-sm overflow-hidden transition-all duration-300 ${isOpen ? 'border-emerald-500 ring-1 ring-emerald-500' : 'border-slate-200 hover:border-emerald-300'}`}>
+                      <button 
+                        onClick={() => toggle(i)}
+                        className="w-full flex items-center justify-between p-5 cursor-pointer text-left bg-white group"
+                      >
+                        <span className="flex gap-4 items-start pr-4 text-slate-800 font-semibold">
+                          <span className={`font-bold px-2.5 py-1 rounded-lg flex-shrink-0 transition-colors duration-300 ${isOpen ? 'bg-emerald-500 text-white shadow-sm' : 'bg-emerald-50 text-emerald-600 group-hover:bg-emerald-100'}`}>
+                            Q{i + 1}
+                          </span>
+                          <span className="mt-1">{qa.q}</span>
+                        </span>
+                        <Icon name="chevron-down" className={`text-emerald-600 transition-transform duration-300 flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`} />
+                      </button>
+                      <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                        <div className="overflow-hidden">
+                          <div className="p-5 pt-4 border-t border-emerald-100 bg-[#ebfbf3] text-emerald-900 text-sm leading-relaxed">
+                            <span className="block font-bold text-emerald-800 mb-2">Answer:</span>
+                            <div>{qa.a}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        }
+
+        function LimbicLongTab() {
+          const essays = [
+            {
+              q: "The Dual-System Theory of Motivation: Compare and contrast the Reward and Punishment systems.",
+              a: (
+                <>
+                  <p>Motivation is defined as the force that activates or inhibits behavior to achieve specific goals, and the limbic system manages this through two distinct centers.</p>
+                  <p className="mt-4"><strong>The Reward (Approach) System's</strong> main centers are located in the lateral and ventromedial nuclei of the hypothalamus. Secondary reward centers include the septum, amygdala, and certain areas of the thalamus and basal ganglia. Behaviorally, stimulation of this system produces pleasure and satisfaction, reinforcing the repetition of the act. Its chemical profile is dominated by dopamine—the activity of which is increased by addictive substances—alongside norepinephrine and serotonin.</p>
+                  <p className="mt-4">Conversely, <strong>The Punishment (Avoidance/Aversion) System</strong> is centered in the periventricular nucleus of the hypothalamus and the periaqueductal gray area. It has less potent centers in the amygdala and hippocampus. Unlike the pleasure-seeking reward system, the punishment system utilizes acetylcholine as its main neurotransmitter. Stimulation results in fear and displeasure, causing the individual to cease the current activity. Together, these systems provide a physiological framework for behavioral modification based on emotional reinforcement.</p>
+                </>
+              )
+            },
+            {
+              q: "Discuss how the limbic system and hypothalamus coordinate to produce and express emotions, specifically detailing fear, rage, and placidity.",
+              a: (
+                <>
+                  <p>The genesis and expression of emotions, including feelings and moods, are coordinated by the limbic system and the hypothalamus. This expression is multifaceted, involving somatic motor, autonomic, and endocrine responses. The limbic system's stimulation produces autonomic effects that serve as physical components of the emotional experience.</p>
+                  <p className="mt-4">Specific emotional states are tied to distinct nuclei:</p>
+                  <ul className="list-disc pl-5 mt-2 space-y-2">
+                    <li><strong>Rage and Aggression</strong> are produced by the stimulation of the <em>lateral nucleus</em> of the hypothalamus and certain areas of the amygdala.</li>
+                    <li><strong>Fear</strong> is generated through the stimulation of the <em>periventricular nucleus</em> of the hypothalamus and specific amygdaloid regions.</li>
+                    <li><strong>Placidity</strong>—a state of calm or lack of aggression—is produced by the stimulation of the <em>ventromedial nucleus</em> of the hypothalamus.</li>
+                  </ul>
+                  <p className="mt-4">This localization of function demonstrates that the limbic system is not a monolithic entity but a complex network where specific nodes regulate distinct emotional and physiological states.</p>
+                </>
+              )
+            }
+          ];
+
+          const [openIndex, setOpenIndex] = useState(null);
+          const toggle = (index) => setOpenIndex(openIndex === index ? null : index);
+
+          return (
+            <div className="animate-in">
+              <SectionTitle>Long Essay Review</SectionTitle>
+              <div className="space-y-4">
+                {essays.map((essay, i) => {
+                  const isOpen = openIndex === i;
+                  return (
+                    <div key={i} className={`bg-white border rounded-xl shadow-sm overflow-hidden transition-all duration-300 ${isOpen ? 'border-emerald-500 ring-1 ring-emerald-500' : 'border-slate-200 hover:border-emerald-300'}`}>
+                      <button 
+                        onClick={() => toggle(i)}
+                        className="w-full flex items-center justify-between p-5 cursor-pointer text-left bg-white group"
+                      >
+                        <span className="flex gap-4 items-start pr-4 text-slate-800 font-semibold">
+                          <span className={`font-bold px-2.5 py-1 rounded-lg flex-shrink-0 transition-colors duration-300 ${isOpen ? 'bg-emerald-500 text-white shadow-sm' : 'bg-emerald-50 text-emerald-600 group-hover:bg-emerald-100'}`}>
+                            {i + 1}
+                          </span>
+                          <span className="mt-1">{essay.q}</span>
+                        </span>
+                        <Icon name="chevron-down" className={`text-emerald-600 transition-transform duration-300 flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`} />
+                      </button>
+                      <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                        <div className="overflow-hidden">
+                          <div className="p-5 pt-4 border-t border-emerald-100 bg-[#ebfbf3] text-emerald-900 text-sm leading-relaxed">
+                            <span className="block font-bold text-emerald-800 mb-2">Answer:</span>
+                            <div>{essay.a}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        }
+
+        function LimbicGlossaryTab() {
+          return (
+            <div className="space-y-8 animate-in text-slate-700">
+              <SectionTitle>Glossary & Mnemonics</SectionTitle>
+
+              <div className="grid md:grid-cols-2 gap-8">
+                {/* Glossary Terms */}
+                <div className="space-y-4">
+                  <h3 className="font-bold text-xl text-emerald-800 flex items-center gap-2 mb-4">
+                    <Icon name="book-open" /> Key Terms & Hooks
+                  </h3>
+                  
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col">
+                    <div className="flex justify-between items-start mb-1">
+                      <p className="font-bold text-slate-800">Papez Circuit</p>
+                      <span className="bg-amber-100 text-amber-800 text-xs px-2 py-0.5 rounded font-bold">Prolonged nature of emotions</span>
+                    </div>
+                    <p className="text-sm mt-1">A major excitatory circuit involving the hippocampus, fornix, hypothalamus, and thalamus.</p>
+                  </div>
+
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col">
+                    <div className="flex justify-between items-start mb-1">
+                      <p className="font-bold text-slate-800">Anterograde Amnesia</p>
+                      <span className="bg-amber-100 text-amber-800 text-xs px-2 py-0.5 rounded font-bold">Bilateral hippocampal lesion</span>
+                    </div>
+                    <p className="text-sm mt-1">The inability to form new memories following brain trauma.</p>
+                  </div>
+
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col">
+                    <div className="flex justify-between items-start mb-1">
+                      <p className="font-bold text-slate-800">Hyperphagia</p>
+                      <span className="bg-amber-100 text-amber-800 text-xs px-2 py-0.5 rounded font-bold">Amygdaloid nuclei lesion</span>
+                    </div>
+                    <p className="text-sm mt-1">An abnormal increase in appetite and food consumption.</p>
+                  </div>
+
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col">
+                    <div className="flex justify-between items-start mb-1">
+                      <p className="font-bold text-slate-800">Amniophagia</p>
+                      <span className="bg-amber-100 text-amber-800 text-xs px-2 py-0.5 rounded font-bold">Indiscriminate eating</span>
+                    </div>
+                    <p className="text-sm mt-1">The indiscriminate ingestion of all kinds of food.</p>
+                  </div>
+
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col">
+                    <div className="flex justify-between items-start mb-1">
+                      <p className="font-bold text-slate-800">Piriform Cortex</p>
+                      <span className="bg-amber-100 text-amber-800 text-xs px-2 py-0.5 rounded font-bold">Olfactory perception</span>
+                    </div>
+                    <p className="text-sm mt-1">Area responsible for perception and discrimination of olfactory sensation.</p>
+                  </div>
+
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col">
+                    <div className="flex justify-between items-start mb-1">
+                      <p className="font-bold text-slate-800">After-discharge</p>
+                      <span className="bg-amber-100 text-amber-800 text-xs px-2 py-0.5 rounded font-bold">Reverberating circuits</span>
+                    </div>
+                    <p className="text-sm mt-1">The continued firing of neurons after the initial stimulus has ceased.</p>
+                  </div>
+                </div>
+
+                {/* Mnemonics & Systems */}
+                <div className="space-y-4">
+                  <h3 className="font-bold text-xl text-emerald-800 flex items-center gap-2 mb-4">
+                    <Icon name="lightbulb" /> Mnemonics for Mastery
+                  </h3>
+
+                  <div className="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-xl shadow-sm">
+                    <p className="font-bold text-emerald-900 mb-2 border-b border-emerald-200 pb-2">The Papez Pathway Mnemonic</p>
+                    <p className="text-sm text-emerald-800 font-bold bg-emerald-100 p-2 rounded text-center mb-3">
+                      "Hippos Feel Happy To Chew Hay"
+                    </p>
+                    <ul className="text-sm text-emerald-800 space-y-1">
+                      <li><strong>H</strong>ippos &rarr; Hippocampus</li>
+                      <li><strong>F</strong>eel &rarr; Fornix</li>
+                      <li><strong>H</strong>appy &rarr; Hypothalamus (Mammillary bodies)</li>
+                      <li><strong>T</strong>o &rarr; Thalamus (Anterior nuclei)</li>
+                      <li><strong>C</strong>hew &rarr; Cingulate Gyrus</li>
+                      <li><strong>H</strong>ay &rarr; Hippocampus</li>
+                    </ul>
+                  </div>
+
+                  <div className="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-xl shadow-sm">
+                    <p className="font-bold text-emerald-900 mb-2 border-b border-emerald-200 pb-2">Hypothalamic Nuclei Quick-Guide</p>
+                    <ul className="text-sm text-emerald-800 space-y-3">
+                      <li>
+                        <strong className="bg-emerald-100 px-1 rounded">Lateral = Lashing out</strong>
+                        <p className="mt-0.5 text-xs text-emerald-700">Triggers Rage & Aggression.</p>
+                      </li>
+                      <li>
+                        <strong className="bg-emerald-100 px-1 rounded">Ventromedial = Very Still</strong>
+                        <p className="mt-0.5 text-xs text-emerald-700">Triggers Placidity & Satiety.</p>
+                      </li>
+                      <li>
+                        <strong className="bg-emerald-100 px-1 rounded">Periventricular = Panic</strong>
+                        <p className="mt-0.5 text-xs text-emerald-700">Triggers Fear & Punishment.</p>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4 mt-6">
+                    <div className="bg-blue-50 p-4 rounded-xl border border-blue-200 shadow-sm">
+                      <p className="font-bold text-blue-900 text-sm border-b border-blue-200 pb-1 mb-2">Reward System</p>
+                      <p className="text-xs text-blue-800"><strong>Transmitter:</strong> Dopamine<br/><strong>Hook:</strong> Addiction / Pleasure</p>
+                    </div>
+                    <div className="bg-rose-50 p-4 rounded-xl border border-rose-200 shadow-sm">
+                      <p className="font-bold text-rose-900 text-sm border-b border-rose-200 pb-1 mb-2">Punishment System</p>
+                      <p className="text-xs text-rose-800"><strong>Transmitter:</strong> Acetylcholine<br/><strong>Hook:</strong> Displeasure / Avoidance</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        // --- Functions of Hypothalamus Components ---
+
+        function HypoOverviewTab() {
+          return (
+            <div className="space-y-6 animate-in">
+              <SectionTitle>Overview of the Hypothalamus</SectionTitle>
+              
+              <div className="bg-blue-50 border border-blue-200 text-blue-900 p-6 rounded-2xl shadow-sm mb-6">
+                <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
+                  <Icon name="location-dot" /> Anatomical Location & Significance
+                </h3>
+                <p className="leading-relaxed">
+                  The hypothalamus is a critical regulatory center situated at the base of the brain, positioned anteriorly to the brain stem. It is <strong>bounded by the optic chiasma</strong> at its anterior aspect and the <strong>mammillary body</strong> at its posterior aspect. Functioning as the primary coordinator for the body's internal homeostasis, it oversees vegetative functions, endocrine activity, and various aspects of emotional and behavioral responses.
+                </p>
+              </div>
+
+              <SubTitle>Anatomical Organization: Hypothalamic Nuclei</SubTitle>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse bg-white rounded-xl overflow-hidden shadow-sm border border-slate-200">
+                  <thead className="bg-slate-100 text-slate-700">
+                    <tr>
+                      <th className="p-4 border-b border-slate-200 font-bold w-1/3">Region</th>
+                      <th className="p-4 border-b border-slate-200 font-bold w-2/3">Specific Nuclei</th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-sm">
+                    <tr className="border-b border-slate-100 hover:bg-slate-50">
+                      <td className="p-4 font-bold text-emerald-700">Anterior</td>
+                      <td className="p-4">Supraoptic, suprachiasmatic, preoptic, and paraventricular nuclei.</td>
+                    </tr>
+                    <tr className="border-b border-slate-100 hover:bg-slate-50">
+                      <td className="p-4 font-bold text-emerald-700">Posterior</td>
+                      <td className="p-4">Posterior hypothalamic nuclei and mammillary body.</td>
+                    </tr>
+                    <tr className="border-b border-slate-100 hover:bg-slate-50">
+                      <td className="p-4 font-bold text-emerald-700">Medial</td>
+                      <td className="p-4">Dorsomedial, ventromedial, and arcuate nuclei.</td>
+                    </tr>
+                    <tr className="border-b border-slate-100 hover:bg-slate-50">
+                      <td className="p-4 font-bold text-emerald-700">Lateral</td>
+                      <td className="p-4">Lateral nucleus and parts of the tuber cinerium.</td>
+                    </tr>
+                    <tr className="hover:bg-slate-50">
+                      <td className="p-4 font-bold text-emerald-700">Periventricular</td>
+                      <td className="p-4">Periventricular nucleus.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          );
+        }
+
+        function HypoMechanismsTab() {
+          return (
+            <div className="space-y-6 animate-in">
+              <SectionTitle>Major Physiological Functions (Homeostasis)</SectionTitle>
+              
+              <div className="grid md:grid-cols-2 gap-6">
+                
+                {/* Endocrine */}
+                <div className="bg-emerald-50 border border-emerald-200 p-6 rounded-2xl shadow-sm">
+                  <h4 className="font-bold text-emerald-800 text-lg mb-4 flex items-center gap-2">
+                    <Icon name="flask" /> 1. Endocrine Gland Control
+                  </h4>
+                  <div className="space-y-3 text-sm text-emerald-900">
+                    <div>
+                      <strong className="block border-b border-emerald-200 pb-1 mb-1">Nervous Control</strong>
+                      <ul className="list-disc pl-5">
+                        <li><strong>Posterior Pituitary:</strong> Directly regulates secretion of oxytocin and ADH.</li>
+                        <li><strong>Adrenal Medulla:</strong> Posterior hypothalamus sends sympathetic signals to stimulate catecholamine secretion.</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <strong className="block border-b border-emerald-200 pb-1 mb-1 mt-3">Hormonal Control (Hypophysiotropic)</strong>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li><strong>Arcuate Nucleus:</strong> Synthesizes Dopamine and GHRH.</li>
+                        <li><strong>Preoptic Nucleus:</strong> Synthesizes GnRH.</li>
+                        <li><strong>Paraventricular Nucleus:</strong> Synthesizes TRH, CRH, and Somatostatin (SST).</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Autonomic & Temp */}
+                <div className="space-y-6 flex flex-col justify-between">
+                  <div className="bg-blue-50 border border-blue-200 p-6 rounded-2xl shadow-sm flex-grow">
+                    <h4 className="font-bold text-blue-900 text-lg mb-3 flex items-center gap-2">
+                      <Icon name="heart-pulse" /> 2. Autonomic Nervous System
+                    </h4>
+                    <ul className="list-disc pl-5 text-sm text-blue-800 space-y-2">
+                      <li><strong>Sympathetic Effects:</strong> Stimulation of the <em>posterolateral hypothalamus</em> triggers the "alarm response".</li>
+                      <li><strong>Parasympathetic Effects:</strong> Stimulation of the <em>anterior nuclei</em> produces parasympathetic responses.</li>
+                    </ul>
+                  </div>
+
+                  <div className="bg-amber-50 border border-amber-200 p-6 rounded-2xl shadow-sm flex-grow">
+                    <h4 className="font-bold text-amber-900 text-lg mb-3 flex items-center gap-2">
+                      <Icon name="temperature-half" /> 3. Thermoregulation & Water
+                    </h4>
+                    <ul className="list-disc pl-5 text-sm text-amber-800 space-y-2">
+                      <li><strong>Heat Loss Center (Anterior):</strong> Triggers cutaneous vasodilation and sweating.</li>
+                      <li><strong>Heat Gain Center (Posterior):</strong> Triggers cutaneous vasoconstriction and shivering.</li>
+                      <li><strong>Water Balance:</strong> Stimulates thirst center (lateral nuclei) and regulates ADH secretion.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {/* Appetite & Sleep */}
+              <div className="grid md:grid-cols-2 gap-6 mt-6">
+                <div className="bg-slate-50 border border-slate-200 p-6 rounded-2xl shadow-sm">
+                  <h4 className="font-bold text-slate-800 text-lg mb-3 flex items-center gap-2">
+                    <Icon name="utensils" /> 4. Appetite (The Appestat)
+                  </h4>
+                  <p className="text-sm text-slate-700 mb-3">Managed by two reciprocal centers:</p>
+                  <ul className="list-disc pl-5 text-sm text-slate-700 space-y-2">
+                    <li><strong>Feeding Center (Lateral Hypothalamus):</strong> Chronically active. Drives the urge to eat.</li>
+                    <li><strong>Satiety Center (Ventromedial Nucleus):</strong> Inhibits the feeding center. Contains glucoreceptors that respond to increased blood glucose.</li>
+                  </ul>
+                </div>
+
+                <div className="bg-slate-50 border border-slate-200 p-6 rounded-2xl shadow-sm">
+                  <h4 className="font-bold text-slate-800 text-lg mb-3 flex items-center gap-2">
+                    <Icon name="moon" /> 5. Circadian Rhythm & Sleep
+                  </h4>
+                  <ul className="list-disc pl-5 text-sm text-slate-700 space-y-2">
+                    <li><strong>Suprachiasmatic Nucleus:</strong> The internal biological clock.</li>
+                    <li><strong>Posterior Hypothalamus:</strong> Stimulation produces arousal/awake state.</li>
+                    <li><strong>Anterior Hypothalamus:</strong> Stimulation induces sleep.</li>
+                    <li><strong>Lateral Hypothalamic Neurons:</strong> Produce <em>orexin</em>, essential for switching between sleep and wakefulness.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        function HypoClinicalTab() {
+          return (
+            <div className="space-y-6 animate-in">
+              <SectionTitle>Clinical Correlations & Lesions</SectionTitle>
+
+              <div className="grid md:grid-cols-2 gap-6 mb-6">
+                <div className="bg-rose-50 border border-rose-200 text-rose-900 p-6 rounded-2xl shadow-sm">
+                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2 border-b border-rose-200 pb-2">
+                    <Icon name="pizza-slice" /> Appestat Lesions
+                  </h3>
+                  <div className="space-y-4 text-sm">
+                    <div>
+                      <p className="font-bold">Feeding Center Lesion (Lateral):</p>
+                      <p className="mt-1 bg-white p-2 rounded border border-rose-100">Results in <strong>Anorexia</strong>. The primary drive to eat is completely lost.</p>
+                    </div>
+                    <div>
+                      <p className="font-bold">Satiety Center Lesion (Ventromedial):</p>
+                      <p className="mt-1 bg-white p-2 rounded border border-rose-100">Results in <strong>Hyperphagia</strong> (excessive eating). The feeding center is never inhibited.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-amber-50 border border-amber-200 text-amber-900 p-6 rounded-2xl shadow-sm flex flex-col">
+                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2 border-b border-amber-200 pb-2">
+                    <Icon name="syringe" /> Diabetes & Polyphagia
+                  </h3>
+                  <div className="flex-grow flex flex-col justify-center">
+                    <p className="font-bold mb-2">Clinical Note:</p>
+                    <p className="text-sm bg-white/60 p-4 rounded-xl border border-amber-100">
+                      Glucose entrance into the satiety center is <strong>insulin-dependent</strong>. In diabetic patients, the lack of effective insulin prevents glucose from entering the satiety center. Because the center cannot "sense" the glucose in the blood, it fails to inhibit the feeding center. This mechanism directly explains the excessive hunger (<strong>polyphagia</strong>) commonly observed in untreated diabetes.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-rose-50 border border-rose-200 text-rose-900 p-6 rounded-2xl shadow-sm">
+                <h3 className="text-xl font-bold mb-3 flex items-center gap-2">
+                  <Icon name="triangle-exclamation" /> Additional Clinical Manifestations
+                </h3>
+                <ul className="list-disc pl-5 space-y-3 text-sm">
+                  <li>
+                    <strong>Sexual Behavior:</strong> The hypothalamus controls sexual drive through its most anterior and posterior parts. A lesion in the anterior hypothalamus leads to the total abolishment of sexual interest.
+                  </li>
+                  <li>
+                    <strong>Orexin Deficiency:</strong> Since lateral hypothalamic neurons produce orexin (which switches the brain between sleep and wakefulness), damage or deficiency in these neurons is the primary cause of Narcolepsy.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          );
+        }
+
+        function HypoShortTab() {
+          const qas = [
+            { q: "Describe the anatomical boundaries of the hypothalamus.", a: "The hypothalamus is situated at the base of the brain in front of the brain stem. Its boundaries are defined by the optic chiasma anteriorly and the mammillary body posteriorly." },
+            { q: "How does the hypothalamus control the adrenal medulla?", a: "The hypothalamus controls the adrenal medulla through nervous control. Specifically, the posterior hypothalamus sends signals via sympathetic nerves to stimulate the secretion of catecholamines." },
+            { q: "Identify the specific hormones synthesized by the paraventricular nucleus.", a: "The paraventricular nucleus is responsible for synthesizing three specific hypophysiotropic hormones: Thyrotropin-releasing hormone (TRH), Corticotropin-releasing hormone (CRH), and Somatostatin (SST)." },
+            { q: "Explain the reciprocal relationship between the feeding and satiety centers.", a: "The feeding center in the lateral hypothalamus is chronically active but can be inhibited by the satiety center in the ventromedial nucleus. Following a meal, rising blood glucose stimulates the satiety center's glucoreceptors, which then inhibit the feeding center." },
+            { q: "Why do patients with diabetes often experience excessive hunger?", a: "Glucose entrance into the satiety center is insulin-dependent. In diabetes, a lack of effective insulin prevents glucose entry, meaning the center is not stimulated to inhibit the feeding center, leading to excessive hunger." },
+            { q: "Distinguish between the roles of the anterior and posterior hypothalamus in temperature regulation.", a: "The anterior hypothalamus contains the heat loss center, facilitating cooling through sweating and cutaneous vasodilation. The posterior hypothalamus contains the heat gain center, maintaining warmth through shivering and cutaneous vasoconstriction." },
+            { q: "What is the \"internal biological clock,\" and what functions does it regulate?", a: "The suprachiasmatic nucleus serves as the internal biological clock. It is responsible for the circadian rhythm of various functions, including the sleep-wake cycle, heart rate, blood pressure, and digestive activities." },
+            { q: "What is the physiological result of a lesion in the anterior hypothalamus regarding sexual behavior?", a: "The hypothalamus controls sexual drive through its most anterior and posterior parts. A lesion in the anterior hypothalamus will lead to the total abolishment of sexual interest." },
+            { q: "Describe the role of orexin in the lateral hypothalamus.", a: "Orexin is a hormone produced by neurons in the lateral hypothalamus. It plays a critical role in the regulation of sleep by acting as a switch between the awake state and the sleep state." },
+            { q: "How does the hypothalamus regulate water output in the body?", a: "The hypothalamus regulates water output through the release of Antidiuretic Hormone (ADH) from the posterior pituitary. This hormone acts on the kidneys to control urinary water loss, maintaining extracellular fluid volume." }
+          ];
+
+          const [openIndex, setOpenIndex] = useState(null);
+          const toggle = (index) => setOpenIndex(openIndex === index ? null : index);
+
+          return (
+            <div className="animate-in">
+              <SectionTitle>Short Essay</SectionTitle>
+              <p className="text-slate-600 mb-6">Click on a question to reveal the answer using active recall.</p>
+              
+              <div className="space-y-4">
+                {qas.map((qa, i) => {
+                  const isOpen = openIndex === i;
+                  return (
+                    <div key={i} className={`bg-white border rounded-xl shadow-sm overflow-hidden transition-all duration-300 ${isOpen ? 'border-emerald-500 ring-1 ring-emerald-500' : 'border-slate-200 hover:border-emerald-300'}`}>
+                      <button 
+                        onClick={() => toggle(i)}
+                        className="w-full flex items-center justify-between p-5 cursor-pointer text-left bg-white group"
+                      >
+                        <span className="flex gap-4 items-start pr-4 text-slate-800 font-semibold">
+                          <span className={`font-bold px-2.5 py-1 rounded-lg flex-shrink-0 transition-colors duration-300 ${isOpen ? 'bg-emerald-500 text-white shadow-sm' : 'bg-emerald-50 text-emerald-600 group-hover:bg-emerald-100'}`}>
+                            Q{i + 1}
+                          </span>
+                          <span className="mt-1">{qa.q}</span>
+                        </span>
+                        <Icon name="chevron-down" className={`text-emerald-600 transition-transform duration-300 flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`} />
+                      </button>
+                      <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                        <div className="overflow-hidden">
+                          <div className="p-5 pt-4 border-t border-emerald-100 bg-[#ebfbf3] text-emerald-900 text-sm leading-relaxed">
+                            <span className="block font-bold text-emerald-800 mb-2">Answer:</span>
+                            <div>{qa.a}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        }
+
+        function HypoLongTab() {
+          const essays = [
+            {
+              q: "The Role of the Hypothalamus in Homeostatic Thermoregulation: Discuss how it acts as a \"thermostat\".",
+              a: (
+                <>
+                  <p>The hypothalamus maintains body temperature at a specific set point by functioning as a biological thermostat. This regulation is split between two distinct areas: the heat loss center located in the anterior hypothalamus and the heat gain center located in the posterior hypothalamus.</p>
+                  <p className="mt-4">When the body needs to reduce temperature, the anterior heat loss center is activated, leading to cutaneous vasodilation (increasing blood flow to the skin) and the stimulation of sweat glands.</p>
+                  <p className="mt-4">When the body needs to conserve or generate heat, the posterior heat gain center triggers cutaneous vasoconstriction to minimize heat loss through the skin and initiates shivering to generate heat through muscular activity. Together, these centers ensure the body remains at its hypothalamic set point despite external environmental changes.</p>
+                </>
+              )
+            },
+            {
+              q: "Mechanisms of Appetite Control and Clinical Correlations: Explain the \"Appestat\" mechanism and lesions.",
+              a: (
+                <>
+                  <p>The hypothalamus regulates food intake through two reciprocal centers collectively known as the "Appestat." The feeding center, located in the lateral hypothalamus, is inherently active and drives the urge to eat. This center is regulated by the satiety center, located in the ventromedial nucleus. The satiety center contains glucoreceptors (or glucostats) that monitor blood glucose levels; after a meal, the rise in glucose stimulates these receptors, which then inhibit the feeding center.</p>
+                  <p className="mt-4">The clinical significance of these centers is evidenced by the effects of lesions. A lesion in the feeding center leads to anorexia, as the primary drive to eat is lost. Conversely, a lesion in the satiety center leads to hyperphagia, as the feeding center is never inhibited, resulting in excessive overeating.</p>
+                  <p className="mt-4">Additionally, because glucose uptake in the satiety center requires insulin, metabolic disorders like diabetes can lead to persistent hunger (polyphagia) because the satiety center cannot "sense" the glucose in the blood.</p>
+                </>
+              )
+            }
+          ];
+
+          const [openIndex, setOpenIndex] = useState(null);
+          const toggle = (index) => setOpenIndex(openIndex === index ? null : index);
+
+          return (
+            <div className="animate-in">
+              <SectionTitle>Long Essay Review</SectionTitle>
+              <div className="space-y-4">
+                {essays.map((essay, i) => {
+                  const isOpen = openIndex === i;
+                  return (
+                    <div key={i} className={`bg-white border rounded-xl shadow-sm overflow-hidden transition-all duration-300 ${isOpen ? 'border-emerald-500 ring-1 ring-emerald-500' : 'border-slate-200 hover:border-emerald-300'}`}>
+                      <button 
+                        onClick={() => toggle(i)}
+                        className="w-full flex items-center justify-between p-5 cursor-pointer text-left bg-white group"
+                      >
+                        <span className="flex gap-4 items-start pr-4 text-slate-800 font-semibold">
+                          <span className={`font-bold px-2.5 py-1 rounded-lg flex-shrink-0 transition-colors duration-300 ${isOpen ? 'bg-emerald-500 text-white shadow-sm' : 'bg-emerald-50 text-emerald-600 group-hover:bg-emerald-100'}`}>
+                            {i + 1}
+                          </span>
+                          <span className="mt-1">{essay.q}</span>
+                        </span>
+                        <Icon name="chevron-down" className={`text-emerald-600 transition-transform duration-300 flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`} />
+                      </button>
+                      <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                        <div className="overflow-hidden">
+                          <div className="p-5 pt-4 border-t border-emerald-100 bg-[#ebfbf3] text-emerald-900 text-sm leading-relaxed">
+                            <span className="block font-bold text-emerald-800 mb-2">Answer:</span>
+                            <div>{essay.a}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        }
+
+        function HypoGlossaryTab() {
+          return (
+            <div className="space-y-8 animate-in text-slate-700">
+              <SectionTitle>Glossary & Mnemonics</SectionTitle>
+
+              <div className="grid md:grid-cols-2 gap-8">
+                {/* Glossary Terms */}
+                <div className="space-y-4">
+                  <h3 className="font-bold text-xl text-emerald-800 flex items-center gap-2 mb-4">
+                    <Icon name="book-open" /> Key Terms
+                  </h3>
+                  
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <p className="font-bold text-slate-800">Appestat</p>
+                    <p className="text-sm mt-1">The collective term for the hypothalamic centers (feeding and satiety) that regulate food intake.</p>
+                  </div>
+
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <p className="font-bold text-slate-800">Glucostat / Glucoreceptor</p>
+                    <p className="text-sm mt-1">Specialized cells in the ventromedial nucleus that sense blood glucose levels to trigger satiety.</p>
+                  </div>
+
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <p className="font-bold text-slate-800">Hypophysiotropic Hormones</p>
+                    <p className="text-sm mt-1">Releasing or inhibiting hormones produced by the hypothalamus that act on the anterior pituitary.</p>
+                  </div>
+
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <p className="font-bold text-slate-800">Hyperphagia</p>
+                    <p className="text-sm mt-1">Excessive eating, often caused by a lesion in the satiety center.</p>
+                  </div>
+
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <p className="font-bold text-slate-800">Anorexia</p>
+                    <p className="text-sm mt-1">Loss of appetite, specifically linked to lesions in the lateral feeding center.</p>
+                  </div>
+
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <p className="font-bold text-slate-800">Orexin</p>
+                    <p className="text-sm mt-1">A hormone from the lateral hypothalamus vital for switching between sleep and wakefulness.</p>
+                  </div>
+
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <p className="font-bold text-slate-800">Suprachiasmatic Nucleus</p>
+                    <p className="text-sm mt-1">The "Master Clock" of the body regulating circadian rhythms.</p>
+                  </div>
+                </div>
+
+                {/* Mnemonics */}
+                <div className="space-y-4">
+                  <h3 className="font-bold text-xl text-emerald-800 flex items-center gap-2 mb-4">
+                    <Icon name="lightbulb" /> Mnemonics for Mastery
+                  </h3>
+
+                  <div className="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-xl shadow-sm">
+                    <p className="font-bold text-emerald-900 mb-2 border-b border-emerald-200 pb-2">Appetite Centers</p>
+                    <ul className="text-sm text-emerald-800 space-y-3">
+                      <li>
+                        <strong className="bg-emerald-100 px-1 rounded">Lateral = Lunch</strong>
+                        <p className="mt-0.5 text-xs text-emerald-700">Feeding center; "I want Lunch".</p>
+                      </li>
+                      <li>
+                        <strong className="bg-emerald-100 px-1 rounded">Ventromedial = Very Much full</strong>
+                        <p className="mt-0.5 text-xs text-emerald-700">Satiety center; "I've had Very Much".</p>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-xl shadow-sm mt-4">
+                    <p className="font-bold text-blue-900 mb-2 border-b border-blue-200 pb-2">Temperature Regulation</p>
+                    <ul className="text-sm text-blue-800 space-y-3">
+                      <li>
+                        <strong className="bg-blue-100 px-1 rounded">Anterior = Air Conditioning</strong>
+                        <p className="mt-0.5 text-xs text-blue-700">Heat loss center; Sweating and Vasodilation.</p>
+                      </li>
+                      <li>
+                        <strong className="bg-blue-100 px-1 rounded">Posterior = Production of heat</strong>
+                        <p className="mt-0.5 text-xs text-blue-700">Heat gain center; Shivering and Vasoconstriction.</p>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl shadow-sm mt-4">
+                    <p className="font-bold text-amber-900 mb-2 border-b border-amber-200 pb-2">Autonomic Control</p>
+                    <ul className="text-sm text-amber-800 space-y-3">
+                      <li>
+                        <strong className="bg-amber-100 px-1 rounded">Posterolateral = Pumped up</strong>
+                        <p className="mt-0.5 text-xs text-amber-700">Sympathetic / Alarm response.</p>
+                      </li>
+                      <li>
+                        <strong className="bg-amber-100 px-1 rounded">Anterior = At rest</strong>
+                        <p className="mt-0.5 text-xs text-amber-700">Parasympathetic response.</p>
                       </li>
                     </ul>
                   </div>
