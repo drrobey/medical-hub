@@ -135,6 +135,23 @@
                       </button>
                     </div>
 
+                    {/* Cranial Cavity Module Card */}
+                    <div 
+                      onClick={() => onSelectGuide('cranial_cavity')}
+                      className="relative overflow-hidden rounded-2xl border-2 p-6 transition-all duration-300 ease-out flex flex-col h-full transform cursor-pointer hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.02] hover:border-red-500 group bg-red-50 border-red-200"
+                    >
+                      <div className="bg-white w-16 h-16 rounded-2xl shadow-sm flex items-center justify-center mb-6 shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+                        <i className="fa-solid fa-skull text-2xl text-red-500"></i>
+                      </div>
+                      <h3 className="text-xl font-bold mb-2 text-slate-900">Cranial Cavity 1 & 2</h3>
+                      <p className="text-slate-600 mb-8 line-clamp-2 flex-1">
+                        Dural folds, venous sinuses, vascular supply, cranial nerve exit points, and clinical anatomy.
+                      </p>
+                      <button className="w-full py-3 px-4 bg-white/50 hover:bg-white text-slate-800 border border-slate-300 font-semibold rounded-xl transition-all duration-200 transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 mt-auto shadow-sm">
+                         Open Review
+                      </button>
+                    </div>
+
                   </div>
                 </main>
               </div>
@@ -182,6 +199,37 @@
               { title: "Cortico-nuclear Innervation and Clinical Implications of UMNLs", answer: "The standard organization of the motor nuclei of cranial nerves is the receipt of bilateral cortico-nuclear tract innervation. This provides a redundancy that protects function in the event of unilateral cortical damage. However, there are two critical exceptions to this rule: the portion of the facial nucleus that innervates the lower face and the portion of the hypoglossal nucleus that innervates the genioglossus muscle. These specific regions receive only contralateral cortico-nuclear fibers.\n\nIn the case of the Facial nerve (VII), the motor nucleus is divided into dorsal and ventral parts. The dorsal part, supplying the upper face, receives bilateral input, meaning an UMNL on one side will not paralyze the forehead or eye-closing muscles. Conversely, the ventral part, supplying the lower face, receives only contralateral input. Therefore, an UMNL results in paralysis of the muscles of the lower face on the side opposite the lesion. Similarly, for the Hypoglossal nerve (XII), the portion of the nucleus innervating the genioglossus muscle receives only contralateral fibers. An UMNL would therefore lead to weakness or deviation of the tongue toward the side opposite the lesion. These exceptions make these two nerves uniquely liable to observable deficits during UMNL clinical presentations." },
               { title: "Functional Organization of the Mixed Cranial Nerves", answer: "Mixed cranial nerves are defined by their complex roles, necessitating four distinct nuclei to handle different functional modalities: General Somatic Afferent (GSA), Special Visceral Afferent (SVA), General Visceral Efferent (GVE), and Special Visceral Efferent (SVE).\n\nFor the Glossopharyngeal (IX) and Vagus (X) nerves, sharing central nuclei is a key organizational feature. Both nerves utilize the Nucleus Ambiguus (SVE) to provide motor innervation to the muscles of the 3rd arch (IX - stylopharyngeus) and the 4th/6th arches (X - palate, pharynx, larynx). They also share the Nucleus Solitarius for visceral functions; for CN IX, it processes taste from the posterior tongue (SVA), and for CN X, it processes taste from the epiglottis and general visceral sensations (GVA) from the thoracic and abdominal organs. Finally, both contribute to the Spinal Nucleus of the Trigeminal (GSA) to relay general sensations from the oropharynx, ear, and respiratory tract. This sharing of nuclei ensures that specific types of information (like taste or visceral motor control) are processed in specialized, consolidated brainstem centers regardless of which peripheral nerve carries the signal." }
             ]
+          },
+          cranial_cavity: {
+            title: "Cranial Cavity 1 & 2",
+            shortEssays: [
+              { q: "Describe the structure and primary function of the dural folds.", a: "Dural folds are partition-like processes formed by the reduplication of the inner meningeal layer of the dura mater. Their primary function is to stabilize the brain within the cranial cavity during movements of the head." },
+              { q: "What are the two layers of the cranial dura mater, and when do they separate?", a: "The two layers are the outer endosteal layer and the inner meningeal layer. They remain fused except where the inner layer forms folds or when they separate to enclose a venous dural sinus." },
+              { q: "Explain the significance of the pterion in clinical practice.", a: "The pterion is the thinnest part of the skull, located 4 cm above the zygomatic arch. It is clinically significant because the middle meningeal artery lies deep to it, making it a common site for fractures leading to extradural hematomas." },
+              { q: "How does the drainage of the cavernous sinus differ between the superior and inferior petrosal sinuses?", a: "The cavernous sinus drains into the transverse sinus via the superior petrosal sinus. Alternatively, it drains directly into the internal jugular vein (IJV) via the inferior petrosal sinus." },
+              { q: "What is the \"tentorial notch,\" and what structure passes through it?", a: "The tentorial notch is a U-shaped opening in the free border of the tentorium cerebelli. It is designed to allow the passage of the midbrain between the cranial compartments." },
+              { q: "Identify the contents found within the center of the cavernous sinus.", a: "The center of the cavernous sinus contains the Internal Carotid Artery (ICA) surrounded by its sympathetic plexus. The abducent nerve (CN VI) also runs through the center, inferolateral to the artery." },
+              { q: "What is the clinical significance of emissary veins?", a: "Emissary veins are valveless vessels that connect dural sinuses with extracranial veins. They serve to equalize venous pressure but are dangerous as they can spread infection from external sources into the cranial cavity." },
+              { q: "Distinguish between the origin of extradural and subdural hemorrhages.", a: "Extradural hemorrhage is typically arterial, often caused by injury to the middle meningeal vessels. Subdural hemorrhage is more common and usually venous in origin, often identified by RBCs in the CSF." },
+              { q: "Which cranial nerves pass through the jugular foramen?", a: "The nerves that exit the cranium through the jugular foramen are the Glossopharyngeal (IX), Vagus (X), and Accessory (XI) nerves." },
+              { q: "Describe the attachment points of the Diaphragma sellae.", a: "This is a small rounded dural fold that roofs the hypophyseal (pituitary) fossa. It is attached to the four clinoid processes and has a central opening for the infundibulum." },
+              { q: "Where does the middle meningeal artery originate and how does it enter the skull?", a: "The middle meningeal artery originates from the first part of the maxillary artery within the infratemporal fossa. It enters the cranial cavity by passing through the foramen spinosum." },
+              { q: "Describe the location and nature of the trigeminal ganglion.", a: "Also known as the semilunar ganglion, it is the sensory ganglion of the fifth cranial nerve (CN V). It is located in the trigeminal impression on the anterior surface of the apex of the petrous temporal bone." },
+              { q: "Which cranial nerves are associated with the internal acoustic meatus?", a: "The seventh cranial nerve (facial nerve) and the eighth cranial nerve (vestibulocochlear nerve) both pass through the internal acoustic meatus." },
+              { q: "Identify the shape and specific site of the falx cerebelli.", a: "This is a small, sickle-shaped dural fold. It is positioned vertically in the posterior cranial fossa, situated specifically between the two cerebellar hemispheres." },
+              { q: "What is the clinical significance of the \"dangerous area of the face\" in relation to the cavernous sinus?", a: "Infection from this area can spread to the cavernous sinus via the facial and superior ophthalmic veins. This can lead to cavernous sinus thrombosis, affecting cranial nerves III, IV, and VI." },
+              { q: "Describe the path and termination of the superior sagittal sinus.", a: "It begins anteriorly at the crista galli and runs along the upper attached margin of the falx cerebri. It ends opposite the internal occipital protuberance, usually turning to the right to continue as the right transverse sinus." },
+              { q: "Which cranial nerve is composed of a large sensory root and a small motor root, and how do these roots exit the skull?", a: "The Trigeminal Nerve (CN V) consists of a large sensory root (forming the trigeminal ganglion) and a small motor root. The ophthalmic and maxillary divisions pass through the cavernous sinus, while the mandibular division (carrying the motor root) passes through the foramen ovale." },
+              { q: "Identify the branches of the cerebral part of the internal carotid artery (ICA).", a: "The cerebral part of the internal carotid artery gives off the ophthalmic artery, the posterior communicating artery, the anterior choroidal artery, and its terminal branches: the anterior and middle cerebral arteries." },
+              { q: "Describe the intracranial course of the olfactory nerve (CN I).", a: "This nerve consists of 15–20 filaments on each side. These filaments pierce the cribriform plate of the ethmoid bone to terminate in the olfactory bulb." },
+              { q: "What is a carotid-cavernous sinus fistula, and what are its physical manifestations?", a: "This is an abnormal arterio-venous communication resulting from head injury or a ruptured aneurysm of the ICA into the cavernous sinus. It typically leads to unilateral pulsating exophthalmos." }
+            ],
+            longEssays: [
+              { title: "Discuss the Anatomy, Relations, and Clinical Importance of the Cavernous Sinus.", answer: "The cavernous sinus is a large, endothelial-lined venous space located in the middle cranial fossa on either side of the sphenoid bone. It extends from the superior orbital fissure anteriorly to the apex of the petrous temporal bone posteriorly. Medially, it is related to the pituitary gland and sphenoidal air sinus, while laterally it is bordered by the temporal lobe.\n\nThe sinus is unique due to the structures passing through it. The internal carotid artery and abducent nerve (CN VI) pass through its center, while the oculomotor (III), trochlear (IV), ophthalmic (V1), and maxillary (V2) nerves are embedded in its lateral wall. It receives tributaries from the orbit, brain, and meninges.\n\nClinically, the cavernous sinus is highly significant. Infections from the \"dangerous area of the face\" can spread via the facial and ophthalmic veins to cause cavernous sinus thrombosis, affecting the nerves passing through it. Furthermore, a head injury can cause a carotid-cavernous fistula, where arterial blood from the ICA forced into the sinus leads to pulsating exophthalmos." },
+              { title: "Describe the Middle Meningeal Artery: Origin, Course, and Applied Anatomy.", answer: "The middle meningeal artery originates from the first part of the maxillary artery within the infratemporal fossa. It enters the cranial cavity through the foramen spinosum. Once inside the middle cranial fossa, it runs an extradural course between the two layers of the dura mater, grooving the squamous temporal bone. It eventually divides into a frontal (anterior) and a parietal (posterior) branch.\n\nThe artery's course is closely related to the pterion on the surface of the skull. Because the pterion is the thinnest part of the cranium, a blow to this area often fractures the bone and tears the underlying middle meningeal artery. This results in an extradural hemorrhage. The accumulating blood (hematoma) presses on the motor area of the brain, potentially causing contralateral hemiplegia. Surgical intervention via a burr-hole at the pterion is often required for decompression." },
+              { title: "The Intracranial Course and Branching of the Internal Carotid Artery (ICA)", answer: "The internal carotid artery (ICA) begins in the neck as a terminal branch of the common carotid artery and is divided into four distinct intracranial parts:\n\nCervical Part: This segment resides within the carotid sheath and notably provides no branches.\n\nPetrous Part: The artery enters the skull through the carotid canal in the petrous temporal bone. It gives rise to the corticotympanic branches (to the middle ear) and the pterygoid branches (to the pterygoid canal).\n\nCavernous Part: The ICA passes forward through the cavernous sinus, positioned inferolateral to the abducent nerve. Its branches include those to the trigeminal ganglion, hypophyseal branches to the pituitary gland, and a meningeal branch to the dura of the anterior cranial fossa.\n\nCerebral Part: The artery emerges through the roof of the cavernous sinus, medial to the anterior clinoid process. It terminates by dividing into the anterior and middle cerebral arteries. Before this, it gives off the ophthalmic, posterior communicating, and anterior choroidal arteries." },
+              { title: "The Falx Cerebri: Anatomy, Attachments, and Associated Venous Sinuses", answer: "The falx cerebri is a large, sickle-shaped dural fold situated vertically along the median fissure between the two cerebral hemispheres. Its anatomical structure is defined by its borders and attachments:\n\nApex (Anterior): Attached to the crista galli and the frontal crest.\n\nBase (Posterior): Attached to the upper surface of the tentorium cerebelli.\n\nUpper Border: Attached to the lips of the sagittal sulcus. This border is convex and encloses the superior sagittal sinus.\n\nLower Border: This border is free and concave, running along the corpus callosum. It encloses the inferior sagittal sinus.\n\nJunction of Base: At the line where the falx cerebri meets the tentorium cerebelli, it encloses the straight sinus." }
+            ]
           }
         };
 
@@ -191,6 +239,7 @@
           const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
           const [openShortIndex, setOpenShortIndex] = useState(null);
           const [openLongIndex, setOpenLongIndex] = useState(0);
+          const [currentPage, setCurrentPage] = useState(1); // NEW: Pagination state
 
           const currentData = contentDB[topic];
 
@@ -254,6 +303,8 @@
                         <button
                           onClick={() => {
                             setActiveTab(tab.id);
+                            setCurrentPage(1); // Reset to page 1 on tab switch
+                            setOpenShortIndex(null); // Close any open questions
                             setIsMobileMenuOpen(false); // Closes menu automatically on mobile
                           }}
                           className={`w-full flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200 transform hover:translate-x-2 active:scale-95 text-left group
@@ -474,42 +525,222 @@
                           </div>
                         </>
                       )}
-                    </div>
-                  )}
 
-                  {activeTab === 'short_essay' && (
-                    <div className="space-y-6 animate-in">
-                      <div className="border-b border-slate-200 pb-4">
-                        <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
-                          <i className="fa-solid fa-file-lines text-red-600"></i> Short Essay
-                        </h2>
-                        <p className="text-slate-600 mt-2">Targeted, high-yield written responses for {currentData.title}.</p>
-                      </div>
-                      
-                      <div className="space-y-3">
-                        {currentData.shortEssays.map((item, idx) => (
-                          <div key={idx} className="border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:border-red-300 transition-all duration-300">
-                            <button
-                              onClick={() => setOpenShortIndex(openShortIndex === idx ? null : idx)}
-                              className="w-full text-left p-4 bg-white hover:bg-slate-50 flex justify-between items-center focus:outline-none"
-                            >
-                              <span className="font-semibold text-slate-800 pr-4">Q{idx + 1}: {item.q}</span>
-                              <i className={`fa-solid fa-chevron-down transition-transform duration-300 ${openShortIndex === idx ? 'rotate-180 text-red-500' : 'text-slate-400'}`}></i>
-                            </button>
+                      {topic === 'cranial_cavity' && (
+                        <>
+                          {/* Cranial Cavity Summary */}
+                          <div>
+                            <h3 className="text-2xl font-bold text-slate-800 mb-4 border-b pb-2">Part I: Dural Folds & Venous Sinuses</h3>
                             
-                            <div className={`grid transition-all duration-300 ease-in-out ${openShortIndex === idx ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
-                              <div className="overflow-hidden">
-                                <div className="p-4 bg-red-50 border-t border-red-100 text-slate-700">
-                                  <strong className="text-red-800 block mb-1">Answer:</strong>
-                                  {item.a}
+                            <div className="grid md:grid-cols-2 gap-6 mb-6">
+                              <div className="bg-red-50 p-5 rounded-xl border border-red-100">
+                                <h4 className="font-bold text-red-900 mb-2">The Cranial Dura Mater</h4>
+                                <p className="text-slate-700 text-sm mb-3">The outermost, thickest, and toughest membrane covering the brain. Organized into two fused layers: the <strong>Outer (Endosteal) Layer</strong> and the <strong>Inner (Meningeal) Layer</strong>.</p>
+                                <div className="bg-white p-3 rounded shadow-sm border border-red-200 text-sm text-red-800 font-medium">
+                                  <i className="fa-solid fa-layer-group mr-2"></i> Separation occurs only to form dural folds (septa) or to enclose venous dural sinuses.
+                                </div>
+                              </div>
+
+                              <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                                <h4 className="font-bold text-slate-800 mb-3">Major Dural Folds</h4>
+                                <ul className="space-y-2 text-sm text-slate-700">
+                                  <li className="flex justify-between items-center border-b pb-1">
+                                    <span className="font-semibold text-blue-700">Falx cerebri</span>
+                                    <span className="text-xs text-slate-500 text-right">Sickle-shaped; between hemispheres</span>
+                                  </li>
+                                  <li className="flex justify-between items-center border-b pb-1">
+                                    <span className="font-semibold text-emerald-700">Tentorium cerebelli</span>
+                                    <span className="text-xs text-slate-500 text-right">Tent-shaped; roofs post. fossa</span>
+                                  </li>
+                                  <li className="flex justify-between items-center border-b pb-1">
+                                    <span className="font-semibold text-purple-700">Falx cerebelli</span>
+                                    <span className="text-xs text-slate-500 text-right">Small sickle; between cerebellar hemis</span>
+                                  </li>
+                                  <li className="flex justify-between items-center pb-1">
+                                    <span className="font-semibold text-rose-700">Diaphragma sellae</span>
+                                    <span className="text-xs text-slate-500 text-right">Rounded; roofs hypophyseal fossa</span>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+
+                            <div className="mb-8">
+                              <h4 className="font-bold text-slate-800 mb-3">The Cavernous Sinus Anatomy</h4>
+                              <div className="grid md:grid-cols-2 gap-4">
+                                <div className="bg-white border-l-4 border-indigo-500 p-4 rounded shadow-sm">
+                                  <div className="font-bold text-indigo-900 mb-1">Center Contents</div>
+                                  <p className="text-sm text-slate-600">The <strong>Internal Carotid Artery (ICA)</strong> (with sympathetic plexus) and the <strong>Abducent nerve (CN VI)</strong>.</p>
+                                </div>
+                                <div className="bg-white border-l-4 border-rose-500 p-4 rounded shadow-sm">
+                                  <div className="font-bold text-rose-900 mb-1">Lateral Wall Contents</div>
+                                  <p className="text-sm text-slate-600">Superior to inferior: Oculomotor (III), Trochlear (IV), Ophthalmic (V1), and Maxillary (V2) nerves.</p>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        ))}
-                      </div>
+
+                          <div>
+                            <h3 className="text-2xl font-bold text-slate-800 mb-4 border-b pb-2">Part II: Vascularity & Cranial Exits</h3>
+                            
+                            <div className="grid md:grid-cols-2 gap-6 mb-6">
+                              {/* Vascular */}
+                              <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:border-red-300 transition-colors">
+                                <h4 className="font-bold text-lg text-red-800 mb-3 border-b pb-2">Key Vascular Structures</h4>
+                                <ul className="space-y-3 text-sm text-slate-700">
+                                  <li><strong className="text-slate-900">Middle Meningeal Artery:</strong> Originates from maxillary art. Enters via foramen spinosum. Runs deep to the <strong>pterion</strong> (common fracture site).</li>
+                                  <li><strong className="text-slate-900">Emissary Veins:</strong> Valveless veins connecting dural to extracranial veins. High risk for spreading external infections inward.</li>
+                                  <li><strong className="text-slate-900">ICA Intracranial Parts:</strong> Cervical, Petrous, Cavernous, and Cerebral.</li>
+                                </ul>
+                              </div>
+
+                              {/* Applied Anatomy */}
+                              <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:border-red-300 transition-colors">
+                                <h4 className="font-bold text-lg text-red-800 mb-3 border-b pb-2">Applied Anatomy (Clinical)</h4>
+                                <ul className="space-y-3 text-sm text-slate-700">
+                                  <li><strong className="text-red-700">Extradural Hemorrhage:</strong> Usually arterial (middle meningeal). Near pterion.</li>
+                                  <li><strong className="text-red-700">Subdural Hemorrhage:</strong> Usually venous. RBCs found in CSF.</li>
+                                  <li><strong className="text-red-700">Cavernous Sinus Thrombosis:</strong> From "dangerous area of face". Affects CN III, IV, VI.</li>
+                                  <li><strong className="text-red-700">Carotid-Cavernous Fistula:</strong> ICA/Cavernous communication causing "pulsating exophthalmos".</li>
+                                </ul>
+                              </div>
+                            </div>
+
+                            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                              <h4 className="font-bold text-lg text-slate-800 mb-3 border-b pb-2">Cranial Nerve Exit Points</h4>
+                              <div className="overflow-x-auto">
+                                <table className="w-full text-sm text-left">
+                                  <thead className="bg-slate-50 text-slate-700 uppercase">
+                                    <tr><th className="px-4 py-2">Foramen / Fissure</th><th className="px-4 py-2">Cranial Nerves Exiting</th></tr>
+                                  </thead>
+                                  <tbody className="divide-y divide-slate-100">
+                                    <tr><td className="px-4 py-2 font-medium">Cribriform Plate</td><td className="px-4 py-2">I (Olfactory)</td></tr>
+                                    <tr><td className="px-4 py-2 font-medium">Optic Canal</td><td className="px-4 py-2">II (Optic)</td></tr>
+                                    <tr><td className="px-4 py-2 font-medium">Superior Orbital Fissure</td><td className="px-4 py-2">III, IV, V1 (Ophthalmic), VI</td></tr>
+                                    <tr><td className="px-4 py-2 font-medium">Foramen Rotundum</td><td className="px-4 py-2">V2 (Maxillary)</td></tr>
+                                    <tr><td className="px-4 py-2 font-medium">Foramen Ovale</td><td className="px-4 py-2">V3 (Mandibular)</td></tr>
+                                    <tr><td className="px-4 py-2 font-medium">Internal Acoustic Meatus</td><td className="px-4 py-2">VII, VIII</td></tr>
+                                    <tr><td className="px-4 py-2 font-medium">Jugular Foramen</td><td className="px-4 py-2">IX, X, XI</td></tr>
+                                    <tr><td className="px-4 py-2 font-medium">Hypoglossal Canal</td><td className="px-4 py-2">XII (Hypoglossal)</td></tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+
+                          </div>
+                        </>
+                      )}
+
                     </div>
                   )}
+
+                  {activeTab === 'short_essay' && (() => {
+                    // --- PAGINATION LOGIC ---
+                    const itemsPerPage = 5; // You can change how many questions appear per page here
+                    const totalPages = Math.ceil(currentData.shortEssays.length / itemsPerPage);
+                    const startIndex = (currentPage - 1) * itemsPerPage;
+                    const currentQuestions = currentData.shortEssays.slice(startIndex, startIndex + itemsPerPage);
+
+                    return (
+                      <div className="space-y-6 animate-in">
+                        <div className="border-b border-slate-200 pb-4">
+                          <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                            <i className="fa-solid fa-file-lines text-red-600"></i> Short Essay
+                          </h2>
+                          <p className="text-slate-600 mt-2">Targeted, high-yield written responses for {currentData.title}.</p>
+                        </div>
+                        
+                        {/* Questions List with re-triggering fade animation on page change */}
+                        <div key={currentPage} className="space-y-3 animate-in min-h-[300px]">
+                          {currentQuestions.map((item, idx) => {
+                            // Calculate the true absolute index of the question
+                            const absoluteIndex = startIndex + idx;
+                            return (
+                              <div key={absoluteIndex} className="border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:border-red-400 transition-all duration-300 hover:shadow-md">
+                                <button
+                                  onClick={() => setOpenShortIndex(openShortIndex === absoluteIndex ? null : absoluteIndex)}
+                                  className="w-full text-left p-4 bg-white hover:bg-slate-50 flex justify-between items-center focus:outline-none transition-colors"
+                                >
+                                  <span className="font-semibold text-slate-800 pr-4">Q{absoluteIndex + 1}: {item.q}</span>
+                                  <i className={`fa-solid fa-chevron-down transition-transform duration-300 ${openShortIndex === absoluteIndex ? 'rotate-180 text-red-500' : 'text-slate-400'}`}></i>
+                                </button>
+                                
+                                <div className={`grid transition-all duration-300 ease-in-out ${openShortIndex === absoluteIndex ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                                  <div className="overflow-hidden">
+                                    <div className="p-4 bg-red-50 border-t border-red-100 text-slate-700">
+                                      <strong className="text-red-800 block mb-1">Answer:</strong>
+                                      {item.a}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+
+                        {/* Interactive Google-Style Pagination Controls */}
+                        {totalPages > 1 && (
+                          <div className="flex justify-center items-center gap-4 mt-8 pt-6 border-t border-slate-200">
+                            {/* Previous Arrow */}
+                            <button 
+                              onClick={() => { setCurrentPage(prev => Math.max(1, prev - 1)); setOpenShortIndex(null); }}
+                              disabled={currentPage === 1}
+                              className={`w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300 ${currentPage === 1 ? 'opacity-40 cursor-not-allowed text-slate-400 bg-slate-100' : 'text-red-600 bg-white border border-slate-200 hover:bg-red-50 hover:text-red-700 hover:shadow-md hover:-translate-x-1 cursor-pointer'}`}
+                            >
+                              <i className="fa-solid fa-chevron-left"></i>
+                            </button>
+
+                            {/* Sliding Carousel Window */}
+                            <div className="relative w-[232px] h-12 overflow-hidden flex items-center">
+                              <div 
+                                className="flex gap-2 absolute left-0 transition-transform duration-500 ease-out" 
+                                style={{ transform: `translateX(${96 - (currentPage - 1) * 48}px)` }}
+                              >
+                                {[...Array(totalPages)].map((_, i) => {
+                                  const pageNum = i + 1;
+                                  const distance = Math.abs(currentPage - pageNum);
+                                  
+                                  let sizeClasses = "";
+                                  if (distance === 0) {
+                                      // Active Center Page
+                                      sizeClasses = "w-10 h-10 text-base bg-red-600 text-white shadow-md ring-2 ring-red-200 ring-offset-1 z-10 opacity-100";
+                                  } else if (distance === 1) {
+                                      // Adjacent Pages (1 step away)
+                                      sizeClasses = "w-8 h-8 text-sm bg-white text-slate-600 border border-slate-200 hover:bg-red-50 hover:text-red-600 hover:border-red-300 opacity-100 cursor-pointer hover:scale-110";
+                                  } else if (distance === 2) {
+                                      // Two steps away
+                                      sizeClasses = "w-6 h-6 text-xs bg-white text-slate-500 border border-slate-200 hover:bg-red-50 hover:text-red-600 hover:border-red-300 opacity-50 cursor-pointer hover:scale-125";
+                                  } else {
+                                      // Hidden/Faded out pages at the edges
+                                      sizeClasses = "w-4 h-4 text-[0px] bg-white text-slate-400 border border-slate-200 opacity-0 pointer-events-none";
+                                  }
+
+                                  return (
+                                    <div key={i} className="w-10 h-10 shrink-0 flex items-center justify-center">
+                                      <button
+                                        onClick={() => { setCurrentPage(pageNum); setOpenShortIndex(null); }}
+                                        className={`rounded-full font-bold transition-all duration-300 flex items-center justify-center shrink-0 ${sizeClasses}`}
+                                      >
+                                        {pageNum}
+                                      </button>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+
+                            {/* Next Arrow */}
+                            <button 
+                              onClick={() => { setCurrentPage(prev => Math.min(totalPages, prev + 1)); setOpenShortIndex(null); }}
+                              disabled={currentPage === totalPages}
+                              className={`w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300 ${currentPage === totalPages ? 'opacity-40 cursor-not-allowed text-slate-400 bg-slate-100' : 'text-red-600 bg-white border border-slate-200 hover:bg-red-50 hover:text-red-700 hover:shadow-md hover:translate-x-1 cursor-pointer'}`}
+                            >
+                              <i className="fa-solid fa-chevron-right"></i>
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })()}
 
                   {activeTab === 'long_essay' && (
                     <div className="space-y-6 animate-in">
@@ -699,6 +930,75 @@
                                   { term: 'Hypoglossal Trigone', def: 'The area in the floor of the 4th ventricle overlying the hypoglossal nucleus.' },
                                   { term: 'Edinger Westphal Nucleus', def: 'The "Golden Buzzword" for parasympathetic control of the pupil and lens.' },
                                   { term: 'Nucleus Ambiguus', def: 'The "Golden Buzzword" for swallowing and vocalization (muscles of the palate, pharynx, larynx).' }
+                                ].map((item, idx) => (
+                                  <div key={idx} className="border border-slate-200 p-3 rounded-lg bg-white hover:border-red-300 transition-colors">
+                                    <h4 className="font-bold text-red-800 mb-1">{item.term}</h4>
+                                    <p className="text-slate-600 text-sm">{item.def}</p>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+
+                          </div>
+                        </>
+                      )}
+
+                      {topic === 'cranial_cavity' && (
+                        <>
+                          {/* Cranial Cavity Glossary */}
+                          <div>
+                            <h3 className="text-xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
+                              <i className="fa-solid fa-bolt text-red-600"></i> Golden Buzzwords
+                            </h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                              {[
+                                { term: '"Sickle-shaped"', def: 'Think Falx cerebri or Falx cerebelli.' },
+                                { term: '"Tent-shaped"', def: 'Think Tentorium cerebelli.' },
+                                { term: '"Dangerous area of the face"', def: 'Link to Cavernous Sinus Thrombosis.' },
+                                { term: '"Pulsating exophthalmos"', def: 'Link to Carotid-Cavernous Fistula.' },
+                                { term: '"RBCs in CSF"', def: 'Think Subdural Hemorrhage.' }
+                              ].map((item, idx) => (
+                                <div key={idx} className="bg-white border border-slate-200 p-4 rounded-lg shadow-sm hover:border-red-300 hover:shadow-md transition-all">
+                                  <strong className="text-red-800 block mb-1 text-lg">{item.term}</strong>
+                                  <p className="text-slate-600 text-sm">{item.def}</p>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="grid md:grid-cols-2 gap-8 pt-4 border-t border-slate-200">
+                            
+                            <div className="space-y-8">
+                              <div className="bg-red-50 rounded-xl p-6 border border-red-200 shadow-sm">
+                                <h3 className="text-xl font-bold text-red-900 mb-4 flex items-center gap-2">
+                                  <i className="fa-solid fa-brain"></i> Mnemonics for Exits
+                                </h3>
+                                <div className="space-y-4">
+                                  {[
+                                    { title: 'Superior Orbital Fissure', desc: 'Live Free To See Naked Antelopes (Lacrimal, Frontal, Trochlear, Sup. Ophthalmic Vein, Nasociliary, Abducent). Clinical basic: III, IV, V1, VI.' },
+                                    { title: 'Trigeminal Exits (Standing Room Only)', desc: 'V1 = Superior Orbital Fissure, V2 = Foramen Rotundum, V3 = Foramen Ovale.' }
+                                  ].map((item, idx) => (
+                                    <div key={idx} className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-red-500">
+                                      <div className="font-bold text-red-900 text-lg mb-1">{item.title}</div>
+                                      <p className="text-slate-700 text-sm">{item.desc}</p>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+
+                            <div>
+                              <h3 className="text-xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
+                                <i className="fa-solid fa-list text-slate-600"></i> Key Terms and "Hooks"
+                              </h3>
+                              <div className="flex flex-col gap-3">
+                                {[
+                                  { term: 'Endosteum', def: 'The role played by the outer layer of the dura mater in relation to the skull bones.' },
+                                  { term: 'Reduplicate', def: 'The action of the inner dural layer folding back on itself to create septa.' },
+                                  { term: 'Valveless', def: 'A key characteristic of both dural sinuses and emissary veins, allowing two-way blood flow.' },
+                                  { term: 'Pterion', def: 'The H-shaped junction of bones; the "weak spot" of the skull covering the middle meningeal artery.' },
+                                  { term: 'Lucid Interval', def: 'Often associated with extradural hematomas (implied by the clinical course of arterial bleeding).' },
+                                  { term: 'Infundibulum', def: 'The stalk connecting the pituitary gland to the brain, passing through the diaphragma sellae.' }
                                 ].map((item, idx) => (
                                   <div key={idx} className="border border-slate-200 p-3 rounded-lg bg-white hover:border-red-300 transition-colors">
                                     <h4 className="font-bold text-red-800 mb-1">{item.term}</h4>
