@@ -54,8 +54,16 @@
               <div key={currentView} className={direction === 'forward' ? 'slide-forward' : 'slide-backward'}>
                 {currentView === 'dashboard' ? (
                   <Dashboard onSelectGuide={(topicId) => navigateTo(topicId)} onBackToPortal={backToPortal} />
+                ) : currentView === 'scalp_face' ? (
+                  <ScalpFaceDashboard onSelectTopic={(t) => navigateTo(t)} onBack={() => navigateTo('dashboard')} />
                 ) : (
-                  <AnatomyTopicGuide topic={currentView} onBack={() => navigateTo('dashboard')} />
+                  <AnatomyTopicGuide topic={currentView} onBack={() => {
+                    if (currentView === 'the_scalp' || currentView === 'the_face') {
+                      navigateTo('scalp_face');
+                    } else {
+                      navigateTo('dashboard');
+                    }
+                  }} />
                 )}
               </div>
               
@@ -152,6 +160,23 @@
                       </button>
                     </div>
 
+                    {/* Scalp & Face Module Card */}
+                    <div 
+                      onClick={() => onSelectGuide('scalp_face')}
+                      className="relative overflow-hidden rounded-2xl border-2 p-6 transition-all duration-300 ease-out flex flex-col h-full transform cursor-pointer hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.02] hover:border-red-500 group bg-red-50 border-red-200"
+                    >
+                      <div className="bg-white w-16 h-16 rounded-2xl shadow-sm flex items-center justify-center mb-6 shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+                        <i className="fa-solid fa-face-smile text-2xl text-red-500"></i>
+                      </div>
+                      <h3 className="text-xl font-bold mb-2 text-slate-900">Scalp &amp; Face</h3>
+                      <p className="text-slate-600 mb-8 line-clamp-2 flex-1">
+                        Layers of the scalp, facial muscles, vascularization, innervation, and lymphatic drainage.
+                      </p>
+                      <button className="w-full py-3 px-4 bg-white/50 hover:bg-white text-slate-800 border border-slate-300 font-semibold rounded-xl transition-all duration-200 transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 mt-auto shadow-sm">
+                         Open Review
+                      </button>
+                    </div>
+
                   </div>
                 </main>
               </div>
@@ -198,6 +223,53 @@
             longEssays: [
               { title: "Cortico-nuclear Innervation and Clinical Implications of UMNLs", answer: "The standard organization of the motor nuclei of cranial nerves is the receipt of bilateral cortico-nuclear tract innervation. This provides a redundancy that protects function in the event of unilateral cortical damage. However, there are two critical exceptions to this rule: the portion of the facial nucleus that innervates the lower face and the portion of the hypoglossal nucleus that innervates the genioglossus muscle. These specific regions receive only contralateral cortico-nuclear fibers.\n\nIn the case of the Facial nerve (VII), the motor nucleus is divided into dorsal and ventral parts. The dorsal part, supplying the upper face, receives bilateral input, meaning an UMNL on one side will not paralyze the forehead or eye-closing muscles. Conversely, the ventral part, supplying the lower face, receives only contralateral input. Therefore, an UMNL results in paralysis of the muscles of the lower face on the side opposite the lesion. Similarly, for the Hypoglossal nerve (XII), the portion of the nucleus innervating the genioglossus muscle receives only contralateral fibers. An UMNL would therefore lead to weakness or deviation of the tongue toward the side opposite the lesion. These exceptions make these two nerves uniquely liable to observable deficits during UMNL clinical presentations." },
               { title: "Functional Organization of the Mixed Cranial Nerves", answer: "Mixed cranial nerves are defined by their complex roles, necessitating four distinct nuclei to handle different functional modalities: General Somatic Afferent (GSA), Special Visceral Afferent (SVA), General Visceral Efferent (GVE), and Special Visceral Efferent (SVE).\n\nFor the Glossopharyngeal (IX) and Vagus (X) nerves, sharing central nuclei is a key organizational feature. Both nerves utilize the Nucleus Ambiguus (SVE) to provide motor innervation to the muscles of the 3rd arch (IX - stylopharyngeus) and the 4th/6th arches (X - palate, pharynx, larynx). They also share the Nucleus Solitarius for visceral functions; for CN IX, it processes taste from the posterior tongue (SVA), and for CN X, it processes taste from the epiglottis and general visceral sensations (GVA) from the thoracic and abdominal organs. Finally, both contribute to the Spinal Nucleus of the Trigeminal (GSA) to relay general sensations from the oropharynx, ear, and respiratory tract. This sharing of nuclei ensures that specific types of information (like taste or visceral motor control) are processed in specialized, consolidated brainstem centers regardless of which peripheral nerve carries the signal." }
+            ]
+          },
+          the_scalp: {
+            title: "The Scalp",
+            shortEssays: [
+              { q: "Define the anatomical extent of the scalp.", a: "The scalp extends anteriorly to the supra-orbital margin and posteriorly to the external occipital protuberance and the highest nuchal lines. Laterally, it is bounded by the superior temporal lines." },
+              { q: "Why is the second layer of the scalp particularly prone to profuse bleeding when injured?", a: "The dense connective tissue contains blood vessels whose walls are adhered to fibrous septa. These septa prevent the vessels from contracting or retracting when cut, leading to significant blood loss even from small wounds." },
+              { q: "Describe the structure and attachments of the Epicranial Aponeurosis.", a: "Also known as the Galea Aponeurotica, it is a strong fibrous sheet that covers the skull vault like a helmet. It receives the insertion of the frontal bellies of the occipito-frontalis anteriorly and the occipital bellies posteriorly." },
+              { q: "Explain why the fourth layer of the scalp is clinically referred to as the 'dangerous layer.'", a: "The loose areolar tissue (fourth layer) allows for the easy spread of blood or pus beneath the aponeurosis. Because it contains emissary veins that connect to intracranial venous sinuses, infections in this layer can spread from the scalp to the cranial cavity." },
+              { q: "How does a hematoma in the pericranium differ in appearance from fluid collection in the loose areolar tissue?", a: "Fluid in the loose areolar tissue can spread across the vault but is limited by muscle attachments (e.g., stopping at the eyelids). In contrast, a hemorrhage beneath the pericranium (the fifth layer) results in a hematoma that takes the specific shape of the underlying skull bone because the pericranium is continuous with the sutural ligaments." },
+              { q: "Compare the actions of the frontal and occipital bellies of the occipito-frontalis muscle.", a: "The frontal bellies pull the scalp forward and raise the eyebrows to produce transverse forehead wrinkles. The occipital bellies act to pull the scalp backwards." },
+              { q: "Identify the two major arterial sources that provide blood supply to the scalp.", a: "The scalp is supplied by branches of both the External Carotid Artery (ECA) and the Internal Carotid Artery (ICA). ICA branches include the supratrochlear and supraorbital arteries, while ECA branches include the superficial temporal, posterior auricular, and occipital arteries." },
+              { q: "What are emissary veins, and what is their clinical significance regarding infection?", a: "These are valveless veins that pass through skull foramina to connect extracranial veins with intracranial venous sinuses. They help reduce intracranial pressure but also serve as potential routes for the spread of infection into the brain." },
+              { q: "Detail the sensory nerve supply of the scalp located in front of the auricle (ear).", a: "The area in front of the ear is supplied by four sensory branches of the trigeminal nerve. These include the supratrochlear and supraorbital nerves (from the ophthalmic nerve), the zygomaticotemporal nerve (from the maxillary nerve), and the auriculotemporal nerve (from the mandibular nerve)." },
+              { q: "Where does lymph from the pre-auricular and post-auricular regions of the scalp drain?", a: "The pre-auricular region of the scalp drains into the parotid lymph nodes. The post-auricular region drains into the mastoid and occipital lymph nodes." }
+            ],
+            longEssays: [
+              { title: "Explain the anatomical basis for the 'Black Eye' phenomenon resulting from a scalp injury.", answer: "The occurrence of a 'black eye' following a scalp injury is rooted in the anatomy of the fourth layer of the scalp, the loose areolar tissue. This layer is characterized by its lack of tension, which allows for the free mobility of the top three layers of the scalp over the skull. Clinically, this space allows for the easy spread of blood or inflammatory fluids (pus).\n\nWhile the loose areolar tissue is attached posteriorly to the occipital bone and laterally to the superior temporal line, it has no bony attachment anteriorly. Instead, it is continuous with the subcutaneous tissue of the eyelids because the frontal bellies of the occipito-frontalis muscle insert into the skin of the eyebrows rather than the bone. Consequently, if blood accumulates in the fourth layer due to trauma, it can gravitate forward and enter the eyelids, resulting in the discoloration known as a 'black eye.'" },
+              { title: "Compare and contrast the frontal and occipital bellies of the occipito-frontalis muscle in terms of origin, nerve supply, and physical characteristics.", answer: "The occipito-frontalis is the primary muscle of the scalp, consisting of two frontal bellies and two occipital bellies connected by the epicranial aponeurosis. They differ significantly in several ways:\n\nOrigin: The frontal bellies arise from the skin of the eyebrows and are wider and partly united in the midline. The occipital bellies are narrower, separated by an extension of the aponeurosis, and arise from the lateral two-thirds of the highest nuchal line.\n\nInsertion: Both bellies insert into the epicranial aponeurosis.\n\nNerve Supply: Although both are supplied by the facial nerve, they receive different branches. The frontal belly is supplied by the temporal branch of the facial nerve, whereas the occipital belly is supplied by the posterior auricular branch.\n\nPhysicality: The frontal bellies have no bony attachments, whereas the occipital bellies are attached to the bone at the highest nuchal line. This difference explains why fluid can move past the frontal bellies to the eyes but is blocked posteriorly by the occipital attachments." }
+            ]
+          },
+          the_face: {
+            title: "The Face",
+            shortEssays: [
+              { q: "What is the embryological origin of the muscles of facial expression?", a: "The muscles of facial expression develop from the mesoderm of the 2nd pharyngeal arch. Because of this common origin, they are all innervated by the facial nerve (CN VII)." },
+              { q: "Define the \"Modiolus\" and describe its location.", a: "The modiolus is a fibromuscular palpable mass where various facial muscle fibers converge or diverge. It is located just lateral to the angle of the mouth." },
+              { q: "Why is the facial artery described as \"tortuous\"?", a: "The facial artery is tortuous to permit the free movement of the mandible, lips, and cheeks. This anatomical feature prevents the vessel from being overstretched during wide mouth opening or facial expressions." },
+              { q: "Which specific part of the orbicularis oculi is responsible for the flow of tears?", a: "The lacrimal part of the orbicularis oculi is responsible for this function. It arises from the lacrimal crest and dilates the lacrimal sac, assisting in the suction and flow of tears." },
+              { q: "What is the sensory innervation of the skin over the chin?", a: "The skin of the chin is supplied by the mental nerve. This nerve is a branch of the mandibular division (V3) of the trigeminal nerve." },
+              { q: "List the five terminal motor branches of the facial nerve.", a: "The five terminal branches are the Temporal, Zygomatic, Buccal, Mandibular, and Cervical branches. These branches emerge from the anterior border of the parotid gland to supply specific muscle groups." },
+              { q: "Which nerve supplies the skin over the angle of the mandible?", a: "The skin over the angle of the mandible is supplied by the great auricular nerve. This nerve originates from the cervical plexus (C2, 3) rather than the trigeminal nerve." },
+              { q: "Describe the boundaries of the \"Dangerous area of the face.\"", a: "The dangerous area is a triangular region of facial skin. Its boundaries include the upper lip, the nose, and the medial angles of the eyes." },
+              { q: "What are the two parts of the Orbicularis oris muscle?", a: "The orbicularis oris consists of a large pars peripheralis and a small pars marginalis. The muscle is formed of 8 segments total, with two parts in each of the four quadrants." },
+              { q: "Where does the facial nerve form the \"Pes Anserinus\"?", a: "The facial nerve forms the Pes Anserinus (the \"goose's foot\") within the parotid gland. This is the site where the nerve divides into its five terminal motor branches." },
+              { q: "What are the three specific boundaries that define the face?", a: "The face is bounded superiorly by the hair line, which makes the forehead common to both the scalp and the face. Inferiorly, it is bounded by the lower border of the mandible, and sideways it extends from one auricle to the other." },
+              { q: "Describe the formation and drainage of the common facial vein.", a: "The common facial vein is formed by the union of the anterior facial vein and the anterior division of the retromandibular vein. Once formed, it drains its contents directly into the internal jugular vein (IJV)." },
+              { q: "Explain the clinical significance of the \"Dangerous Area of the Face.\"", a: "This triangular area around the nose and upper lip is dangerous because its venous drainage connects to the cavernous sinus. Infections in this region can travel through these veins, leading to a life-threatening cavernous sinus thrombosis." },
+              { q: "Which specific area of the face is NOT supplied by the trigeminal nerve, and what supplies it instead?", a: "The skin over the angle of the mandible and the capsule of the parotid gland are the exceptions to trigeminal innervation. These specific areas are instead supplied by the great auricular nerve, which arises from the cervical plexus (C2 and C3)." },
+              { q: "How does the facial nerve exit the skull, and what are its first two branches before it enters the parotid gland?", a: "The facial nerve (CN VII) exits the cranial cavity through the stylomastoid foramen. Before entering the parotid gland, it gives off the posterior auricular branch and a muscular branch to the digastric and stylohyoid muscles." },
+              { q: "Identify the three parts of the orbicularis oculi and their distinct functions.", a: "The orbital part closes the eyelids tightly for protection, while the palpebral part handles gentle blinking to spread tears. The lacrimal part is responsible for dilating the lacrimal sac to facilitate the flow of tears." },
+              { q: "What are the origins and the primary action of the buccinator muscle?", a: "The buccinator originates from the alveolar margins of the maxilla and mandible near the molars and the pterygomandibular raphe. Its primary action is compressing the cheeks against the teeth to assist in blowing, whistling, and mastication." },
+              { q: "Describe the lymphatic drainage of the central lower lip and chin.", a: "The central portion of the lower lip and the chin follow a specific lymphatic pathway. These areas drain into the submental lymph nodes, which are distinct from the submandibular or parotid nodes." }
+            ],
+            longEssays: [
+              { title: "Functional Anatomy of the Buccinator", answer: "The buccinator originates from the alveolar margins of the maxilla and mandible (opposite the molars) and the pterygomandibular raphe. Its fibers insert into the lips by converging at the modiolus. A unique anatomical feature is the decussation of its middle fibers: the upper middle fibers insert into the lower lip, and the lower middle fibers insert into the upper lip. Mechanically, the muscle compresses the cheeks against the teeth to prevent food from accumulating in the vestibule of the mouth during mastication. Additionally, it provides the tension required for activities such as whistling, blowing, and suckling." },
+              { title: "Integration of Facial Nerve Anatomy and Clinical Practice", answer: "After exiting the skull through the stylomastoid foramen, the facial nerve (CN VII) provides motor branches to the occipito-frontalis, digastric, and stylohyoid muscles. It then enters the parotid gland, where it forms the Pes Anserinus plexus and divides into five terminal branches: temporal, zygomatic, buccal, mandibular, and cervical. These branches radiate outward across the face to supply the muscles of facial expression, such as the orbicularis oculi and buccinator. Because these branches radiate horizontally from the parotid region, surgical incisions on the face should be made transverse and parallel to these nerve branches. This technique minimizes the risk of accidentally cutting the nerves, which would result in paralysis of the associated facial muscles." },
+              { title: "The Dual Blood Supply of the Face and its Anastomoses", answer: "The face receives a robust blood supply from both the ECA and ICA. The ECA provides the facial artery, which is the chief supply, and the superficial temporal artery, which gives off the transverse facial artery. The ICA contributes via its branches, the supratrochlear and supra-orbital arteries, which supply the forehead. A critical point of communication occurs at the medial angle of the eye. Here, the angular artery (the terminal branch of the facial artery/ECA) anastomoses with the dorsal nasal artery (a branch of the ophthalmic artery/ICA). This anastomosis is a vital physiological link between the internal and external carotid systems." }
             ]
           },
           cranial_cavity: {
@@ -338,6 +410,150 @@
                         </h2>
                         <p className="text-slate-600 mt-2">Comprehensive overview and core principles for {currentData.title}.</p>
                       </div>
+
+                      {topic === 'the_scalp' && (
+                        <div className="space-y-8">
+                          <div className="bg-red-50 border-l-4 border-red-500 p-5 rounded-r-xl">
+                            <h3 className="text-xl font-bold text-red-900 mb-2">The SCALP Mnemonic — Five Layers</h3>
+                            <p className="text-slate-700 text-sm mb-4">The five layers of the scalp from superficial to deep, remembered by the word <strong>SCALP</strong>:</p>
+                            <div className="space-y-3">
+                              {[
+                                { letter: "S", name: "Skin", desc: "Thick, vascular, contains hair follicles, sebaceous glands, and sweat glands." },
+                                { letter: "C", name: "Connective Tissue (Dense)", desc: "Contains vessels adhered to fibrous septa — causes profuse bleeding when cut." },
+                                { letter: "A", name: "Aponeurosis (Epicranial / Galea)", desc: "Helmet-like fibrous sheet. Receives frontal and occipital bellies of occipito-frontalis." },
+                                { letter: "L", name: "Loose Areolar Tissue", desc: "The 'DANGEROUS LAYER' — allows blood/pus to spread; contains emissary veins." },
+                                { letter: "P", name: "Pericranium", desc: "Periosteum of skull bones. Bleeds beneath it form bone-shaped hematomas." },
+                              ].map((layer, i) => (
+                                <div key={i} className="flex items-start gap-4 bg-white p-4 rounded-xl border border-red-100 shadow-sm">
+                                  <div className="bg-red-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-black text-xl shrink-0">{layer.letter}</div>
+                                  <div>
+                                    <strong className="text-slate-900 block">{layer.name}</strong>
+                                    <p className="text-slate-600 text-sm">{layer.desc}</p>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="grid md:grid-cols-2 gap-6">
+                            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                              <h4 className="font-bold text-slate-800 mb-3 flex items-center gap-2"><i className="fa-solid fa-droplet text-red-500"></i> Arterial Supply</h4>
+                              <div className="space-y-2 text-sm">
+                                <div className="bg-blue-50 p-3 rounded border border-blue-100">
+                                  <strong className="text-blue-800 block">ICA Branches (Anterior):</strong>
+                                  <p className="text-slate-700">Supratrochlear artery, Supraorbital artery</p>
+                                </div>
+                                <div className="bg-orange-50 p-3 rounded border border-orange-100">
+                                  <strong className="text-orange-800 block">ECA Branches (Posterior/Lateral):</strong>
+                                  <p className="text-slate-700">Superficial temporal, Posterior auricular, Occipital arteries</p>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                              <h4 className="font-bold text-slate-800 mb-3 flex items-center gap-2"><i className="fa-solid fa-network-wired text-red-500"></i> Nerve Supply (Pre-auricular)</h4>
+                              <div className="space-y-1 text-sm text-slate-700">
+                                {[
+                                  { nerve: "Supratrochlear + Supraorbital", branch: "Ophthalmic (V1)" },
+                                  { nerve: "Zygomaticotemporal", branch: "Maxillary (V2)" },
+                                  { nerve: "Auriculotemporal", branch: "Mandibular (V3)" },
+                                  { nerve: "Greater/Lesser Occipital", branch: "Post-auricular (C2/C3)" },
+                                ].map((n, i) => (
+                                  <div key={i} className="flex justify-between items-center bg-slate-50 p-2 rounded border border-slate-200">
+                                    <span className="font-medium">{n.nerve}</span>
+                                    <span className="text-red-700 text-xs font-bold bg-red-50 px-2 py-0.5 rounded-full">{n.branch}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {topic === 'the_face' && (
+                        <div className="space-y-8">
+                          <p className="text-slate-700 bg-white p-4 rounded-xl border border-slate-200 shadow-sm leading-relaxed">
+                            This study guide provides a detailed synthesis of facial anatomy, including its boundaries, layers, vascular supply, innervation, and musculature. It is designed to facilitate a deep understanding of the clinical and anatomical relationships within the human face.
+                          </p>
+
+                          <div className="grid md:grid-cols-2 gap-6">
+                            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                              <h4 className="font-bold text-slate-800 mb-3 flex items-center gap-2"><i className="fa-solid fa-border-all text-red-500"></i> Boundaries & Layers</h4>
+                              <div className="space-y-2 text-sm text-slate-700">
+                                <p><strong>Superiorly:</strong> The hair line (the forehead is common to both the scalp and the face).</p>
+                                <p><strong>Inferiorly:</strong> The lower border of the mandible.</p>
+                                <p><strong>Sideways:</strong> Limits extend from one auricle (ear) to the other.</p>
+                                <div className="mt-3 border-t pt-3 space-y-2">
+                                  <p><strong>Skin:</strong> Rich in sweat and sebaceous glands. Primary attachment site for facial muscles.</p>
+                                  <p><strong>Deep Fascia:</strong> Generally absent to allow free movement of facial muscles. Only present over the parotid gland and buccinator muscle.</p>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                              <h4 className="font-bold text-slate-800 mb-3 flex items-center gap-2"><i className="fa-solid fa-water text-red-500"></i> Lymphatic Drainage</h4>
+                              <ul className="space-y-3 text-sm text-slate-700">
+                                <li><strong>Submandibular Nodes:</strong> Drain the area medial to the facial artery.</li>
+                                <li><strong>Parotid Nodes:</strong> Drain the area lateral to the facial artery.</li>
+                                <li><strong>Submental Nodes:</strong> Drain the central part of the lower lip and chin.</li>
+                              </ul>
+                            </div>
+                          </div>
+
+                          <div className="bg-red-50 border-l-4 border-red-500 p-5 rounded-r-xl">
+                            <h3 className="text-xl font-bold text-red-900 mb-2">Muscles of Facial Expression</h3>
+                            <p className="text-slate-700 text-sm mb-4">Developed from the 2nd pharyngeal arch, these muscles act as sphincters and dilators of the facial orifices. They all insert into the skin and are innervated by the Facial Nerve (CN VII).</p>
+                            <div className="grid grid-cols-2 gap-4">
+                              <div className="bg-white p-3 rounded border border-red-100 shadow-sm">
+                                <strong className="text-red-800 text-sm block mb-1">Orbicularis Oculi</strong>
+                                <p className="text-slate-600 text-xs">Closes the eye. Palpebral part (blinking) and Orbital part (forceful closure).</p>
+                              </div>
+                              <div className="bg-white p-3 rounded border border-red-100 shadow-sm">
+                                <strong className="text-red-800 text-sm block mb-1">Buccinator</strong>
+                                <p className="text-slate-600 text-xs">Muscle of the cheek. Compresses cheeks against teeth during chewing.</p>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="grid md:grid-cols-2 gap-6">
+                            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                              <h4 className="font-bold text-slate-800 mb-3 flex items-center gap-2"><i className="fa-solid fa-network-wired text-red-500"></i> Sensory Innervation</h4>
+                              <p className="text-xs text-slate-500 mb-3">Primarily supplied by the Trigeminal Nerve (CN V).</p>
+                              <div className="space-y-2 text-sm">
+                                <div className="bg-slate-50 p-2 rounded border border-slate-100 flex justify-between">
+                                  <strong className="text-slate-700">Ophthalmic (V1)</strong>
+                                  <span className="text-slate-500 text-xs">Forehead, dorsum of nose</span>
+                                </div>
+                                <div className="bg-slate-50 p-2 rounded border border-slate-100 flex justify-between">
+                                  <strong className="text-slate-700">Maxillary (V2)</strong>
+                                  <span className="text-slate-500 text-xs">Cheek, upper lip, ala of nose</span>
+                                </div>
+                                <div className="bg-slate-50 p-2 rounded border border-slate-100 flex justify-between">
+                                  <strong className="text-slate-700">Mandibular (V3)</strong>
+                                  <span className="text-slate-500 text-xs">Lower lip, chin, temporal area</span>
+                                </div>
+                                <div className="bg-red-50 p-2 rounded border border-red-200 flex justify-between mt-2">
+                                  <strong className="text-red-800 text-xs">EXCEPTION: Angle of Mandible</strong>
+                                  <span className="text-red-600 text-xs font-bold">Great Auricular N. (C2, C3)</span>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                              <h4 className="font-bold text-slate-800 mb-3 flex items-center gap-2"><i className="fa-solid fa-droplet text-red-500"></i> Blood Supply</h4>
+                              <div className="space-y-3 text-sm">
+                                <div className="bg-slate-50 p-3 rounded border border-slate-100">
+                                  <strong className="text-slate-800 block mb-1">Facial Artery</strong>
+                                  <p className="text-slate-600 text-xs">Branch of ECA. Notably tortuous to allow for facial movements. Gives off superior/inferior labial branches.</p>
+                                </div>
+                                <div className="bg-slate-50 p-3 rounded border border-slate-100">
+                                  <strong className="text-slate-800 block mb-1">Facial Vein</strong>
+                                  <p className="text-slate-600 text-xs"><strong className="text-red-600">Valveless.</strong> Connects to cavernous sinus (via sup. ophthalmic vein) creating the "Dangerous Area of the Face".</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
 
                       {topic === 'cerebellum' && (
                         <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 text-center text-slate-500 italic">
@@ -943,6 +1159,164 @@
                         </>
                       )}
 
+                      {topic === 'the_scalp' && (
+                        <>
+                          <div>
+                            <h3 className="text-xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
+                              <i className="fa-solid fa-bolt text-red-600"></i> Golden Buzzwords
+                            </h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                              {[
+                                { term: '"Dangerous Layer"', def: 'Loose areolar tissue (Layer 4) — allows spread of blood/pus to cranial cavity via emissary veins.' },
+                                { term: '"Valveless Veins"', def: 'Emissary veins — can spread infection in either direction between scalp and dural sinuses.' },
+                                { term: '"Helmet-like"', def: 'Epicranial Aponeurosis (Galea Aponeurotica) — covers the skull vault.' },
+                                { term: '"Bone-shaped hematoma"', def: 'Bleeding beneath the pericranium — limited by sutural ligaments, mirrors the skull bone shape.' },
+                                { term: '"Profuse bleeding"', def: 'Dense connective tissue septa hold vessels open, preventing retraction when cut.' },
+                                { term: '"Supra-orbital margin"', def: 'The anterior boundary of the scalp at eyebrow level.' },
+                              ].map((item, idx) => (
+                                <div key={idx} className="bg-white border border-slate-200 p-4 rounded-lg shadow-sm hover:border-red-300 hover:shadow-md transition-all">
+                                  <strong className="text-red-800 block mb-1 text-lg">{item.term}</strong>
+                                  <p className="text-slate-600 text-sm">{item.def}</p>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="grid md:grid-cols-2 gap-8 pt-4 border-t border-slate-200">
+                            <div className="bg-red-50 rounded-xl p-6 border border-red-200 shadow-sm">
+                              <h3 className="text-xl font-bold text-red-900 mb-4 flex items-center gap-2">
+                                <i className="fa-solid fa-brain"></i> The SCALP Mnemonic
+                              </h3>
+                              <div className="space-y-2">
+                                {[
+                                  { l: "S", t: "Skin" },
+                                  { l: "C", t: "Connective Tissue (Dense)" },
+                                  { l: "A", t: "Aponeurosis (Galea)" },
+                                  { l: "L", t: "Loose Areolar Tissue ← DANGEROUS" },
+                                  { l: "P", t: "Pericranium" },
+                                ].map((row, i) => (
+                                  <div key={i} className="bg-white p-3 rounded shadow-sm border-l-4 border-red-500 flex items-center gap-3">
+                                    <strong className="text-red-700 text-xl w-6">{row.l}</strong>
+                                    <span className="text-slate-700 text-sm">{row.t}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+
+                            <div>
+                              <h3 className="text-xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
+                                <i className="fa-solid fa-list text-slate-600"></i> Key Terms and Hooks
+                              </h3>
+                              <div className="flex flex-col gap-3">
+                                {[
+                                  { term: "Adherent Layers", def: "First 3 layers (S, C, A) are bound together and move as a single unit." },
+                                  { term: "Septa", def: "Fibrous partitions in dense connective tissue that hold arteries open → profuse bleeding." },
+                                  { term: "Highest Nuchal Line", def: "Posterior bony attachment for occipital bellies and pericranium." },
+                                  { term: "Vertex", def: "Highest point of the scalp — landmark for nerve and arterial distribution." },
+                                  { term: "Sebaceous Cysts", def: "Common in scalp due to high density of sebaceous glands in the skin layer." },
+                                  { term: "Parotid Nodes", def: "Drain the pre-auricular (anterior) region of the scalp." },
+                                  { term: "Mastoid/Occipital Nodes", def: "Drain the post-auricular (posterior) region of the scalp." },
+                                ].map((item, idx) => (
+                                  <div key={idx} className="border border-slate-200 p-3 rounded-lg bg-white hover:border-red-300 transition-colors">
+                                    <h4 className="font-bold text-red-800 mb-1">{item.term}</h4>
+                                    <p className="text-slate-600 text-sm">{item.def}</p>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      )}
+
+                      {topic === 'the_face' && (
+                        <>
+                          <div>
+                            <h3 className="text-xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
+                              <i className="fa-solid fa-bolt text-red-600"></i> Golden Buzzwords
+                            </h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                              {[
+                                { term: '"2nd pharyngeal arch"', def: 'The universal developmental origin for all facial muscles.' },
+                                { term: '"Tortuous artery"', def: 'The hallmark of the facial artery, adapted for mandibular movement.' },
+                                { term: '"8 segments"', def: 'The specific quantitative structural composition of the orbicularis oris.' },
+                                { term: '"3 emissary veins"', def: 'The specific connection between the pterygoid plexus and cavernous sinus.' },
+                              ].map((item, idx) => (
+                                <div key={idx} className="bg-white border border-slate-200 p-4 rounded-lg shadow-sm hover:border-red-300 hover:shadow-md transition-all">
+                                  <strong className="text-red-800 block mb-1 text-lg">{item.term}</strong>
+                                  <p className="text-slate-600 text-sm">{item.def}</p>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="grid md:grid-cols-2 gap-8 pt-4 border-t border-slate-200">
+                            <div className="bg-red-50 rounded-xl p-6 border border-red-200 shadow-sm space-y-6">
+                              
+                              <div>
+                                <h3 className="text-xl font-bold text-red-900 mb-3 flex items-center gap-2">
+                                  <i className="fa-solid fa-brain"></i> Facial N. Branches Mnemonic
+                                </h3>
+                                <p className="text-slate-700 font-bold mb-3 italic">"Ten Zebras Bit My Cat"</p>
+                                <div className="space-y-2">
+                                  {[
+                                    { l: "Ten", t: "Temporal" },
+                                    { l: "Zebras", t: "Zygomatic" },
+                                    { l: "Bit", t: "Buccal" },
+                                    { l: "My", t: "Mandibular" },
+                                    { l: "Cat", t: "Cervical" },
+                                  ].map((row, i) => (
+                                    <div key={i} className="bg-white p-2 rounded shadow-sm border-l-4 border-red-500 flex items-center gap-3">
+                                      <strong className="text-red-700 w-12 text-right text-sm">{row.l}</strong>
+                                      <span className="text-slate-700 text-sm font-semibold">{row.t}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+
+                              <div>
+                                <h3 className="text-xl font-bold text-red-900 mb-2 flex items-center gap-2">
+                                  <i className="fa-solid fa-eye"></i> Orbicularis Oculi Functions
+                                </h3>
+                                <ul className="text-slate-700 text-sm bg-white p-4 rounded shadow-sm border border-red-100 space-y-2">
+                                  <li><strong>Palpebral</strong> = Peeping/Blinking (Gentle)</li>
+                                  <li><strong>Orbital</strong> = Ouch! (Tight closure for protection)</li>
+                                </ul>
+                              </div>
+
+                              <div>
+                                <h3 className="text-xl font-bold text-red-900 mb-2 flex items-center gap-2">
+                                  <i className="fa-solid fa-shield-halved"></i> The Sensory "Exceptions"
+                                </h3>
+                                <p className="text-slate-700 text-sm bg-white p-4 rounded shadow-sm border border-red-100">
+                                  <strong>Great Auricular = Gives Angle:</strong> While the Trigeminal nerve (V) dominates the face, the Great Auricular (C2,3) "guards the angle." It is the only sensory nerve supplying the angle of the mandible, unlike the rest of the face supplied by CN V.
+                                </p>
+                              </div>
+
+                            </div>
+
+                            <div>
+                              <h3 className="text-xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
+                                <i className="fa-solid fa-book-medical text-slate-600"></i> Medical Glossary
+                              </h3>
+                              <div className="flex flex-col gap-3">
+                                {[
+                                  { term: "Angular artery", def: "The terminal part of the facial artery at the medial angle of the eye." },
+                                  { term: "Buccopharyngeal fascia", def: "The deep fascia covering the buccinator muscle and the pharynx." },
+                                  { term: "Pes Anserinus", def: "The \"goose’s foot\" branching pattern of the facial nerve within the parotid gland." },
+                                  { term: "Pterygomandibular raphe", def: "A fibrous band connecting the pterygoid hamulus to the mylohyoid line of the mandible; serves as an origin for the buccinator." },
+                                  { term: "Cavernous Sinus Thrombosis", def: "A dangerous potential complication of facial infections spreading through venous pathways." }
+                                ].map((item, idx) => (
+                                  <div key={idx} className="border border-slate-200 p-3 rounded-lg bg-white hover:border-red-300 transition-colors">
+                                    <h4 className="font-bold text-red-800 mb-1">{item.term}</h4>
+                                    <p className="text-slate-600 text-sm">{item.def}</p>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      )}
+
                       {topic === 'cranial_cavity' && (
                         <>
                           {/* Cranial Cavity Glossary */}
@@ -1017,6 +1391,63 @@
 
                 </div>
               </main>
+            </div>
+          );
+        }
+
+        // --- Scalp & Face Sub-Dashboard ---
+        function ScalpFaceDashboard({ onSelectTopic, onBack }) {
+          return (
+            <div className="min-h-screen bg-slate-100 font-sans text-slate-800 p-6 md:p-12">
+              <div className="max-w-6xl mx-auto space-y-8 animate-in">
+
+                <button onClick={onBack} className="group flex items-center gap-2 text-slate-500 hover:text-red-600 font-bold transition-all">
+                  <i className="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i>
+                  <span className="text-sm uppercase tracking-wider">Back to Dashboard</span>
+                </button>
+
+                <header className="flex items-center justify-between pb-6 border-b border-slate-200">
+                  <div className="flex items-center gap-4">
+                    <div className="bg-red-600 p-3 rounded-xl shadow-lg w-12 h-12 flex items-center justify-center text-white text-xl">
+                      <i className="fa-solid fa-face-smile"></i>
+                    </div>
+                    <div>
+                      <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Scalp &amp; Face</h1>
+                      <p className="text-slate-500 font-medium mt-1">Select a topic to begin your review</p>
+                    </div>
+                  </div>
+                </header>
+
+                <main>
+                  <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+                    <i className="fa-solid fa-book-open text-red-600"></i>
+                    Topics in this Module
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl">
+
+                    <div onClick={() => onSelectTopic('the_scalp')}
+                      className="relative overflow-hidden rounded-2xl border-2 p-6 transition-all duration-300 ease-out flex flex-col h-full transform cursor-pointer hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.02] hover:border-red-500 group bg-red-50 border-red-200">
+                      <div className="bg-white w-16 h-16 rounded-2xl shadow-sm flex items-center justify-center mb-6 shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+                        <i className="fa-solid fa-head-side text-2xl text-red-500"></i>
+                      </div>
+                      <h3 className="text-xl font-bold mb-2 text-slate-900">The Scalp</h3>
+                      <p className="text-slate-600 mb-8 line-clamp-2 flex-1">Five layers (SCALP mnemonic), vascularization, innervation, the dangerous layer, and clinical anatomy.</p>
+                      <button className="w-full py-3 px-4 bg-white/50 hover:bg-white text-slate-800 border border-slate-300 font-semibold rounded-xl transition-all duration-200 transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 mt-auto shadow-sm">Open Review</button>
+                    </div>
+
+                    <div onClick={() => onSelectTopic('the_face')}
+                      className="relative overflow-hidden rounded-2xl border-2 p-6 transition-all duration-300 ease-out flex flex-col h-full transform cursor-pointer hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.02] hover:border-red-500 group bg-red-50 border-red-200">
+                      <div className="bg-white w-16 h-16 rounded-2xl shadow-sm flex items-center justify-center mb-6 shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+                        <i className="fa-solid fa-face-grin text-2xl text-red-500"></i>
+                      </div>
+                      <h3 className="text-xl font-bold mb-2 text-slate-900">The Face</h3>
+                      <p className="text-slate-600 mb-8 line-clamp-2 flex-1">Muscles of facial expression, sensory and motor nerve supply, arterial supply, and lymphatic drainage.</p>
+                      <button className="w-full py-3 px-4 bg-white/50 hover:bg-white text-slate-800 border border-slate-300 font-semibold rounded-xl transition-all duration-200 transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 mt-auto shadow-sm">Open Review</button>
+                    </div>
+
+                  </div>
+                </main>
+              </div>
             </div>
           );
         }
