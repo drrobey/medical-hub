@@ -177,6 +177,23 @@
                       </button>
                     </div>
 
+                    {/* NEW: Temporal & Infratemporal Fossa Module Card */}
+                    <div 
+                      onClick={() => onSelectGuide('temporal_fossa')}
+                      className="relative overflow-hidden rounded-2xl border-2 p-6 transition-all duration-300 ease-out flex flex-col h-full transform cursor-pointer hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.02] hover:border-red-500 group bg-red-50 border-red-200"
+                    >
+                      <div className="bg-white w-16 h-16 rounded-2xl shadow-sm flex items-center justify-center mb-6 shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+                        <i className="fa-solid fa-tooth text-2xl text-red-500"></i>
+                      </div>
+                      <h3 className="text-xl font-bold mb-2 text-slate-900">Temporal & Infratemporal Fossa</h3>
+                      <p className="text-slate-600 mb-8 line-clamp-2 flex-1">
+                        Muscles of mastication, TMJ anatomy, ligaments, and mandibular movements.
+                      </p>
+                      <button className="w-full py-3 px-4 bg-white/50 hover:bg-white text-slate-800 border border-slate-300 font-semibold rounded-xl transition-all duration-200 transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 mt-auto shadow-sm">
+                         Open Review
+                      </button>
+                    </div>
+
                   </div>
                 </main>
               </div>
@@ -301,6 +318,26 @@
               { title: "Describe the Middle Meningeal Artery: Origin, Course, and Applied Anatomy.", answer: "The middle meningeal artery originates from the first part of the maxillary artery within the infratemporal fossa. It enters the cranial cavity through the foramen spinosum. Once inside the middle cranial fossa, it runs an extradural course between the two layers of the dura mater, grooving the squamous temporal bone. It eventually divides into a frontal (anterior) and a parietal (posterior) branch.\n\nThe artery's course is closely related to the pterion on the surface of the skull. Because the pterion is the thinnest part of the cranium, a blow to this area often fractures the bone and tears the underlying middle meningeal artery. This results in an extradural hemorrhage. The accumulating blood (hematoma) presses on the motor area of the brain, potentially causing contralateral hemiplegia. Surgical intervention via a burr-hole at the pterion is often required for decompression." },
               { title: "The Intracranial Course and Branching of the Internal Carotid Artery (ICA)", answer: "The internal carotid artery (ICA) begins in the neck as a terminal branch of the common carotid artery and is divided into four distinct intracranial parts:\n\nCervical Part: This segment resides within the carotid sheath and notably provides no branches.\n\nPetrous Part: The artery enters the skull through the carotid canal in the petrous temporal bone. It gives rise to the corticotympanic branches (to the middle ear) and the pterygoid branches (to the pterygoid canal).\n\nCavernous Part: The ICA passes forward through the cavernous sinus, positioned inferolateral to the abducent nerve. Its branches include those to the trigeminal ganglion, hypophyseal branches to the pituitary gland, and a meningeal branch to the dura of the anterior cranial fossa.\n\nCerebral Part: The artery emerges through the roof of the cavernous sinus, medial to the anterior clinoid process. It terminates by dividing into the anterior and middle cerebral arteries. Before this, it gives off the ophthalmic, posterior communicating, and anterior choroidal arteries." },
               { title: "The Falx Cerebri: Anatomy, Attachments, and Associated Venous Sinuses", answer: "The falx cerebri is a large, sickle-shaped dural fold situated vertically along the median fissure between the two cerebral hemispheres. Its anatomical structure is defined by its borders and attachments:\n\nApex (Anterior): Attached to the crista galli and the frontal crest.\n\nBase (Posterior): Attached to the upper surface of the tentorium cerebelli.\n\nUpper Border: Attached to the lips of the sagittal sulcus. This border is convex and encloses the superior sagittal sinus.\n\nLower Border: This border is free and concave, running along the corpus callosum. It encloses the inferior sagittal sinus.\n\nJunction of Base: At the line where the falx cerebri meets the tentorium cerebelli, it encloses the straight sinus." }
+            ]
+          },
+          // NEW: Temporal Fossa content injected directly from the study guide
+          temporal_fossa: {
+            title: "Temporal & Infratemporal Fossa",
+            shortEssays: [
+              { q: "What is the common embryological origin and general innervation shared by the muscles of mastication?", a: "The muscles of mastication develop from the mesoderm of the first pharyngeal arch. Because of this shared origin, all four muscles are supplied by branches of the mandibular nerve (V3)." },
+              { q: "Describe the dual action of the Temporalis muscle based on its fiber orientation.", a: "The anterior vertical fibers of the temporalis act as a strong elevator of the mandible. Conversely, its posterior horizontal fibers are responsible for retracting the mandible, making it the only muscle capable of this movement." },
+              { q: "Where does the Lateral Pterygoid muscle insert, and why is this insertion unique?", a: "The lateral pterygoid inserts into the fovea in front of the neck of the mandible, as well as the capsule and articular disc of the TMJ. This allows the muscle to pull the disc forward during movements like depression and protrusion." },
+              { q: "How does the structure of the Articular Disc facilitate the movement of the TMJ?", a: "The disc is made of fibrocartilage and features a concavo-convex upper surface to fit the articular tubercle and mandibular fossa. Its lower surface is concave to accommodate the head of the mandible, effectively dividing the joint into upper and lower compartments." },
+              { q: "What is the functional significance of the Lateral (Temporo-mandibular) ligament?", a: "This ligament is attached above the tubercle of the zygomatic arch and below to the neck of the mandible. Its primary role is to limit posterior movement of the mandible, which protects the external auditory meatus and prevents backward dislocation." },
+              { q: "Which muscles are responsible for the protrusion of the mandible?", a: "Protrusion is achieved through the coordinated action of the lateral pterygoid and medial pterygoid muscles. Additionally, the superficial oblique fibers of the masseter assist in pulling the mandible forward." },
+              { q: "Identify the origin points of the two heads of the Medial Pterygoid muscle.", a: "The superficial head originates from the tuberosity of the maxilla. The larger deep head arises from the medial surface of the lateral pterygoid plate." },
+              { q: "What anatomical structures provide the blood supply to the TMJ?", a: "The blood supply to the temporomandibular joint is derived from two main vessels: the superficial temporal artery and the maxillary artery." },
+              { q: "Describe the mechanics involved in the depression of the mandible.", a: "Depression is primarily initiated by the lateral pterygoid, which pulls the mandibular head and disc forward. This action is assisted by the digastric, geniohyoid, and mylohyoid muscles, along with the natural effect of gravity." },
+              { q: "What is the Spheno-mandibular ligament, and where is it located relative to the joint?", a: "The spheno-mandibular ligament is an embryological remnant of the first pharyngeal arch. It is located medial to the joint, extending from the spine of the sphenoid to the lingula of the mandibular foramen." }
+            ],
+            longEssays: [
+              { title: "Comprehensive Analysis of the Muscles of Mastication", answer: "The four muscles of mastication—temporalis, masseter, medial pterygoid, and lateral pterygoid—are a functional group derived from the first pharyngeal arch and innervated by the mandibular nerve (V3). Geographically, the temporalis occupies the temporal fossa, the masseter overlies the ramus of the mandible, and the two pterygoids are located within the infratemporal fossa.\n\nElevation of the mandible, an essential action for closing the mouth and biting, is performed by the temporalis, masseter, and medial pterygoid. The masseter is particularly noted as an \"antigravity muscle.\" While most of these muscles close the jaw, the lateral pterygoid is unique because its primary function is depression (opening the mouth) by pulling the mandibular head and articular disc forward.\n\nSpecialized movements include retraction and protrusion. The temporalis is the sole retractor of the mandible via its posterior horizontal fibers. Protrusion is a collaborative effort between the lateral and medial pterygoids and the superficial masseter. Finally, side-to-side chewing movements are produced by the alternating contraction of the medial and lateral pterygoids on opposite sides, which pushes the chin toward the opposing side." },
+              { title: "Anatomy and Functional Mechanics of the TMJ", answer: "The TMJ is a synovial-condylar joint that facilitates the complex movements required for speech and mastication. It involves the articulation of the mandibular head with the mandibular fossa and articular tubercle of the temporal bone. Unlike most synovial joints, these surfaces are covered with fibrocartilage. A key structural feature is the fibrocartilaginous articular disc, which divides the joint into two distinct compartments and is shaped to fit the specific contours of the temporal and mandibular bones.\n\nJoint stability is maintained by three primary ligaments. The Lateral (Temporo-mandibular) ligament is the most clinically significant for stability, as it attaches to the zygomatic arch and the mandibular neck to prevent posterior dislocation, thereby protecting the external auditory meatus. The Spheno-mandibular ligament, a remnant of the first pharyngeal arch, lies medially and connects the sphenoid spine to the mandibular lingula. The Stylo-mandibular ligament, a condensation of cervical fascia, extends from the styloid process to the mandibular angle.\n\nClinically, the joint is most susceptible to anterior dislocation. The nerve supply (auriculotemporal and masseteric) and blood supply (maxillary and superficial temporal arteries) ensure the joint remains functional and nourished." }
             ]
           }
         };
@@ -552,6 +589,45 @@
                               </div>
                             </div>
                           </div>
+                        </div>
+                      )}
+
+                      {/* NEW: Temporal Fossa Summary */}
+                      {topic === 'temporal_fossa' && (
+                        <div className="space-y-6">
+                           <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm leading-relaxed text-slate-700">
+                              <p className="mb-4">
+                                This module covers the anatomy of the <strong>Temporal and Infratemporal Fossa</strong>, focusing on the muscles of mastication and the Temporomandibular Joint (TMJ).
+                              </p>
+                              <p>
+                                The muscles of mastication (Temporalis, Masseter, Medial Pterygoid, and Lateral Pterygoid) all share a common embryological origin from the <strong>1st pharyngeal arch</strong> and are collectively innervated by the Mandibular Nerve (V3). They act upon the TMJ, a highly specialized synovial-condylar joint divided into two compartments by a fibrocartilaginous disc.
+                              </p>
+                           </div>
+                           
+                           <div className="grid md:grid-cols-2 gap-6">
+                            <div className="bg-red-50 border-l-4 border-red-500 p-5 rounded-r-xl">
+                              <h4 className="font-bold text-red-900 mb-3 flex items-center gap-2">
+                                <i className="fa-solid fa-tooth"></i> Muscles of Mastication
+                              </h4>
+                              <ul className="space-y-3 text-sm text-slate-700">
+                                <li><strong>Temporalis:</strong> Strong elevator. The <em>only</em> retractor (via posterior horizontal fibers).</li>
+                                <li><strong>Masseter:</strong> Powerful elevator; acts as the primary "antigravity muscle".</li>
+                                <li><strong>Lateral Pterygoid:</strong> The primary depressor (opens jaw); pulls disc forward. Inserts into the fovea.</li>
+                                <li><strong>Medial Pterygoid:</strong> Assists in elevation; works with lateral pterygoid for side-to-side movements.</li>
+                              </ul>
+                            </div>
+                            
+                            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                              <h4 className="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                                <i className="fa-solid fa-bone text-red-500"></i> The TMJ & Ligaments
+                              </h4>
+                              <ul className="space-y-3 text-sm text-slate-700">
+                                <li><strong>Articular Disc:</strong> Made of <em>fibrocartilage</em>; biconcave/concavo-convex shape.</li>
+                                <li><strong>Lateral Ligament:</strong> Prevents posterior dislocation, protecting external auditory meatus.</li>
+                                <li><strong>Spheno-mandibular Ligament:</strong> Medial to the joint; remnant of 1st pharyngeal arch. Attaches to the lingula.</li>
+                              </ul>
+                            </div>
+                           </div>
                         </div>
                       )}
 
@@ -1055,6 +1131,54 @@
                                   { term: 'Paravermal Part', def: 'The portion of the cerebellar hemisphere immediately adjacent to the vermis; connected to distal limb muscles.' },
                                   { term: 'Tentorium Cerebelli', def: 'The "tent" of dura mater that roofs over the cerebellum.' },
                                   { term: 'VLN (Ventral Lateral Nucleus)', def: 'The specific part of the thalamus that receives cerebellar outputs via the SCP.' }
+                                ].map((item, idx) => (
+                                  <div key={idx} className="border border-slate-200 p-3 rounded-lg bg-white hover:border-red-300 transition-colors">
+                                    <h4 className="font-bold text-red-800 mb-1">{item.term}</h4>
+                                    <p className="text-slate-600 text-sm">{item.def}</p>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      )}
+
+                      {/* NEW: Temporal Fossa Glossary */}
+                      {topic === 'temporal_fossa' && (
+                        <>
+                          <div>
+                            <h3 className="text-xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
+                              <i className="fa-solid fa-bolt text-red-600"></i> Golden Buzzwords
+                            </h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                              {[
+                                { term: 'Biconcave/Concavo-convex', def: 'Describes the shape of the articular disc of the TMJ.' },
+                                { term: 'Mandibular Nerve (V3)', def: 'The universal nerve supply for the entire muscles of mastication group.' },
+                                { term: 'Anterior Dislocation', def: 'The most common direction for TMJ injury.' },
+                                { term: 'Lingula', def: 'The attachment point for the spheno-mandibular ligament on the mandible.' }
+                              ].map((item, idx) => (
+                                <div key={idx} className="bg-white border border-slate-200 p-4 rounded-lg shadow-sm hover:border-red-300 hover:shadow-md transition-all">
+                                  <strong className="text-red-800 block mb-1 text-lg">{item.term}</strong>
+                                  <p className="text-slate-600 text-sm">{item.def}</p>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                          
+                          <div className="grid md:grid-cols-1 gap-8 pt-4 border-t border-slate-200">
+                            <div>
+                              <h3 className="text-xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
+                                <i className="fa-solid fa-list text-slate-600"></i> Key Terms and "Hooks"
+                              </h3>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                {[
+                                  { term: '1st Pharyngeal Arch', def: 'The embryological origin for all muscles of mastication and the spheno-mandibular ligament.' },
+                                  { term: 'Antigravity Muscle', def: 'A term specifically applied to the masseter due to its role in elevating the mandible against gravity.' },
+                                  { term: 'Articular Tubercle', def: 'The bony prominence on the temporal bone that the mandibular head moves toward during depression.' },
+                                  { term: 'Fibrocartilage', def: 'The specific tissue type covering the articulating surfaces of the TMJ (instead of hyaline cartilage).' },
+                                  { term: 'Fovea', def: 'The specific depression on the neck of the mandible where the lateral pterygoid inserts.' },
+                                  { term: 'Infratemporal Fossa', def: 'The anatomical space containing the medial and lateral pterygoid muscles.' },
+                                  { term: 'Occlusal Position', def: 'The state where the upper and lower teeth are in opposition during jaw closure.' }
                                 ].map((item, idx) => (
                                   <div key={idx} className="border border-slate-200 p-3 rounded-lg bg-white hover:border-red-300 transition-colors">
                                     <h4 className="font-bold text-red-800 mb-1">{item.term}</h4>
