@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MicroBiology Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        @keyframes slideInRight { 0% { transform: translateX(60px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+        @keyframes slideInLeft  { 0% { transform: translateX(-60px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+        .slide-forward  { animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .slide-backward { animation: slideInLeft  0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+        @keyframes fadeSlideUp { 0% { opacity: 0; transform: translateY(15px); } 100% { opacity: 1; transform: translateY(0); } }
+        .animate-in { animation: fadeSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    </style>
+</head>
+<body class="bg-slate-50 overflow-x-hidden">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        // ─── App ────────────────────────────────────────────────────────────────────
+        function App() {
+          const [currentView, setCurrentView] = useState('dashboard');
+          const [direction, setDirection]     = useState('forward');
+
+          const navigateTo = (view) => {
+            setDirection(view === 'dashboard' ? 'backward' : 'forward');
+            setCurrentView(view);
+          };
+
+          // Updated to link directly back to the CNS module tab
+          const backToPortal = () => { window.location.href = 'index.html#cns'; };
+
+          return (
+            <>
+              <div key={currentView} className={direction === 'forward' ? 'slide-forward' : 'slide-backward'}>
+                {currentView === 'dashboard' ? (
+                  <Dashboard onSelectGuide={(id) => navigateTo(id)} onBackToPortal={backToPortal} />
+                ) : (
+                  <MicroTopicGuide topic={currentView} onBack={() => navigateTo('dashboard')} />
+                )}
+              </div>
+              <div className="fixed bottom-2 right-3 text-right text-[10px] md:text-xs text-slate-400/50 font-medium pointer-events-none z-50 select-none">
+                <div>Dr.Zeyad Robey</div>
+                <div>Ain Shams University</div>
+              </div>
+            </>
+          );
+        }
+
+        // ─── Dashboard ──────────────────────────────────────────────────────────────
+        function Dashboard({ onSelectGuide, onBackToPortal }) {
+          const topics = [
+            {
+              id: 'muscle_infections',
+              title: 'Infections Affecting Muscle Tone',
+              desc:  'Pathogens that disrupt neuromuscular function, toxin mechanisms, and clinical presentations.',
+              icon:  'fa-solid fa-person-running',
+              status: 'active',
+            },
+            {
+              id: 'bacterial_meningitis',
+              title: 'Bacterial Meningitis',
+              desc:  'Causative organisms, pathogenesis, CSF findings, treatment, and prophylaxis.',
+              icon:  'fa-solid fa-bacteria',
+              status: 'active',
+            },
+            {
+              id: 'fungal_meningitis',
+              title: 'Fungal Meningitis',
+              desc:  'Cryptococcus, Candida, Aspergillus — diagnosis, risk factors, and antifungal therapy.',
+              icon:  'fa-solid fa-seedling',
+              status: 'active',
+            },
+          ];
+
+          return (
+            <div className="min-h-screen bg-slate-100 font-sans text-slate-800 p-6 md:p-12">
+              <div className="max-w-6xl mx-auto space-y-8 animate-in">
+
+                <button onClick={onBackToPortal}
+                  className="group flex items-center gap-2 text-slate-500 hover:text-purple-700 font-bold transition-all">
+                  <i className="fa-solid fa-house group-hover:-translate-y-1 transition-transform"></i>
+                  <span className="text-sm uppercase tracking-wider">Back to Portal</span>
+                </button>
+
+                <header className="flex items-center justify-between pb-6 border-b border-slate-200">
+                  <div className="flex items-center gap-4">
+                    <div className="bg-purple-800 p-3 rounded-xl shadow-lg w-12 h-12 flex items-center justify-center text-white text-xl">
+                      <i className="fa-solid fa-biohazard"></i>
+                    </div>
+                    <div>
+                      <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">MicroBiology Hub</h1>
+                      <p className="text-slate-500 font-medium mt-1">Microbiology Subject Dashboard</p>
+                    </div>
+                  </div>
+                </header>
+
+                <main>
+                  <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+                    <i className="fa-solid fa-book-open text-purple-700"></i>
+                    Available Study Modules
+                  </h2>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {topics.map((t) => (
+                      <div key={t.id}
+                        onClick={() => t.status === 'active' && onSelectGuide(t.id)}
+                        className={`relative overflow-hidden rounded-2xl border-2 p-6 transition-all duration-300 ease-out flex flex-col h-full transform
+                          bg-purple-50 border-purple-200
+                          ${t.status === 'active'
+                            ? 'cursor-pointer hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.02] hover:border-purple-500 group'
+                            : 'opacity-80 cursor-not-allowed'}`}
+                      >
+                        {t.status === 'coming_soon' && (
+                          <div className="absolute top-4 right-4 bg-purple-100 text-purple-700 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full">
+                            Coming Soon
+                          </div>
+                        )}
+                        <div className={`bg-white w-16 h-16 rounded-2xl shadow-sm flex items-center justify-center mb-6 shrink-0 transition-transform duration-300 ${t.status === 'active' ? 'group-hover:scale-110 group-hover:rotate-3' : ''}`}>
+                          <i className={`${t.icon} text-2xl text-purple-600`}></i>
+                        </div>
+                        <h3 className="text-xl font-bold mb-2 text-slate-900">{t.title}</h3>
+                        <p className="text-slate-600 mb-8 line-clamp-2 flex-1">{t.desc}</p>
+                        {t.status === 'active' ? (
+                          <button className="w-full py-3 px-4 bg-white/50 hover:bg-white text-slate-800 border border-slate-300 font-semibold rounded-xl transition-all duration-200 transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 mt-auto shadow-sm">
+                            Open Review
+                          </button>
+                        ) : (
+                          <div className="w-full py-3 px-4 bg-purple-100 text-purple-500 font-semibold rounded-xl flex items-center justify-center gap-2 mt-auto">
+                            <i className="fa-regular fa-clock"></i> Content Coming Soon
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </main>
+              </div>
+            </div>
+          );
+        }
+
+        // ─── Content Database ────────────────────────────────────────────────────────
+        const contentDB = {
+          muscle_infections: {
+            title: 'Infections Affecting Muscle Tone',
+            shortEssays: [
+              { q: "Describe the morphological appearance of Clostridium tetani under a microscope.", a: "Clostridium tetani appears as Gram-positive, motile, non-capsulated bacilli. They are characterized by terminal, bulging spores that give the bacteria a distinctive \"drumstick\" appearance." },
+              { q: "How does the transmission of infant botulism differ from classic foodborne botulism?", a: "In foodborne botulism, the preformed toxin is ingested from contaminated food. In infant botulism, the organism itself is ingested (often via honey), germinating and producing the toxin within the infant's intestinal tract." },
+              { q: "What is the specific physiological mechanism that causes muscle spasms in tetanus?", a: "Tetanospasmin travels to the spinal cord and blocks the release of inhibitory mediators like glycine and GABA. This removal of inhibition results in sustained muscular excitation and spastic paralysis." },
+              { q: "Why is a \"dark, quiet area\" recommended for the treatment of a tetanus patient?", a: "Patients with tetanus suffer from exaggerated reflexes and severe muscle spasms. A dark, quiet environment minimizes external stimuli that could trigger these painful and potentially life-threatening spasms." },
+              { q: "Explain the significance of \"swollen cans\" in the context of Clostridium botulinum.", a: "Swollen cans indicate that clostridial proteolytic enzymes have produced gas during the fermentation process. These cans must be discarded as they signal the presence of C. botulinum and its toxins." },
+              { q: "Identify the most common route by which pathogens reach the CNS.", a: "The most common route is hematogenous spread through the arterial blood supply. Pathogens can also enter via retrograde venous spread through connections between facial veins and the venous sinuses of the skull." },
+              { q: "What role does acetylcholine play in the clinical presentation of botulism?", a: "The botulinum toxin acts as a protease that cleaves proteins required for the release of acetylcholine at peripheral synapses. Without acetylcholine, nerve impulses cannot reach the muscles, resulting in flaccid paralysis." },
+              { q: "Distinguish between the spores of C. tetani and C. botulinum based on their location.", a: "C. tetani produces terminal and bulging spores (at the very end of the bacillus), while C. botulinum produces oval and subterminal spores (located near but not at the end)." },
+              { q: "What is meant by \"passive-active immunity\" in the prophylaxis of tetanus?", a: "This refers to the simultaneous administration of tetanus immunoglobulin (passive immunity for immediate protection) and the tetanus toxoid vaccine (active immunity for long-term protection). These must be injected at different sites on the body." },
+              { q: "How can the heat-labile nature of botulinum toxin be used for disease prevention?", a: "Because the botulinum toxin is heat-labile, it can be inactivated by boiling food for several minutes. Sufficient cooking and proper canning techniques are effective at preventing the disease." }
+            ],
+            longEssays:  [
+              { title: "Compare and Contrast Tetanus and Botulism", answer: "Both Clostridium tetani and Clostridium botulinum are Gram-positive, anaerobic, spore-forming bacilli that produce powerful neurotoxins; however, their clinical effects are diametrically opposed. C. tetani produces tetanospasmin, which travels to the CNS via retrograde axonal transport to block the release of inhibitory neurotransmitters (GABA and glycine). This results in \"spastic paralysis\" or tetany, characterized by increased muscle tone, lockjaw, and risus sardonicus.\n\nIn contrast, C. botulinum produces a toxin that acts at the peripheral nerve synapses rather than the CNS. It blocks the release of the excitatory neurotransmitter acetylcholine by cleaving essential proteins. This prevents muscle contraction entirely, leading to \"flaccid paralysis.\" While tetanus presents with rigid contractions and exaggerated reflexes, botulism presents with descending weakness, diplopia, and no fever. Both can lead to death through respiratory failure, but for opposite reasons: one due to rigid spasm of respiratory muscles and the other due to their total relaxation." },
+              { title: "Pathogenesis of Tetanus and Clinical Management", answer: "The pathogenesis of tetanus begins when C. tetani spores from soil enter a wound, particularly one with necrotic tissue and poor blood supply, which favors anaerobic vegetation. Once the spores germinate, they produce tetanospasmin. This toxin enters the motor neurons and moves intra-axonally to the anterior horn cells of the spinal cord. By blocking inhibitory signals, it causes the muscle to remain in a state of sustained contraction.\n\nDiagnosis is primarily clinical, focusing on symptoms like trismus. However, laboratory confirmation involves taking a wound exudate specimen for Gram staining (looking for \"drumstick\" bacilli) and culturing the organism on anaerobic media like Robertson cooked meat medium. Treatment requires a multi-pronged approach: maintaining an airway, neutralizing unbound toxin with Tetanus immune globulin, and eliminating the bacteria with antibiotics such as Metronidazole or Penicillin G. Prevention following trauma involves cleaning/debriding the wound and administering a toxoid booster, with the addition of immunoglobulin if the wound is grossly contaminated." }
+            ],
+          },
+          bacterial_meningitis: {
+            title: 'Bacterial Meningitis',
+            shortEssays: [
+              { q: "Define meningitis and categorize its types based on the speed of progression.", a: "Meningitis is an inflammatory process of the meninges caused by infectious or non-infectious factors. It is categorized as acute (caused by pyogenic bacteria or viruses), subacute (caused by M. tuberculosis or fungi), or chronic (a complication of acute or subacute stages)." },
+              { q: "What is the most common route by which pathogens reach the meninges, and what are the resulting clinical manifestations?", a: "The most common route is hematogenous spread (bacteremia) following the invasion of the upper respiratory mucosa. Once the meninges are invaded, the resulting irritation, inflammatory response, and edema cause the characteristic clinical manifestations." },
+              { q: "Under what clinical circumstances is a lumbar puncture (LP) contraindicated, and why?", a: "An LP should not be performed if there are signs of increased intracranial tension, such as papilledema or focal neurologic signs, to avoid fatal brain stem herniation. It is also contraindicated if a mass lesion, such as a brain abscess or tumor, is detected on a CT scan." },
+              { q: "Describe the classic physical signs and rapid progression associated with meningococcal meningitis.", a: "This form of meningitis may develop extremely rapidly, potentially causing death within six hours of initial symptoms. Key signs include fever, headache, nuchal rigidity (neck stiffness), and the presence of petechiae, which are small, dark purplish hemorrhages in the skin." },
+              { q: "Identify the primary virulence factors of Neisseria meningitidis that facilitate mucosal attachment and immune evasion.", a: "The bacteria use pili to mediate attachment to the mucosa and IgA proteases to destroy secretory IgA in the upper respiratory tract. Immune evasion is achieved through a polysaccharide capsule (anti-phagocytic) and Factor H binding protein, which inhibits the c3b complement component." },
+              { q: "Explain the \"satellitism\" phenomenon observed in the laboratory diagnosis of Haemophilus influenzae.", a: "Haemophilus influenzae is a fastidious organism that requires heme (factor X) and NAD (factor V) for growth. In the laboratory, it demonstrates \"satellitism\" by growing well around colonies of Staphylococcus aureus, which provides the necessary growth factors." },
+              { q: "What are the specific requirements and characteristic colonial appearances for identifying Streptococcus pneumoniae in culture?", a: "It requires enriched media (blood agar) and incubation in 5–10% CO2. The resulting α-hemolytic colonies have a distinct \"draughtsman\" appearance and can be confirmed via a positive Quellung reaction (capsule swelling test)." },
+              { q: "How does the pathogenesis of Listeria monocytogenes allow it to evade the host’s humoral immune response?", a: "Listeria produces listeriolysin O, which allows it to escape the phagosome into the cytoplasm and use cytoskeleton proteins to transfer directly to adjacent cells. Because the organism remains intracellular, it is never exposed to humoral agents like complement or antibodies." },
+              { q: "Distinguish between early-onset and late-onset neonatal listeriosis.", a: "Early-onset disease is acquired trans-placentally and results in granulomatosus infantiseptica, characterized by abscesses and granulomas in multiple organs. Late-onset disease is acquired during or soon after birth and typically results in meningitis or meningo-encephalitis with sepsis within 2 to 3 weeks." },
+              { q: "What are the preventive protocols for Streptococcus agalactiae (Group B Strep) in pregnant women?", a: "Pregnant women are screened via vaginal and rectal cultures at 35–37 weeks; if positive, intravenous penicillin G or ampicillin is administered during delivery. Intrapartum antibiotics are also given without screening if risk factors exist, such as preterm labor, fever during labor (≥38°C), or a history of a previous infant with GBS disease." },
+              { q: "Contrast the CSF glucose and cell infiltration findings in bacterial versus viral meningitis.", a: "In bacterial meningitis, glucose levels are significantly decreased and cell infiltration consists of PMNLs (neutrophils). Conversely, viral meningitis presents with normal glucose levels and cell infiltration characterized by lymphocytes." },
+              { q: "Describe the characteristic morphology and staining of Neisseria meningitidis.", a: "Neisseria meningitidis (meningococci) are Gram-negative, kidney-shaped diplococci that appear in pairs. They are non-motile and possess a polysaccharide capsule, which is their most important virulence factor." },
+              { q: "Identify the specific growth requirements for isolating Haemophilus influenzae in a lab.", a: "Isolation of Haemophilus influenzae requires chocolate agar and the addition of two specific components: Factor X (heme) and Factor V (NAD). It also requires an environment with 5-10% CO2 for 1-2 days." },
+              { q: "What are the indications for the 13-valent pneumococcal conjugate vaccine?", a: "The 13-valent vaccine is indicated for children under five years of age. It is also recommended for individuals with immunocompromising conditions or those with anatomical or functional asplenia, such as sickle cell disease." },
+              { q: "How does the CAMP test help identify Streptococcus agalactiae?", a: "Streptococcus agalactiae is identified by a positive CAMP test, where the bacteria produce a factor that increases the beta-hemolysis of an S. aureus indicator strain. This is a key diagnostic marker for Group B Streptococci." }
+            ],
+            longEssays:  [
+              { title: "Differential Diagnosis of CSF Findings", answer: "The diagnosis of meningitis relies heavily on the analysis of CSF obtained via lumbar puncture, focusing on protein levels, glucose concentration, cell infiltration, and pressure. Bacterial meningitis is characterized by significantly elevated protein levels, very low glucose levels, and a predominant infiltration of Polymorphonuclear Leukocytes (PMNLs), usually accompanied by increased opening pressure. This profile reflects a robust pyogenic response and high metabolic consumption of glucose by bacteria.\n\nIn contrast, viral meningitis typically presents with normal or slightly elevated protein and normal glucose levels. The cellular response is dominated by lymphocytes rather than neutrophils, and the CSF pressure remains normal. Fungal meningitis shares the lymphocytic infiltration and increased pressure seen in other types but is distinguished by elevated protein and decreased glucose levels. By evaluating these four parameters, clinicians can rapidly differentiate between pyogenic bacterial infections and non-pyogenic viral or fungal infections, allowing for appropriate empirical therapy." },
+              { title: "Pathogenesis and Virulence of Listeria monocytogenes", answer: "Listeria monocytogenes is a Gram-positive, non-spore-forming bacillus with unique environmental adaptations, including the ability to grow at 4°C and demonstrating \"tumbling motility\" at 22°C. It is a facultative intracellular parasite, which is central to its pathogenesis. Upon ingestion through contaminated food, it invades epithelial cells and macrophages. Its primary virulence factor, listeriolysin O, allows it to disrupt the phagocytic vacuole and escape into the host cell's cytoplasm, where it replicates and spreads to adjacent cells using host cytoskeleton proteins.\n\nThis intracellular existence makes cell-mediated immunity the primary defense against Listeria, explaining why it is a leading cause of meningitis in renal transplant recipients, cancer patients, and the elderly. In neonates, the pathogen can be acquired trans-placentally (early-onset), leading to severe systemic granulomas (granulomatosus infantiseptica), or during delivery (late-onset), resulting in meningitis and sepsis within weeks. Its ability to colonize the female genital tract and cross the placental barrier makes it a critical concern in obstetric and neonatal medicine." },
+              { title: "Comparative Pathogenesis of Neonatal Meningitis", answer: "The three most common causes of neonatal meningitis are Escherichia coli K1, Streptococcus agalactiae (GBS), and Listeria monocytogenes. GBS is an intermittent commensal in the vagina and is acquired during delivery through the birth canal; its primary predisposing factor is the prolonged rupture of membranes (longer than 18 hours). Listeria monocytogenes can be acquired trans-placentally (early-onset) or during delivery (late-onset). Early-onset listeriosis is linked to the ingestion of contaminated foods by the mother, leading to bacteremia and placental infection, while late-onset is often associated with the hospital environment or attending personnel. E. coli K1, while noted as a primary cause, typically follows a route of infection similar to other neonatal pathogens during the passage through the birth canal." },
+              { title: "Virulence and Laboratory Identification of Streptococcus pneumoniae", answer: "Streptococcus pneumoniae possesses several critical virulence factors, the most important being its anti-phagocytic polysaccharide capsule, which allows for serotyping into 90 different types. Other factors include IgA1 protease, which cleaves respiratory immunoglobulins, and pneumolysin, a membrane-damaging toxin. Its autolysin enzyme is significant as it triggers cell wall lysis, releasing fragments that cause a massive inflammatory response. In the laboratory, S. pneumoniae is identified by alpha-hemolytic colonies on blood agar that have a characteristic \"draughtsman\" appearance. It is further confirmed through the Quellung reaction (capsule swelling test) and the latex agglutination test, which detects capsular polysaccharides in the CSF." }
+            ],
+          },
+          fungal_meningitis: {
+            title: 'Fungal Meningitis',
+            shortEssays: [
+              { q: "What is the primary mode of transmission for Cryptococcus neoformans, and what role do birds play in this process?", a: "Cryptococcus neoformans is transmitted via the inhalation of dust contaminated with bird droppings, particularly from pigeons. While birds carry the organism, they are not infected by it, and there is no documented human-to-human transmission." },
+              { q: "How does the morphology of Aspergillus hyphae differ from that of Mucor and Rhizopus under microscopic examination?", a: "Aspergillus is characterized by branching septate hyphae (walls between cells). In contrast, Mucor and Rhizopus species exhibit broad aseptate hyphae (lacking cell walls)." },
+              { q: "Identify the specific metabolic condition that significantly increases a patient's risk for developing rhinocerebral mucormycosis.", a: "Most Mucor and Rhizopus infections occur in patients suffering from metabolic acidosis. Specifically, individuals with diabetic ketoacidosis (DKA) are at the highest risk for these fungal infections." },
+              { q: "Describe the vascular complications that can arise from an invasive Aspergillus infection in the CNS.", a: "Aspergillus hyphae can directly invade blood vessel walls, leading to necrosis and weakening of the vessel. This process results in the formation of mycotic aneurysms, which may cause subarachnoid hemorrhage syndrome." },
+              { q: "What is the \"CrAg\" test, and why is it significant in diagnosing Cryptococcus neoformans?", a: "The CrAg test refers to the Cryptococcal Antigen test, which uses latex particle agglutination to detect capsular antigens in the CSF or blood. It is highly sensitive and specific, particularly in patients with AIDS." },
+              { q: "Explain the virulence mechanism of Aspergillus mycotoxins regarding the host's immune cells.", a: "Aspergillus produces mycotoxins that can damage or kill neurons, astrocytes, and microglia. These toxins also inhibit phagocytosis and make the fungal conidia more resistant to opsonization by the immune system." },
+              { q: "What are the primary clinical signs associated with the rhinocerebral form of mucormycosis?", a: "Common symptoms include facial headache, periorbital edema (swelling around the eyes), and rhinitis. Patients may also experience a loss of vision, diplopia (double vision), and a decrease in mental function." },
+              { q: "How does the portal of entry for Cryptococcus compare to the methods by which Aspergillus reaches the brain?", a: "Both fungi can enter via the respiratory tract; however, Aspergillus can also reach the brain through direct extension from the ear, mastoids, or paranasal sinuses. Cryptococcus primarily spreads from the lungs to the CNS through the blood." },
+              { q: "What are the specific laboratory culture characteristics of Aspergillus fumigatus?", a: "Aspergillus fumigatus grows on most media at room temperature over several days. It typically forms colonies that appear fluffy to granular and range in color from white to blue-green." },
+              { q: "What is the recommended treatment protocol for CNS infections caused by Mucor and Rhizopus?", a: "Treatment requires first-line antifungal therapy with Amphotericin B. This is often supplemented by surgical debridement of infected tissue and efforts toward immune reconstitution." }
+            ],
+            longEssays:  [
+              { title: "Comparative Pathogenesis of Fungal CNS Infections", answer: "The pathogenesis of these fungi begins largely with the inhalation of environmental spores or yeast cells, but their progression and host targets vary significantly. Cryptococcus neoformans is unique because it can infect healthy individuals, though it primarily causes chronic meningitis in those with reduced cell-mediated immunity, such as AIDS patients or transplant recipients. Its capsule and melanin production are key virulence factors that inhibit phagocytic killing.\n\nAspergillus and the agents of mucormycosis (Mucor and Rhizopus) are more strictly opportunistic. Aspergillus targets the highly immunosuppressed, particularly those with neutropenia or those using corticosteroids. It reaches the brain through hematogenous spread or direct extension from nearby sinuses or ears, using mycotoxins to destroy neural cells. Mucor and Rhizopus have a specific affinity for patients with metabolic acidosis (diabetic ketoacidosis). Their pathogenesis is characterized by aggressive hyphal invasion of blood vessels, leading to rapid thrombosis and infarction of the nasal, orbital, and cerebral tissues, typically presenting as an acute rhinocerebral infection." },
+              { title: "Laboratory Diagnosis and Identification", answer: "Differential diagnosis relies on microscopic morphology, staining, and biochemical markers. Cryptococcus neoformans is identified in the CSF using India ink stain, which highlights the budding capsulated yeast cells. It can also be confirmed via the highly sensitive CrAg (latex agglutination) test and culture on Sabouraud’s dextrose agar, which produces mucoid colonies.\n\nFor filamentous fungi, the distinction lies in the hyphae. Aspergillus shows branching septate hyphae on KOH mounts and can be identified by its blue-green granular colonies and the presence of galactomannan antigens in the CSF. In contrast, Mucor and Rhizopus are identified by the presence of broad aseptate hyphae in biopsy specimens. While Aspergillus produces spores on conidiophores, identification of Mucor and Rhizopus is based on their sporangial structures. Both filamentous groups utilize Calcofluor white stains for enhanced fluorescence microscopy of tissue biopsies." }
+            ],
+          },
+        };
+
+        // ─── Topic Guide ─────────────────────────────────────────────────────────────
+        function MicroTopicGuide({ topic, onBack }) {
+          const [activeTab,        setActiveTab]        = useState('summary');
+          const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+          const [openShortIndex,   setOpenShortIndex]   = useState(null);
+          const [openLongIndex,    setOpenLongIndex]    = useState(0);
+          const [currentPage,      setCurrentPage]      = useState(1);
+
+          const currentData = contentDB[topic];
+          const ITEMS_PER_PAGE = 5;
+
+          const tabs = [
+            { id: 'summary',     label: 'Topic Summary',      icon: <i className="fa-solid fa-layer-group    flex items-center justify-center"></i> },
+            { id: 'short_essay', label: 'Short Essay',        icon: <i className="fa-solid fa-file-lines     flex items-center justify-center"></i> },
+            { id: 'long_essay',  label: 'Long Essay',         icon: <i className="fa-solid fa-book-open      flex items-center justify-center"></i> },
+            { id: 'glossary',    label: 'Glossary & Mnemonics', icon: <i className="fa-solid fa-bookmark    flex items-center justify-center"></i> },
+          ];
+
+          return (
+            <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row font-sans text-slate-800">
+
+              {/* Mobile Header */}
+              <div className="md:hidden bg-purple-900 text-white p-4 flex justify-between items-center shadow-md z-20">
+                <div className="flex items-center gap-3">
+                  <button onClick={onBack} className="p-1 hover:bg-purple-800 rounded transition-all duration-200 active:scale-90 w-8 h-8 flex items-center justify-center group">
+                    <i className="fa-solid fa-arrow-left transition-transform duration-300 group-hover:-translate-x-1"></i>
+                  </button>
+                  <div className="flex items-center gap-2 font-bold text-lg">
+                    <i className="fa-solid fa-biohazard text-purple-300"></i>
+                    <span>MicroBiology Review</span>
+                  </div>
+                </div>
+                <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="w-8 h-8 flex items-center justify-center transition-transform duration-300 active:scale-90">
+                  <div className={`transition-transform duration-300 ${isMobileMenuOpen ? 'rotate-90 scale-110' : 'rotate-0'}`}>
+                    {isMobileMenuOpen
+                      ? <i className="fa-solid fa-xmark"></i>
+                      : <i className="fa-solid fa-bars"></i>}
+                  </div>
+                </button>
+              </div>
+
+              {/* Sidebar */}
+              <nav className={`${isMobileMenuOpen ? 'flex' : 'hidden'} md:flex flex-col w-full md:w-72 bg-purple-900 text-white shadow-xl fixed md:sticky top-0 h-screen overflow-y-auto z-10 transition-all duration-300`}>
+                <div className="p-4 border-b border-purple-800">
+                  <button onClick={onBack}
+                    className="flex items-center gap-2 text-purple-300 hover:text-white hover:bg-purple-800 px-3 py-2 rounded-lg transition-all duration-200 transform hover:-translate-x-1 active:scale-95 text-sm font-semibold w-full group">
+                    <i className="fa-solid fa-arrow-left transition-transform duration-300 group-hover:-translate-x-1"></i> Back to Dashboard
+                  </button>
+                </div>
+                <div className="hidden md:flex items-center gap-3 p-6 border-b border-purple-800">
+                  <i className="fa-solid fa-biohazard text-2xl text-purple-300"></i>
+                  <div>
+                    <h1 className="font-bold text-xl leading-tight">MicroBiology</h1>
+                    <span className="text-purple-300 text-xs uppercase tracking-wider font-semibold">Study Guide</span>
+                  </div>
+                </div>
+                <div className="p-4 flex-1">
+                  <p className="text-purple-400 text-xs font-bold mb-4 uppercase tracking-wider px-2">Study Navigation</p>
+                  <ul className="space-y-1">
+                    {tabs.map((tab) => (
+                      <li key={tab.id}>
+                        <button
+                          onClick={() => { setActiveTab(tab.id); setCurrentPage(1); setOpenShortIndex(null); setIsMobileMenuOpen(false); }}
+                          className={`w-full flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200 transform hover:translate-x-2 active:scale-95 text-left group
+                            ${activeTab === tab.id
+                              ? 'bg-purple-600 text-white shadow-md'
+                              : 'text-purple-200 hover:bg-purple-800 hover:text-white'}`}
+                        >
+                          <span className={`w-5 h-5 flex items-center justify-center transition-transform duration-300 ${activeTab === tab.id ? 'scale-110' : 'group-hover:scale-110'}`}>{tab.icon}</span>
+                          <span className="font-medium">{tab.label}</span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="p-4 border-t border-purple-800 text-xs text-purple-400 text-center font-bold">
+                  Topic: {currentData.title}
+                </div>
+              </nav>
+
+              {/* Main Content */}
+              <main className="flex-1 p-4 md:p-8 overflow-y-auto w-full max-w-5xl mx-auto">
+                <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-10 min-h-[80vh]">
+
+                  {/* ── SUMMARY TAB ── */}
+                  {activeTab === 'summary' && (
+                    <div className="space-y-8 animate-in">
+                      <div className="border-b border-slate-200 pb-4">
+                        <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                          <i className="fa-solid fa-layer-group text-purple-600"></i> Topic Summary
+                        </h2>
+                        <p className="text-slate-600 mt-2">Comprehensive overview and core principles for {currentData.title}.</p>
+                      </div>
+                      
+                      {topic === 'muscle_infections' ? (
+                        <div className="space-y-8">
+                          <p className="text-slate-700 bg-white p-5 rounded-xl border border-slate-200 shadow-sm leading-relaxed">
+                            This guide synthesizes clinical information regarding pathogens that affect the central nervous system (CNS) and muscle tone, focusing primarily on <strong>Clostridium tetani</strong> and <strong>Clostridium botulinum</strong>, as well as general routes of CNS infection.
+                          </p>
+
+                          {/* CNS Pathogens Overview */}
+                          <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+                            <div className="bg-purple-50 p-4 border-b border-purple-100">
+                              <h3 className="font-bold text-purple-900 flex items-center gap-2">
+                                <i className="fa-solid fa-viruses"></i> Overview of CNS Pathogens
+                              </h3>
+                            </div>
+                            <div className="p-0 overflow-x-auto">
+                              <table className="w-full text-sm text-left">
+                                <thead className="bg-slate-50 text-slate-600">
+                                  <tr><th className="px-4 py-3 font-semibold w-1/3">Condition</th><th className="px-4 py-3 font-semibold">Pathogen Types and Examples</th></tr>
+                                </thead>
+                                <tbody className="divide-y divide-slate-100 text-slate-700">
+                                  <tr><td className="px-4 py-3 font-medium bg-slate-50/50">Bacterial Meningitis</td><td className="px-4 py-3">N. meningitides, H. influenzae, S. pneumoniae, S. agalactiae, L. monocytogenes</td></tr>
+                                  <tr><td className="px-4 py-3 font-medium">Fungal Meningitis</td><td className="px-4 py-3">Cryptococcus neoformans, Aspergillus species, Mucor Rhizopus species</td></tr>
+                                  <tr><td className="px-4 py-3 font-medium bg-slate-50/50">Viral Meningitis</td><td className="px-4 py-3">Coxsackieviruses, Echoviruses, Poliovirus, HSV-2, VZV, Mumps, West Nile, HIV</td></tr>
+                                  <tr><td className="px-4 py-3 font-medium">Encephalitis</td><td className="px-4 py-3">HSV, VZV, Rabies, Arboviruses, CMV, EBV, HIV, Post-infectious encephalitis</td></tr>
+                                  <tr><td className="px-4 py-3 font-medium text-purple-700 bg-purple-50/30">Muscle Tone Affectors</td><td className="px-4 py-3 font-medium text-purple-800">Clostridium tetani (spasticity), Clostridium botulinum (flaccidity)</td></tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+
+                          <div className="grid md:grid-cols-2 gap-6">
+                            {/* Tetanus Card */}
+                            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                              <h4 className="font-bold text-slate-800 mb-3 flex items-center gap-2 border-b pb-2">
+                                <i className="fa-solid fa-bolt text-purple-500"></i> Clostridium tetani (Tetanus)
+                              </h4>
+                              <ul className="space-y-3 text-sm text-slate-700">
+                                <li><strong>Characteristics:</strong> Gram(+), anaerobic, "drumstick" appearance (terminal spores).</li>
+                                <li><strong>Pathogenesis:</strong> Tetanospasmin travels via retrograde axonal transport to CNS. Blocks release of GABA and Glycine.</li>
+                                <li><strong>Clinical:</strong> Spastic paralysis, lockjaw (trismus), risus sardonicus, exaggerated reflexes.</li>
+                                <li><strong>Treatment:</strong> Metronidazole/Penicillin G, TIG (antitoxin), dark quiet room, DTaP/Tdap vaccine.</li>
+                              </ul>
+                            </div>
+
+                            {/* Botulism Card */}
+                            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                              <h4 className="font-bold text-slate-800 mb-3 flex items-center gap-2 border-b pb-2">
+                                <i className="fa-solid fa-can-food text-purple-500"></i> Clostridium botulinum (Botulism)
+                              </h4>
+                              <ul className="space-y-3 text-sm text-slate-700">
+                                <li><strong>Characteristics:</strong> Gram(+), anaerobic, oval subterminal spores. Heat-labile toxin.</li>
+                                <li><strong>Pathogenesis:</strong> Protease cleaves proteins required for acetylcholine (ACh) release at peripheral synapses.</li>
+                                <li><strong>Clinical:</strong> Descending weakness, flaccid paralysis, diplopia, dysphagia. NO fever.</li>
+                                <li><strong>Forms:</strong> Foodborne (preformed toxin), Wound, Infant (ingesting spores via honey).</li>
+                              </ul>
+                            </div>
+                          </div>
+
+                          {/* Portals of CNS Infection */}
+                          <div className="bg-purple-50 border-l-4 border-purple-500 p-5 rounded-r-xl">
+                            <h3 className="text-xl font-bold text-purple-900 mb-3">Portals of CNS Infection</h3>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-slate-700">
+                              <div className="bg-white p-3 rounded shadow-sm"><strong>Hematogenous Spread:</strong> Most common. Arterial or retrograde venous (facial veins).</div>
+                              <div className="bg-white p-3 rounded shadow-sm"><strong>Direct Implantation:</strong> Traumatic or iatrogenic (e.g., lumbar puncture).</div>
+                              <div className="bg-white p-3 rounded shadow-sm"><strong>Local Extension:</strong> Spread from skull/spine adjacent infections.</div>
+                              <div className="bg-white p-3 rounded shadow-sm"><strong>Peripheral Nerves:</strong> Used by specific viruses (Rabies, VZV).</div>
+                            </div>
+                          </div>
+
+                        </div>
+                      ) : (topic === 'bacterial_meningitis' || topic === 'fungal_meningitis') ? (
+                        <div className="bg-purple-50 p-8 rounded-xl border border-purple-200 text-center shadow-sm">
+                          <i className="fa-solid fa-forward-step text-4xl text-purple-300 mb-4 block"></i>
+                          <h3 className="text-xl font-bold text-purple-900 mb-2">Summary Skipped</h3>
+                          <p className="text-purple-700">As requested, there is no summary for this module. Please proceed directly to the <strong>Short Essay</strong>, <strong>Long Essay</strong>, or <strong>Glossary</strong> tabs to begin your review!</p>
+                        </div>
+                      ) : (
+                        <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 text-center text-slate-500 italic">
+                          Summary content for <strong>{currentData.title}</strong> is coming soon. Please explore the other tabs once content has been added!
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* ── SHORT ESSAY TAB ── */}
+                  {(() => {
+                    if (activeTab !== 'short_essay') return null;
+                    const essays = currentData.shortEssays;
+                    if (essays.length === 0) return (
+                      <div className="space-y-8 animate-in">
+                        <div className="border-b border-slate-200 pb-4">
+                          <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                            <i className="fa-solid fa-file-lines text-purple-600"></i> Short Essay
+                          </h2>
+                          <p className="text-slate-600 mt-2">Short-answer questions for exam preparation.</p>
+                        </div>
+                        <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 text-center text-slate-500 italic">
+                          Short essay questions for <strong>{currentData.title}</strong> are coming soon!
+                        </div>
+                      </div>
+                    );
+                    const totalPages = Math.ceil(essays.length / ITEMS_PER_PAGE);
+                    const paginated  = essays.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+                    return (
+                      <div className="space-y-6 animate-in">
+                        <div className="border-b border-slate-200 pb-4">
+                          <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                            <i className="fa-solid fa-file-lines text-purple-600"></i> Short Essay
+                          </h2>
+                          <p className="text-slate-600 mt-2">Click each question to reveal the answer.</p>
+                        </div>
+                        <div className="space-y-3">
+                          {paginated.map((item, idx) => {
+                            const globalIdx = (currentPage - 1) * ITEMS_PER_PAGE + idx;
+                            return (
+                              <div key={globalIdx} className="border border-slate-200 rounded-lg overflow-hidden shadow-sm hover:border-purple-300 transition-all duration-300 hover:shadow-md">
+                                <button
+                                  onClick={() => setOpenShortIndex(openShortIndex === globalIdx ? null : globalIdx)}
+                                  className="w-full text-left p-4 bg-white hover:bg-purple-50/50 flex justify-between items-center focus:outline-none transition-colors duration-200">
+                                  <span className="font-semibold text-slate-800 pr-4">{globalIdx + 1}. {item.q}</span>
+                                  <i className={`fa-solid fa-chevron-down shrink-0 transition-transform duration-300 ${openShortIndex === globalIdx ? 'rotate-180 text-purple-500' : 'text-slate-400'}`}></i>
+                                </button>
+                                <div className={`grid transition-all duration-300 ease-in-out ${openShortIndex === globalIdx ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                                  <div className="overflow-hidden">
+                                    <div className="p-4 bg-purple-50 border-t border-purple-100 text-slate-700">
+                                      <strong className="text-purple-800 block mb-1">Answer:</strong> {item.a}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                        {totalPages > 1 && (
+                          <div className="flex items-center justify-center gap-3 pt-4">
+                            <button onClick={() => { setCurrentPage(p => Math.max(1, p - 1)); setOpenShortIndex(null); }}
+                              disabled={currentPage === 1}
+                              className={`w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300 ${currentPage === 1 ? 'opacity-40 cursor-not-allowed text-slate-400 bg-slate-100' : 'text-purple-600 bg-white border border-slate-200 hover:bg-purple-50 hover:shadow-md hover:-translate-x-1 cursor-pointer'}`}>
+                              <i className="fa-solid fa-chevron-left"></i>
+                            </button>
+                            <div className="flex items-center gap-2">
+                              {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => {
+                                const distance = Math.abs(currentPage - pageNum);
+                                let cls = "";
+                                if      (distance === 0) cls = "w-10 h-10 text-base bg-purple-600 text-white shadow-md ring-2 ring-purple-200 ring-offset-1 z-10 opacity-100";
+                                else if (distance === 1) cls = "w-8 h-8 text-sm bg-white text-slate-600 border border-slate-200 hover:bg-purple-50 hover:text-purple-600 hover:border-purple-300 opacity-100 cursor-pointer hover:scale-110";
+                                else if (distance === 2) cls = "w-6 h-6 text-xs bg-white text-slate-500 border border-slate-200 hover:bg-purple-50 hover:text-purple-600 hover:border-purple-300 opacity-50 cursor-pointer hover:scale-125";
+                                else                     cls = "w-4 h-4 text-[0px] bg-white border border-slate-200 opacity-0 pointer-events-none";
+                                return (
+                                  <div key={pageNum} className="w-10 h-10 shrink-0 flex items-center justify-center">
+                                    <button onClick={() => { setCurrentPage(pageNum); setOpenShortIndex(null); }}
+                                      className={`rounded-full font-bold transition-all duration-300 flex items-center justify-center shrink-0 ${cls}`}>
+                                      {pageNum}
+                                    </button>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                            <button onClick={() => { setCurrentPage(p => Math.min(totalPages, p + 1)); setOpenShortIndex(null); }}
+                              disabled={currentPage === totalPages}
+                              className={`w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300 ${currentPage === totalPages ? 'opacity-40 cursor-not-allowed text-slate-400 bg-slate-100' : 'text-purple-600 bg-white border border-slate-200 hover:bg-purple-50 hover:shadow-md hover:translate-x-1 cursor-pointer'}`}>
+                              <i className="fa-solid fa-chevron-right"></i>
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })()}
+
+                  {/* ── LONG ESSAY TAB ── */}
+                  {activeTab === 'long_essay' && (
+                    <div className="space-y-6 animate-in">
+                      <div className="border-b border-slate-200 pb-4">
+                        <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                          <i className="fa-solid fa-book-open text-purple-600"></i> Long Essay
+                        </h2>
+                        <p className="text-slate-600 mt-2">Comprehensive, multi-part microbiological discussions.</p>
+                      </div>
+                      {currentData.longEssays.length === 0 ? (
+                        <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 text-center text-slate-500 italic">
+                          Long essay content for <strong>{currentData.title}</strong> is coming soon!
+                        </div>
+                      ) : (
+                        <div className="flex flex-col gap-4">
+                          {currentData.longEssays.map((essay, idx) => (
+                            <div key={idx} className={`border rounded-xl overflow-hidden transition-all duration-300 ${openLongIndex === idx ? 'border-purple-300 shadow-md ring-1 ring-purple-100' : 'border-slate-200 hover:border-purple-200 hover:shadow-md'}`}>
+                              <button
+                                className={`w-full text-left p-5 flex justify-between items-start gap-4 transition-colors duration-200 active:bg-purple-100/50 ${openLongIndex === idx ? 'bg-purple-50' : 'bg-white hover:bg-slate-50'}`}
+                                onClick={() => setOpenLongIndex(openLongIndex === idx ? null : idx)}>
+                                <h3 className={`font-bold text-lg leading-snug transition-colors duration-300 ${openLongIndex === idx ? 'text-purple-900' : 'text-slate-700'}`}>
+                                  Essay {idx + 1}: {essay.title}
+                                </h3>
+                                <i className={`fa-solid fa-chevron-down mt-1 shrink-0 transition-transform duration-300 ${openLongIndex === idx ? 'rotate-180 text-purple-600' : 'text-slate-400'}`}></i>
+                              </button>
+                              <div className={`grid transition-all duration-300 ease-in-out ${openLongIndex === idx ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                                <div className="overflow-hidden">
+                                  <div className="p-6 bg-white border-t border-purple-100 text-slate-700 leading-relaxed text-lg shadow-inner whitespace-pre-wrap">
+                                    {essay.answer}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* ── GLOSSARY TAB ── */}
+                  {activeTab === 'glossary' && (
+                    <div className="space-y-8 animate-in">
+                      <div className="border-b border-slate-200 pb-4">
+                        <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                          <i className="fa-solid fa-bookmark text-purple-600"></i> Glossary & Mnemonics
+                        </h2>
+                        <p className="text-slate-600 mt-2">Key terms, buzzwords, and memory hooks for {currentData.title}.</p>
+                      </div>
+                      
+                      {topic === 'muscle_infections' ? (
+                        <div className="space-y-8">
+                          
+                          {/* Golden Buzzwords */}
+                          <div>
+                            <h3 className="text-xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
+                              <i className="fa-solid fa-bolt text-purple-600"></i> Golden Buzzwords
+                            </h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                              {[
+                                { term: 'Tetanospasmin', def: 'The polypeptide exotoxin responsible for the symptoms of tetanus.' },
+                                { term: 'Retrograde Axonal Transport', def: 'The pathway by which tetanus toxin travels from the wound to the spinal cord.' },
+                                { term: 'Trismus', def: 'Also known as "lockjaw"; the inability to open the mouth due to rigid jaw muscles.' },
+                                { term: 'Risus Sardonicus', def: 'A characteristic, grimacing "sardonic smile" caused by facial muscle spasms.' },
+                                { term: 'Flaccid Paralysis', def: 'A state of limpness and loss of muscle tone, characteristic of botulism and polio.' },
+                                { term: 'Drumstick Appearance', def: 'The microscopic visual of C. tetani with its terminal bulging spores.' },
+                                { term: 'Trivalent Antitoxin', def: 'A treatment for botulism that neutralizes the three most common toxin types (A, B, and E).' },
+                                { term: 'Lysogenic Phage', def: 'The genetic source of the botulinum toxin\'s polypeptide code.' },
+                              ].map((item, idx) => (
+                                <div key={idx} className="bg-white border border-slate-200 p-4 rounded-lg shadow-sm hover:border-purple-300 hover:shadow-md transition-all">
+                                  <strong className="text-purple-800 block mb-1 text-lg">{item.term}</strong>
+                                  <p className="text-slate-600 text-sm">{item.def}</p>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="grid md:grid-cols-2 gap-8 pt-4 border-t border-slate-200">
+                            {/* Mnemonics */}
+                            <div className="bg-purple-50 rounded-xl p-6 border border-purple-200 shadow-sm space-y-6">
+                              <div>
+                                <h3 className="text-xl font-bold text-purple-900 mb-3 flex items-center gap-2">
+                                  <i className="fa-solid fa-brain"></i> The Three Gs of Tetanus
+                                </h3>
+                                <ul className="text-slate-700 text-sm bg-white p-4 rounded shadow-sm border border-purple-100 space-y-2">
+                                  <li><strong>G</strong>ram-positive</li>
+                                  <li><strong>G</strong>ABA inhibition</li>
+                                  <li><strong>G</strong>lycine inhibition</li>
+                                </ul>
+                              </div>
+
+                              <div>
+                                <h3 className="text-xl font-bold text-purple-900 mb-3 flex items-center gap-2">
+                                  <i className="fa-solid fa-list-check"></i> Botulism's "D"s
+                                </h3>
+                                <ul className="text-slate-700 text-sm bg-white p-4 rounded shadow-sm border border-purple-100 space-y-2">
+                                  <li><strong>D</strong>escending paralysis</li>
+                                  <li><strong>D</strong>iplopia</li>
+                                  <li><strong>D</strong>ysphagia</li>
+                                  <li><strong>D</strong>ry (no fever)</li>
+                                </ul>
+                              </div>
+                            </div>
+
+                            {/* Additional Hooks */}
+                            <div>
+                              <h3 className="text-xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
+                                <i className="fa-solid fa-scale-balanced text-slate-600"></i> Tetanus vs. Botulism Muscle Tone
+                              </h3>
+                              <div className="flex flex-col gap-4">
+                                <div className="border-l-4 border-red-500 bg-white p-5 rounded-r-lg shadow-sm">
+                                  <h4 className="font-bold text-red-800 text-lg mb-1">Tetanus = Tense</h4>
+                                  <p className="text-slate-600 text-sm">Spastic paralysis. The body is rigid and tense due to a lack of inhibitory neurotransmitters.</p>
+                                </div>
+                                <div className="border-l-4 border-blue-500 bg-white p-5 rounded-r-lg shadow-sm">
+                                  <h4 className="font-bold text-blue-800 text-lg mb-1">Botulism = Bag of bones</h4>
+                                  <p className="text-slate-600 text-sm">Flaccid paralysis. The body is entirely limp due to blocked acetylcholine release.</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                      ) : topic === 'bacterial_meningitis' ? (
+                        <div className="space-y-8">
+                          
+                          {/* Golden Buzzwords */}
+                          <div>
+                            <h3 className="text-xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
+                              <i className="fa-solid fa-bolt text-purple-600"></i> Key Terms & "Golden Buzzwords"
+                            </h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                              {[
+                                { term: 'Nuchal Rigidity', def: 'Neck stiffness; a hallmark clinical sign of meningeal irritation.' },
+                                { term: 'Petechiae', def: 'Small purplish skin hemorrhages; classic "buzzword" for Meningococcal meningitis.' },
+                                { term: 'PMNLs', def: 'Polymorphonuclear Leukocytes; the dominant cell type in bacterial CSF.' },
+                                { term: 'Thayer-Martin', def: 'Specialized medium used for the isolation of Neisseria species.' },
+                                { term: 'Quellung Reaction', def: 'Capsule swelling test used for typing Streptococcus pneumoniae.' },
+                                { term: 'Draughtsman Colony', def: 'The specific morphology of Streptococcus pneumoniae on blood agar.' },
+                                { term: 'Satellitism', def: 'H. influenzae growing around S. aureus colonies.' },
+                                { term: 'CAMP Test', def: 'Test used to identify Streptococcus agalactiae (GBS); increases β-hemolysis.' },
+                                { term: 'Tumbling Motility', def: 'Characteristic movement of Listeria at 22°C.' },
+                                { term: 'Hippurate Hydrolysis', def: 'Positive biochemical test for the identification of Streptococcus agalactiae.' },
+                                { term: 'Listeriolysin O', def: 'The toxin that allows Listeria to survive intracellularly.' },
+                                { term: 'Hematogenous Spread', def: 'The most common route (via the bloodstream) for meningitis infection.' },
+                              ].map((item, idx) => (
+                                <div key={idx} className="bg-white border border-slate-200 p-4 rounded-lg shadow-sm hover:border-purple-300 hover:shadow-md transition-all">
+                                  <strong className="text-purple-800 block mb-1 text-lg">{item.term}</strong>
+                                  <p className="text-slate-600 text-sm">{item.def}</p>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="grid md:grid-cols-2 gap-8 pt-4 border-t border-slate-200">
+                            {/* Mnemonics */}
+                            <div className="bg-purple-50 rounded-xl p-6 border border-purple-200 shadow-sm space-y-6">
+                              <div>
+                                <h3 className="text-xl font-bold text-purple-900 mb-3 flex items-center gap-2">
+                                  <i className="fa-solid fa-brain"></i> Mnemonics for Mastery
+                                </h3>
+                                <div className="space-y-4">
+                                  <div className="bg-white p-4 rounded shadow-sm border border-purple-100">
+                                    <strong className="text-purple-800 block mb-1">The "Big Three" of Adult/Child Meningitis:</strong>
+                                    <p className="text-slate-700 text-sm">Neisseria, Haemophilus, Streptococcus (No Head Stiffness — though ironically, they cause it).</p>
+                                  </div>
+                                  <div className="bg-white p-4 rounded shadow-sm border border-purple-100">
+                                    <strong className="text-purple-800 block mb-1">The Neonatal Trio:</strong>
+                                    <p className="text-slate-700 text-sm">Baby Loves Everyone: <strong>B</strong>-GBS (S. agalactiae), <strong>L</strong>-Listeria, <strong>E</strong>-E. coli K1.</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Additional Hooks */}
+                            <div className="space-y-6">
+                              <h3 className="text-xl font-bold text-slate-800 mb-2 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
+                                <i className="fa-solid fa-lightbulb text-slate-600"></i> Rapid Recall Hooks
+                              </h3>
+                              <div className="flex flex-col gap-3">
+                                <div className="border-l-4 border-emerald-500 bg-white p-4 rounded-r-lg shadow-sm">
+                                  <h4 className="font-bold text-slate-800 text-md mb-1">H. influenzae Requirements</h4>
+                                  <p className="text-slate-600 text-sm">Needs X and V (10 and 5): "Heme is <strong>X</strong> (10), NAD is <strong>V</strong> (5)."</p>
+                                </div>
+                                <div className="border-l-4 border-blue-500 bg-white p-4 rounded-r-lg shadow-sm">
+                                  <h4 className="font-bold text-slate-800 text-md mb-1">Listeria's Cold Growth</h4>
+                                  <p className="text-slate-600 text-sm">"Listeria Loves the Low temps" (Grows at 4°C in the fridge).</p>
+                                </div>
+                                <div className="border-l-4 border-rose-500 bg-white p-4 rounded-r-lg shadow-sm">
+                                  <h4 className="font-bold text-slate-800 text-md mb-1">Pneumococci Appearance</h4>
+                                  <p className="text-slate-600 text-sm">Pneumococci are Pairs of Pointed (lanceolate) cocci.</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                      ) : topic === 'fungal_meningitis' ? (
+                        <div className="space-y-8">
+                          
+                          {/* Golden Buzzwords */}
+                          <div>
+                            <h3 className="text-xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
+                              <i className="fa-solid fa-bolt text-purple-600"></i> Golden Buzzwords
+                            </h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                              {[
+                                { term: 'Pigeon Droppings', def: 'Cryptococcus neoformans.' },
+                                { term: 'Diabetic Ketoacidosis (DKA)', def: 'Mucor and Rhizopus.' },
+                                { term: 'Blue-green Colonies', def: 'Aspergillus fumigatus.' },
+                                { term: 'Mucoid Colonies', def: 'Cryptococcus neoformans.' },
+                                { term: 'Thrombosis and Infarction', def: 'Pathogenesis of Mucormycosis.' },
+                                { term: 'Voriconazole', def: 'Specific treatment for Aspergillus.' },
+                              ].map((item, idx) => (
+                                <div key={idx} className="bg-white border border-slate-200 p-4 rounded-lg shadow-sm hover:border-purple-300 hover:shadow-md transition-all">
+                                  <strong className="text-purple-800 block mb-1 text-lg">{item.term}</strong>
+                                  <p className="text-slate-600 text-sm">{item.def}</p>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="grid md:grid-cols-2 gap-8 pt-4 border-t border-slate-200">
+                            {/* Mnemonics */}
+                            <div className="bg-purple-50 rounded-xl p-6 border border-purple-200 shadow-sm space-y-6">
+                              <div>
+                                <h3 className="text-xl font-bold text-purple-900 mb-3 flex items-center gap-2">
+                                  <i className="fa-solid fa-brain"></i> Mnemonics for Mastery
+                                </h3>
+                                <div className="space-y-4">
+                                  <div className="bg-white p-4 rounded shadow-sm border border-purple-100">
+                                    <strong className="text-purple-800 block mb-1">The Three S’s of Aspergillus:</strong>
+                                    <p className="text-slate-700 text-sm"><strong>S</strong>oils/Plants, <strong>S</strong>eptate Hyphae, <strong>S</strong>ubarachnoid Hemorrhage (via mycotic aneurysm).</p>
+                                  </div>
+                                  <div className="bg-white p-4 rounded shadow-sm border border-purple-100">
+                                    <strong className="text-purple-800 block mb-1">The M.D. for Mucor:</strong>
+                                    <p className="text-slate-700 text-sm"><strong>M</strong>etabolic Acidosis / <strong>D</strong>iabetic Ketoacidosis.</p>
+                                  </div>
+                                  <div className="bg-white p-4 rounded shadow-sm border border-purple-100">
+                                    <strong className="text-purple-800 block mb-1">The C.C.C. for Cryptococcus:</strong>
+                                    <p className="text-slate-700 text-sm"><strong>C</strong>apsulated, <strong>C</strong>onfirmed by CrAg, <strong>C</strong>hronic Meningitis.</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Additional Hooks / Key Terms */}
+                            <div className="space-y-6">
+                              <h3 className="text-xl font-bold text-slate-800 mb-2 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
+                                <i className="fa-solid fa-list text-slate-600"></i> Key Terms and "Hooks"
+                              </h3>
+                              <div className="flex flex-col gap-3">
+                                {[
+                                  { term: 'Saprophytic', def: 'Organisms that live on decaying organic matter; common to Aspergillus, Mucor, and Rhizopus.' },
+                                  { term: 'Septate Hyphae', def: 'Hyphae with cross-walls; a hallmark of Aspergillus.' },
+                                  { term: 'Aseptate Hyphae', def: 'Broad hyphae without cross-walls; a hallmark of Mucor and Rhizopus.' },
+                                  { term: 'India Ink', def: 'A diagnostic stain used specifically to visualize the capsule of Cryptococcus neoformans.' },
+                                  { term: 'Galactomannan', def: 'An antigen used in molecular and antigen testing for Aspergillus.' },
+                                  { term: 'Mycotic Aneurysm', def: 'A weakening of the vessel wall caused by fungal invasion (Aspergillus), leading to potential hemorrhage.' },
+                                  { term: 'Rhinocerebral', def: 'An acute, invasive infection of the sinuses and orbit extending to the brain; typical of Mucormycosis.' },
+                                  { term: 'Opsonization', def: 'The process of marking a pathogen for ingestion by phagocytes; inhibited by Aspergillus mycotoxins.' },
+                                ].map((item, idx) => (
+                                  <div key={idx} className="border border-slate-200 p-3 rounded-lg bg-white hover:border-purple-300 transition-colors">
+                                    <h4 className="font-bold text-purple-800 mb-1">{item.term}</h4>
+                                    <p className="text-slate-600 text-sm">{item.def}</p>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                      ) : (
+                        <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 text-center text-slate-500 italic">
+                          Glossary content for <strong>{currentData.title}</strong> is coming soon!
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                </div>
+              </main>
+            </div>
+          );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

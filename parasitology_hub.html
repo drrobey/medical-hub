@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parasitology Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        @keyframes slideInRight { 0% { transform: translateX(60px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+        @keyframes slideInLeft  { 0% { transform: translateX(-60px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+        .slide-forward  { animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .slide-backward { animation: slideInLeft  0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+        @keyframes fadeSlideUp { 0% { opacity: 0; transform: translateY(15px); } 100% { opacity: 1; transform: translateY(0); } }
+        .animate-in { animation: fadeSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    </style>
+</head>
+<body class="bg-slate-50 overflow-x-hidden">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        // ─── App ────────────────────────────────────────────────────────────────────
+        function App() {
+          const [currentView, setCurrentView] = useState('dashboard');
+          const [direction, setDirection]     = useState('forward');
+
+          const navigateTo = (view) => {
+            setDirection(view === 'dashboard' ? 'backward' : 'forward');
+            setCurrentView(view);
+          };
+
+          // Link directly back to the CNS module tab in the main portal
+          const backToPortal = () => { window.location.href = 'index.html#cns'; };
+
+          return (
+            <>
+              <div key={currentView} className={direction === 'forward' ? 'slide-forward' : 'slide-backward'}>
+                {currentView === 'dashboard' ? (
+                  <Dashboard onSelectGuide={(id) => navigateTo(id)} onBackToPortal={backToPortal} />
+                ) : (
+                  <ParasitologyTopicGuide topic={currentView} onBack={() => navigateTo('dashboard')} />
+                )}
+              </div>
+              <div className="fixed bottom-2 right-3 text-right text-[10px] md:text-xs text-slate-400/50 font-medium pointer-events-none z-50 select-none">
+                <div>Dr.Zeyad Robey</div>
+                <div>Ain Shams University</div>
+              </div>
+            </>
+          );
+        }
+
+        // ─── Dashboard ──────────────────────────────────────────────────────────────
+        function Dashboard({ onSelectGuide, onBackToPortal }) {
+          const topics = [
+            {
+              id: 'larva_cestodes',
+              title: 'Larva of Cestodes',
+              desc:  'Sparganosis, Neurocysticercosis, transmission routes, and pathogenesis.',
+              icon:  'fa-solid fa-worm',
+              status: 'active',
+            },
+            {
+              id: 'amoebic_encephalitis',
+              title: 'Amoebic Encephalitis',
+              desc:  'Naegleria fowleri, Acanthamoeba, and Balamuthia affecting the central nervous system.',
+              icon:  'fa-solid fa-bacterium',
+              status: 'coming_soon',
+            }
+          ];
+
+          return (
+            <div className="min-h-screen bg-slate-100 font-sans text-slate-800 p-6 md:p-12">
+              <div className="max-w-6xl mx-auto space-y-8 animate-in">
+
+                <button onClick={onBackToPortal}
+                  className="group flex items-center gap-2 text-slate-500 hover:text-orange-600 font-bold transition-all">
+                  <i className="fa-solid fa-house group-hover:-translate-y-1 transition-transform"></i>
+                  <span className="text-sm uppercase tracking-wider">Back to Portal</span>
+                </button>
+
+                <header className="flex items-center justify-between pb-6 border-b border-slate-200">
+                  <div className="flex items-center gap-4">
+                    <div className="bg-orange-600 p-3 rounded-xl shadow-lg w-12 h-12 flex items-center justify-center text-white text-xl">
+                      <i className="fa-solid fa-bug"></i>
+                    </div>
+                    <div>
+                      <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Parasitology Hub</h1>
+                      <p className="text-slate-500 font-medium mt-1">Parasitology Subject Dashboard</p>
+                    </div>
+                  </div>
+                </header>
+
+                <main>
+                  <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+                    <i className="fa-solid fa-book-open text-orange-600"></i>
+                    Available Study Modules
+                  </h2>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {topics.map((t) => (
+                      <div key={t.id}
+                        onClick={() => t.status === 'active' && onSelectGuide(t.id)}
+                        className={`relative overflow-hidden rounded-2xl border-2 p-6 transition-all duration-300 ease-out flex flex-col h-full transform
+                          bg-orange-50 border-orange-200
+                          ${t.status === 'active'
+                            ? 'cursor-pointer hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.02] hover:border-orange-500 group'
+                            : 'opacity-80 cursor-not-allowed'}`}
+                      >
+                        {t.status === 'coming_soon' && (
+                          <div className="absolute top-4 right-4 bg-orange-100 text-orange-700 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full">
+                            Coming Soon
+                          </div>
+                        )}
+                        <div className={`bg-white w-16 h-16 rounded-2xl shadow-sm flex items-center justify-center mb-6 shrink-0 transition-transform duration-300 ${t.status === 'active' ? 'group-hover:scale-110 group-hover:rotate-3' : ''}`}>
+                          <i className={`${t.icon} text-2xl text-orange-500`}></i>
+                        </div>
+                        <h3 className="text-xl font-bold mb-2 text-slate-900">{t.title}</h3>
+                        <p className="text-slate-600 mb-8 line-clamp-2 flex-1">{t.desc}</p>
+                        {t.status === 'active' ? (
+                          <button className="w-full py-3 px-4 bg-white/50 hover:bg-white text-slate-800 border border-slate-300 font-semibold rounded-xl transition-all duration-200 transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 mt-auto shadow-sm">
+                            Open Review
+                          </button>
+                        ) : (
+                          <div className="w-full py-3 px-4 bg-orange-100 text-orange-600 font-semibold rounded-xl flex items-center justify-center gap-2 mt-auto">
+                            <i className="fa-regular fa-clock"></i> Content Coming Soon
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </main>
+              </div>
+            </div>
+          );
+        }
+
+        // ─── Content Database ────────────────────────────────────────────────────────
+        const contentDB = {
+          larva_cestodes: {
+            title: 'Larva of Cestodes',
+            shortEssays: [
+              { q: "How do humans serve as \"blind end intermediate hosts\" in the life cycle of Spirometra mansoni?", a: "Humans act as accidental intermediate hosts when they ingest larvae or eggs, but the parasite cannot complete its development to the adult stage within the human body. Because the cycle stops there and the parasite cannot be transmitted further from the human host, the human is considered a \"blind end.\"" },
+              { q: "Describe the specific mechanism of infection associated with the use of frog flesh poultices.", a: "This infection mode occurs when infected frog flesh is applied to inflamed tissues like the skin or eyes as a traditional remedy. The Sparganum larva within the frog tissue is attracted to the heat of the inflammation and migrates directly into the human's hot, inflamed tissues." },
+              { q: "What are the primary clinical manifestations of ocular sparganosis?", a: "Patients typically present with conjunctivitis and peri-orbital oedema. The presence of the larva in the ocular region induces a chronic inflammatory reaction, leading to swelling and potential tissue damage." },
+              { q: "How does internal autoinfection (retrofection) occur in Taenia solium infections?", a: "This occurs in individuals already harboring an adult Taenia solium worm. Through reverse peristalsis, detached proglottids (segments) ascend to the stomach, where oncospheres hatch, penetrate the intestinal mucosa, enter circulation, and settle in various tissues as cysticerci." },
+              { q: "What is the \"hole-with-dot\" appearance in neurocysticercosis (NCC) imaging?", a: "This is a pathognomonic radiological sign seen on CT or MRI scans of the brain. The \"hole\" represents the cystic lesion (the bladder), while the \"bright dot\" represents the invaginated scolex (head) of the larva." },
+              { q: "Compare the size and morphology of a Sparganum larva versus a Cysticercus cellulosae larva.", a: "A Sparganum is a solid, elongated, glistening white body ranging from a few millimeters to 30 cm in length with an invaginated scolex. In contrast, Cysticercus cellulosae is an ovoid, milky white bladder (usually 5mm by 8-10mm) containing a head with suckers and hooks, though it can grow to 60 ml in volume in the brain." },
+              { q: "Why is the administration of steroids essential when treating cysticercosis with antiparasitic drugs?", a: "When antiparasitic drugs like Albendazole or Praziquantel kill the larvae, the dead organisms release antigenic material. Steroids are required to relieve the intense, localized inflammatory reactions triggered by the host's immune response to these dead larvae." },
+              { q: "Distinguish between parenchymal and extraparenchymal neurocysticercosis.", a: "Parenchymal neurocysticercosis occurs within the actual brain substance and is the most common location. Extraparenchymal neurocysticercosis involves the meninges, ventricles, basal cisterns, or the subarachnoid space of the brain and spinal cord." },
+              { q: "What findings in a CSF analysis would suggest the presence of cysticerci in the ventricles or basal cisterns?", a: "Abnormal findings, present in about 50% of these cases, include high levels of eosinophils and elevated protein levels. Additionally, the glucose levels in the cerebrospinal fluid are typically low or normal." },
+              { q: "Identify the definitive diagnostic method for both Sparganosis and Cysticercosis.", a: "For both conditions, definitive diagnosis is achieved through the surgical removal of the larva or cyst followed by histological examination. Sparganum is identified by its elongated morphology, while Cysticercus is identified by the presence of suckers and hooks on the scolex." }
+            ],
+            longEssays: [
+              { title: "Pathogenesis and Clinical Spectrum of Neurocysticercosis (NCC)", answer: "The clinical manifestations of neurocysticercosis (NCC) are highly variable and are determined by three primary factors: the specific location of the lesions within the central nervous system, the total number of parasites present, and the intensity of the host’s immune response. Pathogenesis arises from two sources: the physical presence of the larvae invading brain tissue and the subsequent tissue reactions stimulated when the larvae die.\n\nThe most common clinical manifestation of NCC is adult-onset epilepsy, making it one of the leading causes of seizures worldwide. Patients may also experience \"mild\" symptoms such as chronic headaches, vomiting, and vertigo. As the infection progresses or involves critical areas, more severe symptoms emerge, including abnormal behavior, transient paresis, and disequilibrium. In cases where the larvae obstruct the flow of cerebrospinal fluid, patients may suffer from intermittent obstructive hydrocephalus. Other serious complications include meningoencephalitis and cranial nerve abnormalities. The severity can range from asymptomatic skeletal muscle nodules to fatal neurological impairment, with approximately 50,000 deaths occurring annually due to the disease." },
+              { title: "Comparison of Transmission and Prevention of Sparganosis and Cysticercosis", answer: "While both diseases involve human ingestion of larval or egg stages of cestodes, their transmission routes differ significantly. Sparganosis (Spirometra mansoni) is primarily acquired through three routes: drinking water contaminated with Cyclops (water fleas) carrying procercoid larvae, eating raw or undercooked intermediate hosts like frogs or birds, or the medicinal application of raw frog flesh poultices. Prevention focuses on environmental and dietary controls: boiling or filtering water to destroy Cyclops, ensuring frogs and birds are cooked properly, and discouraging the use of raw frog tissues as poultices.\n\nCysticercosis (Taenia solium) is transmitted through the ingestion of eggs. This can occur via heteroinfection (food/water contaminated by the feces of an adult worm carrier) or autoinfection (internal retrofection or external hand-to-mouth transfer). Unlike Sparganosis, the prevention of Cysticercosis relies heavily on human hygiene and sanitation. Key strategies include the early detection and treatment of individuals harboring adult T. solium worms to stop egg shedding, improving environmental sanitation, practicing rigorous personal hygiene to prevent autoinfection, and protecting food and water sources from human fecal contamination." }
+            ],
+          },
+          amoebic_encephalitis: { title: 'Amoebic Encephalitis', shortEssays: [], longEssays: [] },
+        };
+
+        // ─── Topic Guide ─────────────────────────────────────────────────────────────
+        function ParasitologyTopicGuide({ topic, onBack }) {
+          const [activeTab,        setActiveTab]        = useState('short_essay');
+          const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+          const [openShortIndex,   setOpenShortIndex]   = useState(null);
+          const [openLongIndex,    setOpenLongIndex]    = useState(0);
+          const [currentPage,      setCurrentPage]      = useState(1);
+
+          const currentData = contentDB[topic];
+          const ITEMS_PER_PAGE = 5;
+
+          const tabs = [
+            { id: 'summary',     label: 'Topic Summary',      icon: <i className="fa-solid fa-layer-group    flex items-center justify-center"></i> },
+            { id: 'short_essay', label: 'Short Essay',        icon: <i className="fa-solid fa-file-lines     flex items-center justify-center"></i> },
+            { id: 'long_essay',  label: 'Long Essay',         icon: <i className="fa-solid fa-book-open      flex items-center justify-center"></i> },
+            { id: 'glossary',    label: 'Glossary & Mnemonics', icon: <i className="fa-solid fa-bookmark    flex items-center justify-center"></i> },
+          ];
+
+          return (
+            <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row font-sans text-slate-800">
+
+              {/* Mobile Header */}
+              <div className="md:hidden bg-orange-900 text-white p-4 flex justify-between items-center shadow-md z-20">
+                <div className="flex items-center gap-3">
+                  <button onClick={onBack} className="p-1 hover:bg-orange-800 rounded transition-all duration-200 active:scale-90 w-8 h-8 flex items-center justify-center group">
+                    <i className="fa-solid fa-arrow-left transition-transform duration-300 group-hover:-translate-x-1"></i>
+                  </button>
+                  <div className="flex items-center gap-2 font-bold text-lg">
+                    <i className="fa-solid fa-bug text-orange-300"></i>
+                    <span>Parasitology Review</span>
+                  </div>
+                </div>
+                <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="w-8 h-8 flex items-center justify-center transition-transform duration-300 active:scale-90">
+                  <div className={`transition-transform duration-300 ${isMobileMenuOpen ? 'rotate-90 scale-110' : 'rotate-0'}`}>
+                    {isMobileMenuOpen
+                      ? <i className="fa-solid fa-xmark"></i>
+                      : <i className="fa-solid fa-bars"></i>}
+                  </div>
+                </button>
+              </div>
+
+              {/* Sidebar */}
+              <nav className={`${isMobileMenuOpen ? 'flex' : 'hidden'} md:flex flex-col w-full md:w-72 bg-orange-900 text-white shadow-xl fixed md:sticky top-0 h-screen overflow-y-auto z-10 transition-all duration-300`}>
+                <div className="p-4 border-b border-orange-800">
+                  <button onClick={onBack}
+                    className="flex items-center gap-2 text-orange-300 hover:text-white hover:bg-orange-800 px-3 py-2 rounded-lg transition-all duration-200 transform hover:-translate-x-1 active:scale-95 text-sm font-semibold w-full group">
+                    <i className="fa-solid fa-arrow-left transition-transform duration-300 group-hover:-translate-x-1"></i> Back to Dashboard
+                  </button>
+                </div>
+                <div className="hidden md:flex items-center gap-3 p-6 border-b border-orange-800">
+                  <i className="fa-solid fa-bug text-2xl text-orange-300"></i>
+                  <div>
+                    <h1 className="font-bold text-xl leading-tight">Parasitology</h1>
+                    <span className="text-orange-300 text-xs uppercase tracking-wider font-semibold">Study Guide</span>
+                  </div>
+                </div>
+                <div className="p-4 flex-1">
+                  <p className="text-orange-400 text-xs font-bold mb-4 uppercase tracking-wider px-2">Study Navigation</p>
+                  <ul className="space-y-1">
+                    {tabs.map((tab) => (
+                      <li key={tab.id}>
+                        <button
+                          onClick={() => { setActiveTab(tab.id); setCurrentPage(1); setOpenShortIndex(null); setIsMobileMenuOpen(false); }}
+                          className={`w-full flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200 transform hover:translate-x-2 active:scale-95 text-left group
+                            ${activeTab === tab.id
+                              ? 'bg-orange-600 text-white shadow-md'
+                              : 'text-orange-200 hover:bg-orange-800 hover:text-white'}`}
+                        >
+                          <span className={`w-5 h-5 flex items-center justify-center transition-transform duration-300 ${activeTab === tab.id ? 'scale-110' : 'group-hover:scale-110'}`}>{tab.icon}</span>
+                          <span className="font-medium">{tab.label}</span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="p-4 border-t border-orange-800 text-xs text-orange-400 text-center font-bold">
+                  Topic: {currentData.title}
+                </div>
+              </nav>
+
+              {/* Main Content */}
+              <main className="flex-1 p-4 md:p-8 overflow-y-auto w-full max-w-5xl mx-auto">
+                <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-10 min-h-[80vh]">
+
+                  {/* ── SUMMARY TAB ── */}
+                  {activeTab === 'summary' && (
+                    <div className="space-y-8 animate-in">
+                      <div className="border-b border-slate-200 pb-4">
+                        <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                          <i className="fa-solid fa-layer-group text-orange-600"></i> Topic Summary
+                        </h2>
+                        <p className="text-slate-600 mt-2">Comprehensive overview and core principles for {currentData.title}.</p>
+                      </div>
+                      
+                      <div className="bg-orange-50 p-8 rounded-xl border border-orange-200 text-center shadow-sm">
+                        <i className="fa-solid fa-forward-step text-4xl text-orange-400 mb-4 block"></i>
+                        <h3 className="text-xl font-bold text-orange-900 mb-2">Summary Skipped</h3>
+                        <p className="text-orange-700">As requested, there is no summary mapped for this module. Please proceed directly to the <strong>Short Essay</strong>, <strong>Long Essay</strong>, or <strong>Glossary</strong> tabs to begin your review!</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* ── SHORT ESSAY TAB ── */}
+                  {(() => {
+                    if (activeTab !== 'short_essay') return null;
+                    const essays = currentData.shortEssays;
+                    if (essays.length === 0) return (
+                      <div className="space-y-8 animate-in">
+                        <div className="border-b border-slate-200 pb-4">
+                          <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                            <i className="fa-solid fa-file-lines text-orange-600"></i> Short Essay
+                          </h2>
+                          <p className="text-slate-600 mt-2">Short-answer questions for exam preparation.</p>
+                        </div>
+                        <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 text-center text-slate-500 italic">
+                          Short essay questions for <strong>{currentData.title}</strong> are coming soon!
+                        </div>
+                      </div>
+                    );
+                    const totalPages = Math.ceil(essays.length / ITEMS_PER_PAGE);
+                    const paginated  = essays.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+                    return (
+                      <div className="space-y-6 animate-in">
+                        <div className="border-b border-slate-200 pb-4">
+                          <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                            <i className="fa-solid fa-file-lines text-orange-600"></i> Short Essay
+                          </h2>
+                          <p className="text-slate-600 mt-2">Click each question to reveal the answer.</p>
+                        </div>
+                        <div className="space-y-3">
+                          {paginated.map((item, idx) => {
+                            const globalIdx = (currentPage - 1) * ITEMS_PER_PAGE + idx;
+                            return (
+                              <div key={globalIdx} className="border border-slate-200 rounded-lg overflow-hidden shadow-sm hover:border-orange-300 transition-all duration-300 hover:shadow-md">
+                                <button
+                                  onClick={() => setOpenShortIndex(openShortIndex === globalIdx ? null : globalIdx)}
+                                  className="w-full text-left p-4 bg-white hover:bg-orange-50/50 flex justify-between items-center focus:outline-none transition-colors duration-200">
+                                  <span className="font-semibold text-slate-800 pr-4">{globalIdx + 1}. {item.q}</span>
+                                  <i className={`fa-solid fa-chevron-down shrink-0 transition-transform duration-300 ${openShortIndex === globalIdx ? 'rotate-180 text-orange-500' : 'text-slate-400'}`}></i>
+                                </button>
+                                <div className={`grid transition-all duration-300 ease-in-out ${openShortIndex === globalIdx ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                                  <div className="overflow-hidden">
+                                    <div className="p-4 bg-orange-50 border-t border-orange-100 text-slate-700">
+                                      <strong className="text-orange-800 block mb-1">Answer:</strong> {item.a}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                        {totalPages > 1 && (
+                          <div className="flex items-center justify-center gap-3 pt-4">
+                            <button onClick={() => { setCurrentPage(p => Math.max(1, p - 1)); setOpenShortIndex(null); }}
+                              disabled={currentPage === 1}
+                              className={`w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300 ${currentPage === 1 ? 'opacity-40 cursor-not-allowed text-slate-400 bg-slate-100' : 'text-orange-600 bg-white border border-slate-200 hover:bg-orange-50 hover:shadow-md hover:-translate-x-1 cursor-pointer'}`}>
+                              <i className="fa-solid fa-chevron-left"></i>
+                            </button>
+                            <div className="flex items-center gap-2">
+                              {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => {
+                                const distance = Math.abs(currentPage - pageNum);
+                                let cls = "";
+                                if      (distance === 0) cls = "w-10 h-10 text-base bg-orange-600 text-white shadow-md ring-2 ring-orange-200 ring-offset-1 z-10 opacity-100";
+                                else if (distance === 1) cls = "w-8 h-8 text-sm bg-white text-slate-600 border border-slate-200 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-300 opacity-100 cursor-pointer hover:scale-110";
+                                else if (distance === 2) cls = "w-6 h-6 text-xs bg-white text-slate-500 border border-slate-200 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-300 opacity-50 cursor-pointer hover:scale-125";
+                                else                     cls = "w-4 h-4 text-[0px] bg-white border border-slate-200 opacity-0 pointer-events-none";
+                                return (
+                                  <div key={pageNum} className="w-10 h-10 shrink-0 flex items-center justify-center">
+                                    <button onClick={() => { setCurrentPage(pageNum); setOpenShortIndex(null); }}
+                                      className={`rounded-full font-bold transition-all duration-300 flex items-center justify-center shrink-0 ${cls}`}>
+                                      {pageNum}
+                                    </button>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                            <button onClick={() => { setCurrentPage(p => Math.min(totalPages, p + 1)); setOpenShortIndex(null); }}
+                              disabled={currentPage === totalPages}
+                              className={`w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300 ${currentPage === totalPages ? 'opacity-40 cursor-not-allowed text-slate-400 bg-slate-100' : 'text-orange-600 bg-white border border-slate-200 hover:bg-orange-50 hover:shadow-md hover:translate-x-1 cursor-pointer'}`}>
+                              <i className="fa-solid fa-chevron-right"></i>
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })()}
+
+                  {/* ── LONG ESSAY TAB ── */}
+                  {activeTab === 'long_essay' && (
+                    <div className="space-y-6 animate-in">
+                      <div className="border-b border-slate-200 pb-4">
+                        <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                          <i className="fa-solid fa-book-open text-orange-600"></i> Long Essay
+                        </h2>
+                        <p className="text-slate-600 mt-2">Comprehensive, multi-part parasitology discussions.</p>
+                      </div>
+                      {currentData.longEssays.length === 0 ? (
+                        <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 text-center text-slate-500 italic">
+                          Long essay content for <strong>{currentData.title}</strong> is coming soon!
+                        </div>
+                      ) : (
+                        <div className="flex flex-col gap-4">
+                          {currentData.longEssays.map((essay, idx) => (
+                            <div key={idx} className={`border rounded-xl overflow-hidden transition-all duration-300 ${openLongIndex === idx ? 'border-orange-300 shadow-md ring-1 ring-orange-100' : 'border-slate-200 hover:border-orange-200 hover:shadow-md'}`}>
+                              <button
+                                className={`w-full text-left p-5 flex justify-between items-start gap-4 transition-colors duration-200 active:bg-orange-100/50 ${openLongIndex === idx ? 'bg-orange-50' : 'bg-white hover:bg-slate-50'}`}
+                                onClick={() => setOpenLongIndex(openLongIndex === idx ? null : idx)}>
+                                <h3 className={`font-bold text-lg leading-snug transition-colors duration-300 ${openLongIndex === idx ? 'text-orange-900' : 'text-slate-700'}`}>
+                                  Essay {idx + 1}: {essay.title}
+                                </h3>
+                                <i className={`fa-solid fa-chevron-down mt-1 shrink-0 transition-transform duration-300 ${openLongIndex === idx ? 'rotate-180 text-orange-600' : 'text-slate-400'}`}></i>
+                              </button>
+                              <div className={`grid transition-all duration-300 ease-in-out ${openLongIndex === idx ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                                <div className="overflow-hidden">
+                                  <div className="p-6 bg-white border-t border-orange-100 text-slate-700 leading-relaxed text-lg shadow-inner whitespace-pre-wrap">
+                                    {essay.answer}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* ── GLOSSARY TAB ── */}
+                  {activeTab === 'glossary' && (
+                    <div className="space-y-8 animate-in">
+                      <div className="border-b border-slate-200 pb-4">
+                        <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                          <i className="fa-solid fa-bookmark text-orange-600"></i> Glossary & Mnemonics
+                        </h2>
+                        <p className="text-slate-600 mt-2">Key terms, buzzwords, and memory hooks for {currentData.title}.</p>
+                      </div>
+                      
+                      {topic === 'larva_cestodes' ? (
+                        <div className="space-y-8">
+                          
+                          {/* Golden Buzzwords & Entities */}
+                          <div>
+                            <h3 className="text-xl font-bold text-slate-800 mb-4 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
+                              <i className="fa-solid fa-bolt text-orange-600"></i> Key Entities & Golden Buzzwords
+                            </h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                              {[
+                                { term: 'Procercoid', def: 'The larval stage found in Cyclops (1st intermediate host) of Spirometra mansoni.' },
+                                { term: 'Sparganum', def: 'The elongated larval stage of Spirometra mansoni that infects human tissues.' },
+                                { term: 'Cysticercus cellulosae', def: 'The "bladder worm" larval stage of Taenia solium; cause of cysticercosis.' },
+                                { term: 'Onchosphere', def: 'The embryo that hatches from T. solium eggs to penetrate the intestinal wall.' },
+                                { term: 'Hole-with-Dot', def: 'Pathognomonic imaging finding for NCC; represents the cyst and the scolex.' },
+                                { term: 'Blind End Host', def: 'A host in which the parasite cannot reach maturity or continue its life cycle.' },
+                                { term: 'Retrofection', def: 'Internal autoinfection where larvae move backward from the intestine to the stomach via reverse peristalsis.' },
+                                { term: 'Cyclops', def: 'The water flea that serves as the first intermediate host for Spirometra.' },
+                              ].map((item, idx) => (
+                                <div key={idx} className="bg-white border border-slate-200 p-4 rounded-lg shadow-sm hover:border-orange-300 hover:shadow-md transition-all">
+                                  <strong className="text-orange-800 block mb-1 text-lg">{item.term}</strong>
+                                  <p className="text-slate-600 text-sm">{item.def}</p>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="grid md:grid-cols-2 gap-8 pt-4 border-t border-slate-200">
+                            {/* Mnemonics */}
+                            <div className="bg-orange-50 rounded-xl p-6 border border-orange-200 shadow-sm space-y-6">
+                              <div>
+                                <h3 className="text-xl font-bold text-orange-900 mb-3 flex items-center gap-2">
+                                  <i className="fa-solid fa-brain"></i> Mnemonics for Mastery
+                                </h3>
+                                <div className="space-y-4">
+                                  <div className="bg-white p-4 rounded shadow-sm border border-orange-100">
+                                    <strong className="text-orange-800 block mb-1">The "S" of Sparganosis:</strong>
+                                    <p className="text-slate-700 text-sm">Think <strong>S</strong>pirometra, <strong>S</strong>olid larva (not a bladder), <strong>S</strong>ubcutaneous swelling, and <strong>S</strong>urgical removal (the primary treatment).</p>
+                                  </div>
+                                  <div className="bg-white p-4 rounded shadow-sm border border-orange-100">
+                                    <strong className="text-orange-800 block mb-1">The "C" of Cysticercosis:</strong>
+                                    <p className="text-slate-700 text-sm">Think <strong>C</strong>yst (bladder), <strong>C</strong>onvulsions (epilepsy), <strong>C</strong>ontaminated feces (source of eggs), and <strong>C</strong>hemotherapy (Albendazole/Praziquantel).</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Additional Hooks */}
+                            <div className="space-y-6">
+                              <h3 className="text-xl font-bold text-slate-800 mb-2 bg-slate-100 p-2 rounded-md inline-flex items-center gap-2">
+                                <i className="fa-solid fa-lightbulb text-slate-600"></i> Rapid Recall Hooks
+                              </h3>
+                              <div className="flex flex-col gap-3">
+                                <div className="border-l-4 border-emerald-500 bg-white p-4 rounded-r-lg shadow-sm">
+                                  <h4 className="font-bold text-slate-800 text-md mb-1">Retrofection Hook</h4>
+                                  <p className="text-slate-600 text-sm">"Retro" means backward. In T. solium, the segments go backward (up) to the stomach before they go forward into the bloodstream.</p>
+                                </div>
+                                <div className="border-l-4 border-rose-500 bg-white p-4 rounded-r-lg shadow-sm">
+                                  <h4 className="font-bold text-slate-800 text-md mb-1">Poultice Hook</h4>
+                                  <p className="text-slate-600 text-sm">Remember the "Heat Seekers." Sparganum larvae in a frog poultice are "hooked" on the heat of human inflammation and migrate toward it.</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                      ) : (
+                        <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 text-center text-slate-500 italic">
+                          Glossary content for <strong>{currentData.title}</strong> is coming soon!
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                </div>
+              </main>
+            </div>
+          );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
