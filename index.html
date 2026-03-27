@@ -53,8 +53,11 @@
         const GraduationCap = ({className}) => <i className={`fa-solid fa-graduation-cap ${className}`}></i>;
         const Pills = ({className}) => <i className={`fa-solid fa-pills ${className}`}></i>;
         const Bolt = ({className}) => <i className={`fa-solid fa-bolt ${className}`}></i>;
-        // تمت إضافة أيقونة الميكروسكوب لحل مشكلة ReferenceError
         const Microscope = ({className}) => <i className={`fa-solid fa-microscope ${className}`}></i>;
+        // Added the Biohazard icon specifically for Microbiology
+        const Biohazard = ({className}) => <i className={`fa-solid fa-biohazard ${className}`}></i>;
+        // Added the Bug icon specifically for Parasitology
+        const Bug = ({className}) => <i className={`fa-solid fa-bug ${className}`}></i>;
 
         function App() {
             // Check the URL hash on load to determine if we should start inside the CNS module
@@ -231,8 +234,8 @@
                         </div>
                     </header>
 
-                    {/* Changed to a 4-column grid and reduced spacing */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 pb-16">
+                    {/* Adjusted grid to handle 6 cards cleanly (2 rows of 3 on large screens) */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 pb-16">
                         
                         {/* Pharmacology Hub Link */}
                         <a href="PharmaBoard.html" className="group relative overflow-hidden bg-slate-800 border border-slate-700 rounded-2xl p-5 transition-all duration-300 hover:border-blue-500 hover:shadow-xl hover:shadow-blue-500/20 hover:-translate-y-1 flex flex-col">
@@ -294,6 +297,38 @@
                                 </p>
                                 <div className="flex items-center text-purple-500 font-bold gap-2 text-sm mt-auto">
                                     Enter Pathology <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+                                </div>
+                            </div>
+                        </a>
+
+                        {/* Microbiology Hub Link (NEW) */}
+                        <a href="MicroBoard.html" className="group relative overflow-hidden bg-slate-800 border border-slate-700 rounded-2xl p-5 transition-all duration-300 hover:border-fuchsia-500 hover:shadow-xl hover:shadow-fuchsia-500/20 hover:-translate-y-1 flex flex-col">
+                            <div className="relative z-10 flex flex-col h-full">
+                                <div className="w-12 h-12 bg-fuchsia-600/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shrink-0">
+                                    <Biohazard className="text-2xl text-fuchsia-500" />
+                                </div>
+                                <h2 className="text-lg font-bold mb-2 text-white">Neuro-Microbiology</h2>
+                                <p className="text-slate-400 mb-4 text-xs leading-relaxed flex-1">
+                                    Study CNS pathogens, meningitis, encephalitis, and neuromuscular infections.
+                                </p>
+                                <div className="flex items-center text-fuchsia-500 font-bold gap-2 text-sm mt-auto">
+                                    Enter Microbiology <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+                                </div>
+                            </div>
+                        </a>
+
+                        {/* Parasitology Hub Link (NEW) */}
+                        <a href="parasitology_hub.html" className="group relative overflow-hidden bg-slate-800 border border-slate-700 rounded-2xl p-5 transition-all duration-300 hover:border-orange-500 hover:shadow-xl hover:shadow-orange-500/20 hover:-translate-y-1 flex flex-col">
+                            <div className="relative z-10 flex flex-col h-full">
+                                <div className="w-12 h-12 bg-orange-600/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shrink-0">
+                                    <Bug className="text-2xl text-orange-500" />
+                                </div>
+                                <h2 className="text-lg font-bold mb-2 text-white">Neuro-Parasitology</h2>
+                                <p className="text-slate-400 mb-4 text-xs leading-relaxed flex-1">
+                                    Investigate parasitic infections of the CNS including larval cestodes and protozoa.
+                                </p>
+                                <div className="flex items-center text-orange-500 font-bold gap-2 text-sm mt-auto">
+                                    Enter Parasitology <ArrowRight className="group-hover:translate-x-1 transition-transform" />
                                 </div>
                             </div>
                         </a>
