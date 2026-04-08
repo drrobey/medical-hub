@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special Sense Anatomy Hub</title>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Load React, ReactDOM, and Babel -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Load Icons (FontAwesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Custom Page Transition Animations */
+        @keyframes slideInRight { 0% { transform: translateX(60px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+        @keyframes slideInLeft { 0% { transform: translateX(-60px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+        .slide-forward { animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .slide-backward { animation: slideInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+        /* Tab Content & Section Enter Animation */
+        @keyframes fadeSlideUp { 0% { opacity: 0; transform: translateY(15px); } 100% { opacity: 1; transform: translateY(0); } }
+        .animate-in { animation: fadeSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+        /* Smooth height transition for accordions */
+        .accordion-content {
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        .accordion-content.open {
+            max-height: 800px; /* Arbitrary large max-height */
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans overflow-x-hidden">
+    <div id="root"></div>
+
+    <script type="text/babel" data-type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const { useState, useEffect } = React;
+
+        // --- Firebase Setup ---
+        let app, auth, db, appId;
+        try {
+            const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+            appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        } catch (error) {
+            console.error("Firebase initialization error:", error);
+        }
+
+        // --- Initial Empty Data Builder ---
+        const initialTopics = [
+            { id: '1', title: 'Anatomy of the Cornea', desc: 'Detail the 5 histological layers of the cornea and their clinical significance.', iconName: 'Eye', theme: 'teal', short_essay: [], long_essay: [], glossary: [] },
+            { id: '2', title: 'Extraocular Muscles', desc: 'Origins, insertions, nerve supply, and primary actions of the 6 extraocular muscles.', iconName: 'Eye', theme: 'teal', short_essay: [], long_essay: [], glossary: [] },
+            { id: '3', title: 'Tympanic Membrane', desc: 'Describe the anatomical landmarks, layers, and quadrants of the tympanic membrane.', iconName: 'EarListen', theme: 'teal', short_essay: [], long_essay: [], glossary: [] },
+            { id: '4', title: 'The Visual Pathway', desc: 'Trace the visual pathway from the retina to the primary visual cortex (V1). Include effects of lesions.', iconName: 'Brain', theme: 'teal', short_essay: [], long_essay: [], glossary: [] }
+        ];
+
+        // --- Main App Component ---
+        function App() {
+            const [topics, setTopics] = useState(initialTopics);
+            const [currentView, setCurrentView] = useState('dashboard');
+            const [direction, setDirection] = useState('forward');
+
+            // Form state for adding topics
+            const [isAddingTopic, setIsAddingTopic] = useState(false);
+            const [newTopic, setNewTopic] = useState({ title: '', desc: '', iconName: 'Eye' });
+
+            // --- Firebase State & Sync ---
+            const [user, setUser] = useState(null);
+            const [syncStatus, setSyncStatus] = useState('connecting'); // New state for cloud status
+
+            useEffect(() => {
+                if (!auth) {
+                    setSyncStatus('offline');
+                    return;
+                }
+                const initAuth = async () => {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        try {
+                            await signInAnonymously(auth);
+                        } catch (e) {
+                            setSyncStatus('offline');
+                        }
+                    }
+                };
+                initAuth();
+                const unsubscribe = onAuthStateChanged(auth, (user) => {
+                    setUser(user);
+                    if (!user) setSyncStatus('offline');
+                });
+                return () => unsubscribe();
+            }, []);
+
+            useEffect(() => {
+                if (!user || !db) {
+                    setSyncStatus('offline');
+                    return;
+                }
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'specialSenseAnatomy', 'topicsDocument');
+                const unsubscribe = onSnapshot(docRef, (snapshot) => {
+                    if (snapshot.exists() && snapshot.data().topics) {
+                        setTopics(snapshot.data().topics);
+                        setSyncStatus('synced');
+                    } else {
+                        // Seed initial data if missing
+                        setDoc(docRef, { topics: initialTopics })
+                            .then(() => setSyncStatus('synced'))
+                            .catch((e) => { console.error(e); setSyncStatus('offline'); });
+                    }
+                }, (error) => {
+                    console.error("Error fetching Firestore data:", error);
+                    setSyncStatus('offline');
+                });
+                return () => unsubscribe();
+            }, [user]);
+
+            const saveTopics = async (newTopics) => {
+                setTopics(newTopics); // Optimistic update
+                if (user && db) {
+                    setSyncStatus('saving...');
+                    try {
+                        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'specialSenseAnatomy', 'topicsDocument');
+                        await setDoc(docRef, { topics: newTopics });
+                        setSyncStatus('synced');
+                    } catch (e) {
+                        console.error("Failed to save topics:", e);
+                        setSyncStatus('offline');
+                    }
+                }
+            };
+
+            const navigateTo = (view) => {
+                if (view === 'dashboard') {
+                    setDirection('backward');
+                } else {
+                    setDirection('forward');
+                }
+                setCurrentView(view);
+            };
+
+            const backToPortal = () => { window.location.href = 'index.html#special-sense'; };
+
+            // Dashboard Actions
+            const handleDeleteTopic = (id, e) => {
+                e.stopPropagation();
+                const newTopics = topics.filter(t => t.id !== id);
+                saveTopics(newTopics);
+            };
+
+            const handleAddTopicSubmit = (e) => {
+                e.preventDefault();
+                if(!newTopic.title) return;
+                const topicToAdd = {
+                    ...newTopic,
+                    id: Date.now().toString(),
+                    theme: 'teal',
+                    short_essay: [], long_essay: [], glossary: []
+                };
+                const newTopics = [...topics, topicToAdd];
+                saveTopics(newTopics);
+                setIsAddingTopic(false);
+                setNewTopic({ title: '', desc: '', iconName: 'Eye' });
+            };
+
+            // --- Dashboard Sub-Component ---
+            const renderDashboard = () => (
+                <div className="min-h-screen bg-slate-100 font-sans text-slate-800 p-6 md:p-12">
+                    <div className="max-w-6xl mx-auto space-y-8 animate-in">
+                        
+                        <button onClick={backToPortal} className="group flex items-center gap-2 text-slate-500 hover:text-teal-600 font-bold transition-all">
+                            <i className="fa-solid fa-house group-hover:-translate-y-1 transition-transform"></i> 
+                            <span className="text-sm uppercase tracking-wider">Back to Special Sense Module</span>
+                        </button>
+
+                        <header className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-slate-200 gap-4">
+                            <div className="flex items-center gap-4">
+                                <div className="bg-teal-600 p-3 rounded-xl shadow-lg w-12 h-12 flex items-center justify-center text-white text-xl">
+                                    <i className="fa-solid fa-eye"></i>
+                                </div>
+                                <div>
+                                    <div className="flex items-center gap-3 flex-wrap">
+                                        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Anatomy Hub</h1>
+                                        {syncStatus === 'synced' && <span className="bg-emerald-100 text-emerald-700 text-[10px] uppercase font-bold px-2 py-1 rounded-full"><i className="fa-solid fa-cloud-check mr-1"></i> Cloud Synced</span>}
+                                        {syncStatus === 'saving...' && <span className="bg-amber-100 text-amber-700 text-[10px] uppercase font-bold px-2 py-1 rounded-full"><i className="fa-solid fa-spinner fa-spin mr-1"></i> Saving...</span>}
+                                        {syncStatus === 'offline' && <span className="bg-slate-200 text-slate-600 text-[10px] uppercase font-bold px-2 py-1 rounded-full"><i className="fa-solid fa-cloud-arrow-down mr-1"></i> Local Mode (No Save)</span>}
+                                    </div>
+                                    <p className="text-slate-500 font-medium mt-1">Special Sense Anatomy Subjects</p>
+                                </div>
+                            </div>
+                            {!isAddingTopic && (
+                                <button onClick={() => setIsAddingTopic(true)} className="bg-teal-50 text-teal-600 hover:bg-teal-100 px-4 py-2 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-colors border border-teal-200 w-full md:w-auto">
+                                    <i className="fa-solid fa-plus"></i> Add Topic
+                                </button>
+                            )}
+                        </header>
+
+                        <main>
+                            <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+                                <i className="fa-solid fa-layer-group text-teal-600"></i>
+                                Available Study Modules
+                            </h2>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {topics.map(topic => (
+                                    <div key={topic.id} onClick={() => navigateTo(topic.id)} className="relative overflow-hidden rounded-2xl border-2 p-6 transition-all duration-300 ease-out flex flex-col h-full transform cursor-pointer hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.02] hover:border-teal-500 group bg-teal-50 border-teal-200">
+                                        <button onClick={(e) => handleDeleteTopic(topic.id, e)} className="absolute top-4 right-4 text-slate-400 hover:text-red-500 hover:bg-white/50 p-2 rounded-lg transition-colors z-20">
+                                            <i className="fa-solid fa-trash"></i>
+                                        </button>
+
+                                        <div className="bg-white w-16 h-16 rounded-2xl shadow-sm flex items-center justify-center mb-6 shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+                                            <i className={`fa-solid fa-${topic.iconName === 'Eye' ? 'eye' : topic.iconName === 'EarListen' ? 'ear-listen' : 'brain'} text-2xl text-teal-500`}></i>
+                                        </div>
+                                        <h3 className="text-xl font-bold mb-2 text-slate-900 pr-6">{topic.title}</h3>
+                                        <p className="text-slate-600 mb-8 line-clamp-2 flex-1">{topic.desc}</p>
+                                        <button className="w-full py-3 px-4 bg-white/50 hover:bg-white text-slate-800 border border-slate-300 font-semibold rounded-xl transition-all duration-200 transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 mt-auto shadow-sm">
+                                            Open Review
+                                        </button>
+                                    </div>
+                                ))}
+
+                                {isAddingTopic && (
+                                    <div className="rounded-2xl border-2 border-teal-400 bg-white p-6 flex flex-col h-full shadow-lg animate-in">
+                                        <div className="flex justify-between items-center mb-4">
+                                            <h3 className="font-bold text-slate-800">Create New Topic</h3>
+                                            <button onClick={() => setIsAddingTopic(false)} className="text-slate-400 hover:text-slate-700"><i className="fa-solid fa-xmark"></i></button>
+                                        </div>
+                                        <form onSubmit={handleAddTopicSubmit} className="flex flex-col flex-1 gap-3">
+                                            <input type="text" placeholder="Topic Title" required value={newTopic.title} onChange={e => setNewTopic({...newTopic, title: e.target.value})} className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-teal-500" />
+                                            <textarea placeholder="Description..." required value={newTopic.desc} onChange={e => setNewTopic({...newTopic, desc: e.target.value})} className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-teal-500 resize-none flex-1" />
+                                            <select value={newTopic.iconName} onChange={e => setNewTopic({...newTopic, iconName: e.target.value})} className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-teal-500">
+                                                <option value="Eye">Eye</option><option value="EarListen">Ear</option><option value="Brain">Brain</option>
+                                            </select>
+                                            <button type="submit" className="w-full bg-teal-600 text-white rounded-lg py-2 text-sm font-bold hover:bg-teal-700 transition-colors mt-2">Save Topic</button>
+                                        </form>
+                                    </div>
+                                )}
+                            </div>
+                        </main>
+                    </div>
+                </div>
+            );
+
+            // --- Topic Review Sub-Component ---
+            const renderTopicView = () => {
+                const activeTopic = topics.find(t => t.id === currentView);
+                if (!activeTopic) return null;
+                
+                return <AnatomyTopicGuide topicData={activeTopic} onBack={() => navigateTo('dashboard')} saveTopics={saveTopics} topics={topics} />;
+            };
+
+            return (
+                <div key={currentView} className={direction === 'forward' ? 'slide-forward' : 'slide-backward'}>
+                    {currentView === 'dashboard' ? renderDashboard() : renderTopicView()}
+                    <div className="fixed bottom-2 right-3 text-right text-[10px] md:text-xs text-slate-400/50 font-medium pointer-events-none z-50 select-none">
+                        <div>Dr.Zeyad Robey</div>
+                        <div>Ain Shams University</div>
+                    </div>
+                </div>
+            );
+        }
+
+        // --- Study Guide Component (Topic View) ---
+        function AnatomyTopicGuide({ topicData, onBack, saveTopics, topics }) {
+            const [activeTab, setActiveTab] = useState('summary'); 
+            const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+            const [openShortIndex, setOpenShortIndex] = useState(null);
+            const [openLongIndex, setOpenLongIndex] = useState(null);
+            const [currentPage, setCurrentPage] = useState(1);
+
+            // Form states for adding items
+            const [addingItemType, setAddingItemType] = useState(null); // 'short_essay', 'long_essay', 'glossary'
+            const [newItemQ, setNewItemQ] = useState('');
+            const [newItemA, setNewItemA] = useState('');
+
+            const themeColor = 'teal'; // Locked to teal for special sense
+
+            const tabs = [
+                { id: 'summary', label: 'Anatomy Summary', icon: <i className="fa-solid fa-book-medical flex items-center justify-center"></i> },
+                { id: 'short_essay', label: 'Short Essay Questions', icon: <i className="fa-solid fa-list-check flex items-center justify-center"></i> },
+                { id: 'long_essay', label: 'Long Essay Questions', icon: <i className="fa-solid fa-book-open flex items-center justify-center"></i> },
+                { id: 'glossary', label: 'Keywords & Glossary', icon: <i className="fa-solid fa-bookmark flex items-center justify-center"></i> },
+            ];
+
+            const handleSaveItem = (e) => {
+                e.preventDefault();
+                if(!newItemQ.trim() || !newItemA.trim()) return;
+
+                const newTopics = topics.map(t => {
+                    if (t.id === topicData.id) {
+                        return {
+                            ...t,
+                            [addingItemType]: [...t[addingItemType], { id: Date.now(), q: newItemQ, a: newItemA }]
+                        };
+                    }
+                    return t;
+                });
+                
+                saveTopics(newTopics);
+                setAddingItemType(null);
+                setNewItemQ('');
+                setNewItemA('');
+            };
+
+            const handleDeleteItem = (e, tabId, itemId) => {
+                e.stopPropagation();
+                const newTopics = topics.map(t => {
+                    if (t.id === topicData.id) {
+                        return {
+                            ...t,
+                            [tabId]: t[tabId].filter(item => item.id !== itemId)
+                        };
+                    }
+                    return t;
+                });
+
+                saveTopics(newTopics);
+                
+                // Check if current page is empty after deletion in short essays
+                if(tabId === 'short_essay') {
+                     const itemsPerPage = 5;
+                     const currentArray = topicData.short_essay.filter(item => item.id !== itemId);
+                     const totalPages = Math.max(1, Math.ceil(currentArray.length / itemsPerPage));
+                     if(currentPage > totalPages) setCurrentPage(totalPages);
+                }
+            };
+
+            const renderAddForm = (typeLabel, placeholderQ, placeholderA) => (
+                <div className="bg-slate-50 border-2 border-teal-300 rounded-xl p-5 shadow-sm animate-in mb-6">
+                    <div className="flex justify-between items-center mb-4">
+                        <h4 className="font-bold text-teal-800">Add New {typeLabel}</h4>
+                        <button onClick={() => setAddingItemType(null)} className="text-slate-400 hover:text-slate-600"><i className="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <form onSubmit={handleSaveItem} className="flex flex-col gap-3">
+                        <input type="text" placeholder={placeholderQ} required value={newItemQ} onChange={(e) => setNewItemQ(e.target.value)} className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500" />
+                        <textarea placeholder={placeholderA} required value={newItemA} onChange={(e) => setNewItemA(e.target.value)} className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 resize-none min-h-[100px]" />
+                        <div className="flex justify-end gap-2 mt-2">
+                            <button type="button" onClick={() => setAddingItemType(null)} className="px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-200 rounded-lg transition-colors">Cancel</button>
+                            <button type="submit" className="px-4 py-2 text-sm font-bold text-white bg-teal-600 hover:bg-teal-700 rounded-lg transition-colors shadow-sm">Save</button>
+                        </div>
+                    </form>
+                </div>
+            );
+
+            return (
+                <div className={`min-h-screen bg-slate-50 flex flex-col md:flex-row font-sans text-slate-800`}>
+                    {/* MOBILE HEADER */}
+                    <div className={`md:hidden bg-teal-900 text-white p-4 flex justify-between items-center shadow-md z-20`}>
+                        <div className="flex items-center gap-3">
+                            <button onClick={onBack} className={`p-1 hover:bg-teal-800 rounded transition-all duration-200 active:scale-90 w-8 h-8 flex items-center justify-center group`}>
+                                <i className="fa-solid fa-arrow-left transition-transform duration-300 group-hover:-translate-x-1"></i>
+                            </button>
+                            <div className="flex items-center gap-2 font-bold text-lg">
+                                <i className={`fa-solid fa-microscope text-teal-300`}></i>
+                                <span>Anatomy Review</span>
+                            </div>
+                        </div>
+                        <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="w-8 h-8 flex items-center justify-center transition-transform duration-300 active:scale-90">
+                            <div className={`transition-transform duration-300 ${isMobileMenuOpen ? 'rotate-90 scale-110' : 'rotate-0'}`}>
+                                {isMobileMenuOpen ? <i className="fa-solid fa-xmark"></i> : <i className="fa-solid fa-bars"></i>}
+                            </div>
+                        </button>
+                    </div>
+
+                    {/* SIDEBAR NAVIGATION */}
+                    <nav className={`
+                        ${isMobileMenuOpen ? 'flex' : 'hidden'} 
+                        md:flex flex-col w-full md:w-72 bg-teal-900 text-white shadow-xl
+                        fixed md:sticky top-0 h-screen overflow-y-auto z-10 transition-all duration-300
+                    `}>
+                        <div className="p-4 border-b border-teal-800 flex items-center justify-between">
+                            <button onClick={onBack} className={`flex items-center gap-2 text-teal-300 hover:text-white hover:bg-teal-800 px-3 py-2 rounded-lg transition-all duration-200 transform hover:-translate-x-1 active:scale-95 text-sm font-semibold w-full group`}>
+                                <i className="fa-solid fa-arrow-left transition-transform duration-300 group-hover:-translate-x-1"></i> Back
+                            </button>
+                        </div>
+                        
+                        <div className={`hidden md:flex items-center gap-3 p-6 border-b border-teal-800`}>
+                            <i className={`fa-solid fa-microscope text-2xl text-teal-300`}></i>
+                            <div>
+                                <h1 className="font-bold text-xl leading-tight">Anatomy Hub</h1>
+                                <span className={`text-teal-300 text-xs uppercase tracking-wider font-semibold`}>Study Guide</span>
+                            </div>
+                        </div>
+                        
+                        <div className="p-4 flex-1">
+                            <p className={`text-teal-400 text-xs font-bold mb-4 uppercase tracking-wider px-2`}>Study Navigation</p>
+                            <ul className="space-y-1">
+                                {tabs.map((tab) => (
+                                    <li key={tab.id}>
+                                        <button
+                                            onClick={() => {
+                                                setActiveTab(tab.id);
+                                                setCurrentPage(1);
+                                                setOpenShortIndex(null);
+                                                setOpenLongIndex(null);
+                                                setAddingItemType(null);
+                                                setIsMobileMenuOpen(false);
+                                            }}
+                                            className={`w-full flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200 transform hover:translate-x-2 active:scale-95 text-left group
+                                                ${activeTab === tab.id 
+                                                    ? `bg-teal-600 text-white shadow-md` 
+                                                    : `text-teal-200 hover:bg-teal-800 hover:text-white`
+                                                }`}
+                                        >
+                                            <span className={`w-5 h-5 flex items-center justify-center transition-transform duration-300 ${activeTab === tab.id ? 'scale-110' : 'group-hover:scale-110'}`}>{tab.icon}</span>
+                                            <span className="font-medium">{tab.label}</span>
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                        
+                        <div className={`p-4 border-t border-teal-800 text-xs text-teal-400 text-center font-bold`}>
+                            Topic: {topicData.title}
+                        </div>
+                    </nav>
+
+                    {/* MAIN CONTENT AREA */}
+                    <main className="flex-1 p-4 md:p-8 overflow-y-auto w-full max-w-5xl mx-auto">
+                        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-10 min-h-[80vh]">
+                            
+                            {/* Summary Tab (Empty placeholder) */}
+                            {activeTab === 'summary' && (
+                                <div className="flex flex-col items-center justify-center h-full min-h-[50vh] text-center space-y-4 animate-in">
+                                    <i className={`fa-solid fa-file-lines text-6xl text-slate-200`}></i>
+                                    <h2 className="text-2xl font-bold text-slate-700">Anatomy Summary</h2>
+                                    <p className="text-slate-500 max-w-md">Use the tabs on the left to review or add Q&A, Essays, and Keywords for <strong>{topicData.title}</strong>.</p>
+                                </div>
+                            )}
+
+                            {/* Short Essay Tab */}
+                            {activeTab === 'short_essay' && (() => {
+                                const itemsPerPage = 5;
+                                const totalPages = Math.max(1, Math.ceil(topicData.short_essay.length / itemsPerPage));
+                                const startIndex = (currentPage - 1) * itemsPerPage;
+                                const currentQuestions = topicData.short_essay.slice(startIndex, startIndex + itemsPerPage);
+
+                                return (
+                                    <div className="space-y-6 animate-in">
+                                        <div className="border-b border-slate-200 pb-4 flex justify-between items-end">
+                                            <div>
+                                                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                                                    <i className={`fa-solid fa-list-check text-teal-600`}></i> Short Essay
+                                                </h2>
+                                                <p className="text-slate-600 mt-2">Targeted, high-yield written responses.</p>
+                                            </div>
+                                            {!addingItemType && (
+                                                <button onClick={() => setAddingItemType('short_essay')} className="bg-teal-50 text-teal-600 hover:bg-teal-100 px-3 py-2 rounded-lg font-bold text-sm flex items-center gap-2 transition-colors border border-teal-200 shadow-sm">
+                                                    <i className="fa-solid fa-plus"></i> Add
+                                                </button>
+                                            )}
+                                        </div>
+
+                                        {addingItemType === 'short_essay' && renderAddForm("Short Essay", "Question (e.g., What is the primary function...)", "Answer...")}
+                                        
+                                        {topicData.short_essay.length === 0 && !addingItemType ? (
+                                            <div className="text-center py-12 text-slate-400 border-2 border-dashed border-slate-200 rounded-xl">
+                                                No short essays added yet. Click 'Add' to create one.
+                                            </div>
+                                        ) : (
+                                            <div key={currentPage} className="space-y-3 animate-in min-h-[300px]">
+                                                {currentQuestions.map((item, idx) => {
+                                                    const absoluteIndex = startIndex + idx;
+                                                    return (
+                                                        <div key={item.id} className={`border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:border-teal-400 transition-all duration-300 hover:shadow-md`}>
+                                                            <div className="flex items-center w-full bg-white hover:bg-slate-50 transition-colors">
+                                                                <button
+                                                                    onClick={() => setOpenShortIndex(openShortIndex === absoluteIndex ? null : absoluteIndex)}
+                                                                    className="flex-1 text-left p-4 flex justify-between items-center focus:outline-none"
+                                                                >
+                                                                    <span className="font-semibold text-slate-800 pr-4">Q{absoluteIndex + 1}: {item.q}</span>
+                                                                    <i className={`fa-solid fa-chevron-down transition-transform duration-300 ${openShortIndex === absoluteIndex ? `rotate-180 text-teal-500` : 'text-slate-400'}`}></i>
+                                                                </button>
+                                                                <button onClick={(e) => handleDeleteItem(e, 'short_essay', item.id)} className="p-4 text-slate-300 hover:text-red-500 transition-colors">
+                                                                    <i className="fa-solid fa-trash"></i>
+                                                                </button>
+                                                            </div>
+                                                            
+                                                            <div className={`grid transition-all duration-300 ease-in-out ${openShortIndex === absoluteIndex ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                                                                <div className="overflow-hidden">
+                                                                    <div className={`p-4 bg-teal-50 border-t border-teal-100 text-slate-700 whitespace-pre-wrap`}>
+                                                                        <strong className={`text-teal-800 block mb-1`}>Answer:</strong>
+                                                                        {item.a}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        )}
+
+                                        {totalPages > 1 && (
+                                            <div className="flex justify-center items-center gap-4 mt-8 pt-6 border-t border-slate-200">
+                                                <button 
+                                                    onClick={() => { setCurrentPage(prev => Math.max(1, prev - 1)); setOpenShortIndex(null); }}
+                                                    disabled={currentPage === 1}
+                                                    className={`w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300 ${currentPage === 1 ? 'opacity-40 cursor-not-allowed text-slate-400 bg-slate-100' : `text-teal-600 bg-white border border-slate-200 hover:bg-teal-50 hover:text-teal-700 hover:shadow-md hover:-translate-x-1 cursor-pointer`}`}
+                                                >
+                                                    <i className="fa-solid fa-chevron-left"></i>
+                                                </button>
+
+                                                <div className="relative w-[232px] h-12 overflow-hidden flex items-center">
+                                                    <div 
+                                                        className="flex gap-2 absolute left-0 transition-transform duration-500 ease-out" 
+                                                        style={{ transform: `translateX(${96 - (currentPage - 1) * 48}px)` }}
+                                                    >
+                                                        {[...Array(totalPages)].map((_, i) => {
+                                                            const pageNum = i + 1;
+                                                            const distance = Math.abs(currentPage - pageNum);
+                                                            
+                                                            let sizeClasses = "";
+                                                            if (distance === 0) {
+                                                                sizeClasses = `w-10 h-10 text-base bg-teal-600 text-white shadow-md ring-2 ring-teal-200 ring-offset-1 z-10 opacity-100`;
+                                                            } else if (distance === 1) {
+                                                                sizeClasses = `w-8 h-8 text-sm bg-white text-slate-600 border border-slate-200 hover:bg-teal-50 hover:text-teal-600 hover:border-teal-300 opacity-100 cursor-pointer hover:scale-110`;
+                                                            } else if (distance === 2) {
+                                                                sizeClasses = `w-6 h-6 text-xs bg-white text-slate-500 border border-slate-200 hover:bg-teal-50 hover:text-teal-600 hover:border-teal-300 opacity-50 cursor-pointer hover:scale-125`;
+                                                            } else {
+                                                                sizeClasses = "w-4 h-4 text-[0px] bg-white text-slate-400 border border-slate-200 opacity-0 pointer-events-none";
+                                                            }
+
+                                                            return (
+                                                                <div key={i} className="w-10 h-10 shrink-0 flex items-center justify-center">
+                                                                    <button
+                                                                        onClick={() => { setCurrentPage(pageNum); setOpenShortIndex(null); }}
+                                                                        className={`rounded-full font-bold transition-all duration-300 flex items-center justify-center shrink-0 ${sizeClasses}`}
+                                                                    >
+                                                                        {pageNum}
+                                                                    </button>
+                                                                </div>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                </div>
+
+                                                <button 
+                                                    onClick={() => { setCurrentPage(prev => Math.min(totalPages, prev + 1)); setOpenShortIndex(null); }}
+                                                    disabled={currentPage === totalPages}
+                                                    className={`w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300 ${currentPage === totalPages ? 'opacity-40 cursor-not-allowed text-slate-400 bg-slate-100' : `text-teal-600 bg-white border border-slate-200 hover:bg-teal-50 hover:text-teal-700 hover:shadow-md hover:translate-x-1 cursor-pointer`}`}
+                                                >
+                                                    <i className="fa-solid fa-chevron-right"></i>
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                );
+                            })()}
+
+                            {/* Long Essay Tab */}
+                            {activeTab === 'long_essay' && (
+                                <div className="space-y-6 animate-in">
+                                    <div className="border-b border-slate-200 pb-4 flex justify-between items-end">
+                                        <div>
+                                            <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                                                <i className={`fa-solid fa-book-open text-teal-600`}></i> Long Essay Review
+                                            </h2>
+                                            <p className="text-slate-600 mt-2">Comprehensive synthesis and pathological correlation.</p>
+                                        </div>
+                                        {!addingItemType && (
+                                            <button onClick={() => setAddingItemType('long_essay')} className="bg-teal-50 text-teal-600 hover:bg-teal-100 px-3 py-2 rounded-lg font-bold text-sm flex items-center gap-2 transition-colors border border-teal-200 shadow-sm">
+                                                <i className="fa-solid fa-plus"></i> Add
+                                            </button>
+                                        )}
+                                    </div>
+
+                                    {addingItemType === 'long_essay' && renderAddForm("Long Essay", "Essay Title / Question", "Full detailed essay...")}
+
+                                    {topicData.long_essay.length === 0 && !addingItemType ? (
+                                        <div className="text-center py-12 text-slate-400 border-2 border-dashed border-slate-200 rounded-xl">
+                                            No long essays added yet. Click 'Add' to create one.
+                                        </div>
+                                    ) : (
+                                        <div className="flex flex-col gap-4">
+                                            {topicData.long_essay.map((essay, idx) => (
+                                                <div key={essay.id} className={`border rounded-xl overflow-hidden transition-all duration-300 ${openLongIndex === idx ? `border-teal-300 shadow-md ring-1 ring-teal-100` : `border-slate-200 hover:border-teal-200 hover:shadow-md`}`}>
+                                                    <div className={`flex w-full transition-colors duration-200 ${openLongIndex === idx ? `bg-teal-50` : 'bg-white hover:bg-slate-50'}`}>
+                                                        <button 
+                                                            className="flex-1 text-left p-5 flex justify-between items-start gap-4"
+                                                            onClick={() => setOpenLongIndex(openLongIndex === idx ? null : idx)}
+                                                        >
+                                                            <h3 className={`font-bold text-lg leading-snug transition-colors duration-300 ${openLongIndex === idx ? `text-teal-900` : 'text-slate-800'}`}>
+                                                                Essay {idx + 1}: {essay.q}
+                                                            </h3>
+                                                            <i className={`fa-solid fa-chevron-down mt-1 shrink-0 transition-transform duration-300 ${openLongIndex === idx ? `rotate-180 text-teal-600` : 'text-slate-400'}`}></i>
+                                                        </button>
+                                                        <button onClick={(e) => handleDeleteItem(e, 'long_essay', essay.id)} className="p-5 text-slate-300 hover:text-red-500 transition-colors shrink-0">
+                                                            <i className="fa-solid fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                    
+                                                    <div className={`grid transition-all duration-300 ease-in-out ${openLongIndex === idx ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                                                        <div className="overflow-hidden">
+                                                            <div className={`p-6 bg-white border-t border-teal-100 text-slate-700 leading-relaxed text-lg shadow-inner whitespace-pre-wrap`}>
+                                                                {essay.a}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
+                            {/* GLOSSARY TAB */}
+                            {activeTab === 'glossary' && (
+                                <div className="space-y-8 animate-in">
+                                    <div className="border-b border-slate-200 pb-4 flex justify-between items-end">
+                                        <div>
+                                            <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                                                <i className={`fa-solid fa-bookmark text-teal-600`}></i> Keywords & Glossary
+                                            </h2>
+                                            <p className="text-slate-600 mt-2">Key terms and golden buzzwords.</p>
+                                        </div>
+                                        {!addingItemType && (
+                                            <button onClick={() => setAddingItemType('glossary')} className="bg-teal-50 text-teal-600 hover:bg-teal-100 px-3 py-2 rounded-lg font-bold text-sm flex items-center gap-2 transition-colors border border-teal-200 shadow-sm">
+                                                <i className="fa-solid fa-plus"></i> Add
+                                            </button>
+                                        )}
+                                    </div>
+
+                                    {addingItemType === 'glossary' && renderAddForm("Keyword", "Term (e.g., Macula Lutea)", "Definition...")}
+
+                                    {topicData.glossary.length === 0 && !addingItemType ? (
+                                        <div className="text-center py-12 text-slate-400 border-2 border-dashed border-slate-200 rounded-xl">
+                                            No keywords added yet. Click 'Add' to create one.
+                                        </div>
+                                    ) : (
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                                            {topicData.glossary.map((item) => (
+                                                <div key={item.id} className="bg-white border border-slate-200 p-4 rounded-lg shadow-sm hover:border-teal-300 hover:shadow-md transition-all relative group">
+                                                    <button onClick={(e) => handleDeleteItem(e, 'glossary', item.id)} className="absolute top-2 right-2 text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                        <i className="fa-solid fa-trash"></i>
+                                                    </button>
+                                                    <strong className="text-teal-800 block mb-1 text-lg pr-6">{item.q}</strong>
+                                                    <p className="text-slate-600 text-sm whitespace-pre-wrap">{item.a}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
+                        </div>
+                    </main>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
