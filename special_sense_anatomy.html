@@ -43,108 +43,82 @@
 <body class="bg-slate-50 text-slate-900 font-sans overflow-x-hidden">
     <div id="root"></div>
 
-    <script type="text/babel" data-type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
+    <script type="text/babel">
         const { useState, useEffect } = React;
 
-        // --- Firebase Setup ---
-        let app, auth, db, appId;
-        try {
-            const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-            app = initializeApp(firebaseConfig);
-            auth = getAuth(app);
-            db = getFirestore(app);
-            appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        } catch (error) {
-            console.error("Firebase initialization error:", error);
-        }
-
-        // --- Initial Empty Data Builder ---
         const initialTopics = [
-            { id: '1', title: 'Anatomy of the Cornea', desc: 'Detail the 5 histological layers of the cornea and their clinical significance.', iconName: 'Eye', theme: 'teal', short_essay: [], long_essay: [], glossary: [] },
-            { id: '2', title: 'Extraocular Muscles', desc: 'Origins, insertions, nerve supply, and primary actions of the 6 extraocular muscles.', iconName: 'Eye', theme: 'teal', short_essay: [], long_essay: [], glossary: [] },
-            { id: '3', title: 'Tympanic Membrane', desc: 'Describe the anatomical landmarks, layers, and quadrants of the tympanic membrane.', iconName: 'EarListen', theme: 'teal', short_essay: [], long_essay: [], glossary: [] },
-            { id: '4', title: 'The Visual Pathway', desc: 'Trace the visual pathway from the retina to the primary visual cortex (V1). Include effects of lesions.', iconName: 'Brain', theme: 'teal', short_essay: [], long_essay: [], glossary: [] }
+            {
+                "id": "1",
+                "title": "Anatomy of the Cornea",
+                "desc": "Detail the 5 histological layers of the cornea and their clinical significance.",
+                "iconName": "Eye",
+                "theme": "teal",
+                "short_essay": [],
+                "long_essay": [],
+                "glossary": []
+            },
+            {
+                "id": "2",
+                "title": "Extraocular Muscles",
+                "desc": "Origins, insertions, nerve supply, and primary actions of the 6 extraocular muscles.",
+                "iconName": "Eye",
+                "theme": "teal",
+                "short_essay": [],
+                "long_essay": [],
+                "glossary": []
+            },
+            {
+                "id": "3",
+                "title": "Tympanic Membrane",
+                "desc": "Describe the anatomical landmarks, layers, and quadrants of the tympanic membrane.",
+                "iconName": "EarListen",
+                "theme": "teal",
+                "short_essay": [],
+                "long_essay": [],
+                "glossary": []
+            },
+            {
+                "id": "4",
+                "title": "The Visual Pathway",
+                "desc": "Trace the visual pathway from the retina to the primary visual cortex (V1). Include effects of lesions.",
+                "iconName": "Brain",
+                "theme": "teal",
+                "short_essay": [],
+                "long_essay": [],
+                "glossary": []
+            }
         ];
 
         // --- Main App Component ---
         function App() {
-            const [topics, setTopics] = useState(initialTopics);
+            // Load from localStorage on initial render
+            const [topics, setTopics] = useState(() => {
+                try {
+                    const saved = localStorage.getItem('specialSenseAnatomyTopics');
+                    if (saved) {
+                        return JSON.parse(saved);
+                    }
+                } catch (e) {
+                    console.warn("Local storage is disabled in this preview environment, but will work when opened locally.");
+                }
+                return initialTopics;
+            });
+
+            // Save to localStorage whenever topics change
+            useEffect(() => {
+                try {
+                    localStorage.setItem('specialSenseAnatomyTopics', JSON.stringify(topics));
+                } catch (e) {
+                    // Ignore errors in sandboxed iframes
+                }
+            }, [topics]);
+
             const [currentView, setCurrentView] = useState('dashboard');
             const [direction, setDirection] = useState('forward');
-
+            
             // Form state for adding topics
             const [isAddingTopic, setIsAddingTopic] = useState(false);
             const [newTopic, setNewTopic] = useState({ title: '', desc: '', iconName: 'Eye' });
-
-            // --- Firebase State & Sync ---
-            const [user, setUser] = useState(null);
-            const [syncStatus, setSyncStatus] = useState('connecting'); // New state for cloud status
-
-            useEffect(() => {
-                if (!auth) {
-                    setSyncStatus('offline');
-                    return;
-                }
-                const initAuth = async () => {
-                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                        await signInWithCustomToken(auth, __initial_auth_token);
-                    } else {
-                        try {
-                            await signInAnonymously(auth);
-                        } catch (e) {
-                            setSyncStatus('offline');
-                        }
-                    }
-                };
-                initAuth();
-                const unsubscribe = onAuthStateChanged(auth, (user) => {
-                    setUser(user);
-                    if (!user) setSyncStatus('offline');
-                });
-                return () => unsubscribe();
-            }, []);
-
-            useEffect(() => {
-                if (!user || !db) {
-                    setSyncStatus('offline');
-                    return;
-                }
-                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'specialSenseAnatomy', 'topicsDocument');
-                const unsubscribe = onSnapshot(docRef, (snapshot) => {
-                    if (snapshot.exists() && snapshot.data().topics) {
-                        setTopics(snapshot.data().topics);
-                        setSyncStatus('synced');
-                    } else {
-                        // Seed initial data if missing
-                        setDoc(docRef, { topics: initialTopics })
-                            .then(() => setSyncStatus('synced'))
-                            .catch((e) => { console.error(e); setSyncStatus('offline'); });
-                    }
-                }, (error) => {
-                    console.error("Error fetching Firestore data:", error);
-                    setSyncStatus('offline');
-                });
-                return () => unsubscribe();
-            }, [user]);
-
-            const saveTopics = async (newTopics) => {
-                setTopics(newTopics); // Optimistic update
-                if (user && db) {
-                    setSyncStatus('saving...');
-                    try {
-                        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'specialSenseAnatomy', 'topicsDocument');
-                        await setDoc(docRef, { topics: newTopics });
-                        setSyncStatus('synced');
-                    } catch (e) {
-                        console.error("Failed to save topics:", e);
-                        setSyncStatus('offline');
-                    }
-                }
-            };
 
             const navigateTo = (view) => {
                 if (view === 'dashboard') {
@@ -160,8 +134,7 @@
             // Dashboard Actions
             const handleDeleteTopic = (id, e) => {
                 e.stopPropagation();
-                const newTopics = topics.filter(t => t.id !== id);
-                saveTopics(newTopics);
+                setTopics(topics.filter(t => t.id !== id));
             };
 
             const handleAddTopicSubmit = (e) => {
@@ -173,15 +146,14 @@
                     theme: 'teal',
                     short_essay: [], long_essay: [], glossary: []
                 };
-                const newTopics = [...topics, topicToAdd];
-                saveTopics(newTopics);
+                setTopics([...topics, topicToAdd]);
                 setIsAddingTopic(false);
                 setNewTopic({ title: '', desc: '', iconName: 'Eye' });
             };
 
             // --- Dashboard Sub-Component ---
             const renderDashboard = () => (
-                <div className="min-h-screen bg-slate-100 font-sans text-slate-800 p-6 md:p-12">
+                <div className="min-h-screen bg-slate-100 font-sans text-slate-800 p-6 md:p-12 relative">
                     <div className="max-w-6xl mx-auto space-y-8 animate-in">
                         
                         <button onClick={backToPortal} className="group flex items-center gap-2 text-slate-500 hover:text-teal-600 font-bold transition-all">
@@ -195,20 +167,18 @@
                                     <i className="fa-solid fa-eye"></i>
                                 </div>
                                 <div>
-                                    <div className="flex items-center gap-3 flex-wrap">
-                                        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Anatomy Hub</h1>
-                                        {syncStatus === 'synced' && <span className="bg-emerald-100 text-emerald-700 text-[10px] uppercase font-bold px-2 py-1 rounded-full"><i className="fa-solid fa-cloud-check mr-1"></i> Cloud Synced</span>}
-                                        {syncStatus === 'saving...' && <span className="bg-amber-100 text-amber-700 text-[10px] uppercase font-bold px-2 py-1 rounded-full"><i className="fa-solid fa-spinner fa-spin mr-1"></i> Saving...</span>}
-                                        {syncStatus === 'offline' && <span className="bg-slate-200 text-slate-600 text-[10px] uppercase font-bold px-2 py-1 rounded-full"><i className="fa-solid fa-cloud-arrow-down mr-1"></i> Local Mode (No Save)</span>}
-                                    </div>
+                                    <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Anatomy Hub</h1>
                                     <p className="text-slate-500 font-medium mt-1">Special Sense Anatomy Subjects</p>
                                 </div>
                             </div>
-                            {!isAddingTopic && (
-                                <button onClick={() => setIsAddingTopic(true)} className="bg-teal-50 text-teal-600 hover:bg-teal-100 px-4 py-2 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-colors border border-teal-200 w-full md:w-auto">
-                                    <i className="fa-solid fa-plus"></i> Add Topic
-                                </button>
-                            )}
+                            
+                            <div className="flex flex-wrap items-center gap-3 w-full md:w-auto mt-4 md:mt-0">
+                                {!isAddingTopic && (
+                                    <button onClick={() => setIsAddingTopic(true)} className="bg-teal-50 text-teal-600 hover:bg-teal-100 px-4 py-2 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-colors border border-teal-200">
+                                        <i className="fa-solid fa-plus"></i> Add Topic
+                                    </button>
+                                )}
+                            </div>
                         </header>
 
                         <main>
@@ -262,7 +232,7 @@
                 const activeTopic = topics.find(t => t.id === currentView);
                 if (!activeTopic) return null;
                 
-                return <AnatomyTopicGuide topicData={activeTopic} onBack={() => navigateTo('dashboard')} saveTopics={saveTopics} topics={topics} />;
+                return <AnatomyTopicGuide topicData={activeTopic} onBack={() => navigateTo('dashboard')} setTopics={setTopics} topics={topics} />;
             };
 
             return (
@@ -277,7 +247,7 @@
         }
 
         // --- Study Guide Component (Topic View) ---
-        function AnatomyTopicGuide({ topicData, onBack, saveTopics, topics }) {
+        function AnatomyTopicGuide({ topicData, onBack, setTopics, topics }) {
             const [activeTab, setActiveTab] = useState('summary'); 
             const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
             const [openShortIndex, setOpenShortIndex] = useState(null);
@@ -306,13 +276,13 @@
                     if (t.id === topicData.id) {
                         return {
                             ...t,
-                            [addingItemType]: [...t[addingItemType], { id: Date.now(), q: newItemQ, a: newItemA }]
+                            [addingItemType]: [...t[addingItemType], { id: Date.now().toString(), q: newItemQ, a: newItemA }]
                         };
                     }
                     return t;
                 });
                 
-                saveTopics(newTopics);
+                setTopics(newTopics);
                 setAddingItemType(null);
                 setNewItemQ('');
                 setNewItemA('');
@@ -330,7 +300,7 @@
                     return t;
                 });
 
-                saveTopics(newTopics);
+                setTopics(newTopics);
                 
                 // Check if current page is empty after deletion in short essays
                 if(tabId === 'short_essay') {
@@ -386,7 +356,7 @@
                     `}>
                         <div className="p-4 border-b border-teal-800 flex items-center justify-between">
                             <button onClick={onBack} className={`flex items-center gap-2 text-teal-300 hover:text-white hover:bg-teal-800 px-3 py-2 rounded-lg transition-all duration-200 transform hover:-translate-x-1 active:scale-95 text-sm font-semibold w-full group`}>
-                                <i className="fa-solid fa-arrow-left transition-transform duration-300 group-hover:-translate-x-1"></i> Back
+                                <i className="fa-solid fa-arrow-left transition-transform duration-300 group-hover:-translate-x-1"></i> Back to Hub
                             </button>
                         </div>
                         
