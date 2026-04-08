@@ -43,6 +43,7 @@
         // --- Icons ---
         const Brain = ({className}) => <i className={`fa-solid fa-brain ${className}`}></i>;
         const Eye = ({className}) => <i className={`fa-solid fa-eye ${className}`}></i>;
+        const EarListen = ({className}) => <i className={`fa-solid fa-ear-listen ${className}`}></i>;
         const Flask = ({className}) => <i className={`fa-solid fa-flask ${className}`}></i>;
         const Stomach = ({className}) => <i className={`fa-solid fa-stomach ${className}`}></i>;
         const Apple = ({className}) => <i className={`fa-solid fa-apple-whole ${className}`}></i>;
@@ -54,21 +55,25 @@
         const Pills = ({className}) => <i className={`fa-solid fa-pills ${className}`}></i>;
         const Bolt = ({className}) => <i className={`fa-solid fa-bolt ${className}`}></i>;
         const Microscope = ({className}) => <i className={`fa-solid fa-microscope ${className}`}></i>;
-        // Added the Biohazard icon specifically for Microbiology
         const Biohazard = ({className}) => <i className={`fa-solid fa-biohazard ${className}`}></i>;
-        // Added the Bug icon specifically for Parasitology
         const Bug = ({className}) => <i className={`fa-solid fa-bug ${className}`}></i>;
+        const Plus = ({className}) => <i className={`fa-solid fa-plus ${className}`}></i>;
+        const Trash = ({className}) => <i className={`fa-solid fa-trash ${className}`}></i>;
+        const Save = ({className}) => <i className={`fa-solid fa-floppy-disk ${className}`}></i>;
+        const Xmark = ({className}) => <i className={`fa-solid fa-xmark ${className}`}></i>;
 
         function App() {
-            // Check the URL hash on load to determine if we should start inside the CNS module
-            const [currentView, setCurrentView] = useState(window.location.hash === '#cns' ? 'cns' : 'systems'); 
+            // Read hash to support initial load routing
+            const initialHash = window.location.hash.replace('#', '');
+            const [currentView, setCurrentView] = useState(initialHash || 'systems'); 
             const [direction, setDirection] = useState('forward');
 
-            // Listen for hash changes so the back button works smoothly
+            // Listen for hash changes
             useEffect(() => {
                 const handleHashChange = () => {
-                    if (window.location.hash === '#cns') {
-                        setCurrentView('cns');
+                    const newHash = window.location.hash.replace('#', '');
+                    if (newHash === 'cns' || newHash === 'special-sense') {
+                        setCurrentView(newHash);
                         setDirection('forward');
                     } else {
                         setCurrentView('systems');
@@ -81,11 +86,7 @@
 
             const navigateTo = (view) => {
                 setDirection(view === 'systems' ? 'backward' : 'forward');
-                if (view === 'cns') {
-                    window.location.hash = 'cns';
-                } else {
-                    window.location.hash = '';
-                }
+                window.location.hash = view === 'systems' ? '' : view;
                 setCurrentView(view);
             };
 
@@ -93,10 +94,14 @@
                 <div className="min-h-screen flex flex-col items-center justify-center p-6 relative">
                     <div className="w-full max-w-6xl z-10">
                         <div key={currentView} className={direction === 'forward' ? 'slide-forward' : 'slide-backward'}>
-                            {currentView === 'systems' ? (
-                                <SystemsDashboard onSelectCNS={() => navigateTo('cns')} />
-                            ) : (
+                            {currentView === 'systems' && (
+                                <SystemsDashboard onSelectModule={navigateTo} />
+                            )}
+                            {currentView === 'cns' && (
                                 <CNSDashboard onBack={() => navigateTo('systems')} />
+                            )}
+                            {currentView === 'special-sense' && (
+                                <SpecialSenseDashboard onBack={() => navigateTo('systems')} />
                             )}
                         </div>
                     </div>
@@ -109,7 +114,7 @@
             );
         }
 
-        function SystemsDashboard({ onSelectCNS }) {
+        function SystemsDashboard({ onSelectModule }) {
             const systems = [
                 {
                     id: 'cns',
@@ -136,7 +141,7 @@
                     icon: <Eye className="text-4xl text-teal-500" />,
                     bgIcon: <Eye />,
                     colorClass: 'hover:border-teal-500 hover:shadow-teal-500/10',
-                    active: false
+                    active: true // Unlocked!
                 },
                 {
                     id: 'git',
@@ -176,7 +181,7 @@
                         {systems.map((sys) => (
                             <div 
                                 key={sys.id}
-                                onClick={() => sys.active && onSelectCNS()}
+                                onClick={() => sys.active && onSelectModule(sys.id)}
                                 className={`
                                     group relative overflow-hidden bg-slate-800 border border-slate-700 rounded-3xl p-8 transition-all duration-300
                                     ${sys.active ? `cursor-pointer hover:shadow-2xl hover:-translate-y-2 ${sys.colorClass}` : 'opacity-80 grayscale-[0.2] cursor-not-allowed'}
@@ -198,7 +203,7 @@
                                     </p>
                                     
                                     {sys.active ? (
-                                        <div className="flex items-center text-blue-500 font-bold gap-2">
+                                        <div className={`flex items-center font-bold gap-2 ${sys.id === 'special-sense' ? 'text-teal-500' : 'text-blue-500'}`}>
                                             Open Module <ArrowRight className="group-hover:translate-x-2 transition-transform" />
                                         </div>
                                     ) : (
@@ -234,11 +239,9 @@
                         </div>
                     </header>
 
-                    {/* Adjusted grid to handle 6 cards cleanly (2 rows of 3 on large screens) */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 pb-16">
-                        
                         {/* Pharmacology Hub Link */}
-                        <a href="PharmaBoard.html" className="group relative overflow-hidden bg-slate-800 border border-slate-700 rounded-2xl p-5 transition-all duration-300 hover:border-blue-500 hover:shadow-xl hover:shadow-blue-500/20 hover:-translate-y-1 flex flex-col">
+                        <a href="#pharma" className="group relative overflow-hidden bg-slate-800 border border-slate-700 rounded-2xl p-5 transition-all duration-300 hover:border-blue-500 hover:shadow-xl hover:shadow-blue-500/20 hover:-translate-y-1 flex flex-col">
                             <div className="relative z-10 flex flex-col h-full">
                                 <div className="w-12 h-12 bg-blue-600/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shrink-0">
                                     <Pills className="text-2xl text-blue-500" />
@@ -254,7 +257,7 @@
                         </a>
 
                         {/* Physiology Hub Link */}
-                        <a href="PhysioBoard.html" className="group relative overflow-hidden bg-slate-800 border border-slate-700 rounded-2xl p-5 transition-all duration-300 hover:border-emerald-500 hover:shadow-xl hover:shadow-emerald-500/20 hover:-translate-y-1 flex flex-col">
+                        <a href="#physio" className="group relative overflow-hidden bg-slate-800 border border-slate-700 rounded-2xl p-5 transition-all duration-300 hover:border-emerald-500 hover:shadow-xl hover:shadow-emerald-500/20 hover:-translate-y-1 flex flex-col">
                             <div className="relative z-10 flex flex-col h-full">
                                 <div className="w-12 h-12 bg-emerald-600/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shrink-0">
                                     <Bolt className="text-2xl text-emerald-500" />
@@ -270,7 +273,7 @@
                         </a>
 
                         {/* Anatomy Hub Link */}
-                        <a href="AnatomyBoard.html" className="group relative overflow-hidden bg-slate-800 border border-slate-700 rounded-2xl p-5 transition-all duration-300 hover:border-red-500 hover:shadow-xl hover:shadow-red-500/20 hover:-translate-y-1 flex flex-col">
+                        <a href="#anatomy" className="group relative overflow-hidden bg-slate-800 border border-slate-700 rounded-2xl p-5 transition-all duration-300 hover:border-red-500 hover:shadow-xl hover:shadow-red-500/20 hover:-translate-y-1 flex flex-col">
                             <div className="relative z-10 flex flex-col h-full">
                                 <div className="w-12 h-12 bg-red-600/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shrink-0">
                                     <Brain className="text-2xl text-red-500" />
@@ -286,7 +289,7 @@
                         </a>
 
                         {/* Pathology Hub Link */}
-                        <a href="PathologyBoard.html" className="group relative overflow-hidden bg-slate-800 border border-slate-700 rounded-2xl p-5 transition-all duration-300 hover:border-purple-500 hover:shadow-xl hover:shadow-purple-500/20 hover:-translate-y-1 flex flex-col">
+                        <a href="#pathology" className="group relative overflow-hidden bg-slate-800 border border-slate-700 rounded-2xl p-5 transition-all duration-300 hover:border-purple-500 hover:shadow-xl hover:shadow-purple-500/20 hover:-translate-y-1 flex flex-col">
                             <div className="relative z-10 flex flex-col h-full">
                                 <div className="w-12 h-12 bg-purple-600/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shrink-0">
                                     <Microscope className="text-2xl text-purple-500" />
@@ -301,8 +304,8 @@
                             </div>
                         </a>
 
-                        {/* Microbiology Hub Link (NEW) */}
-                        <a href="MicroBoard.html" className="group relative overflow-hidden bg-slate-800 border border-slate-700 rounded-2xl p-5 transition-all duration-300 hover:border-fuchsia-500 hover:shadow-xl hover:shadow-fuchsia-500/20 hover:-translate-y-1 flex flex-col">
+                        {/* Microbiology Hub Link */}
+                        <a href="#micro" className="group relative overflow-hidden bg-slate-800 border border-slate-700 rounded-2xl p-5 transition-all duration-300 hover:border-fuchsia-500 hover:shadow-xl hover:shadow-fuchsia-500/20 hover:-translate-y-1 flex flex-col">
                             <div className="relative z-10 flex flex-col h-full">
                                 <div className="w-12 h-12 bg-fuchsia-600/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shrink-0">
                                     <Biohazard className="text-2xl text-fuchsia-500" />
@@ -317,8 +320,8 @@
                             </div>
                         </a>
 
-                        {/* Parasitology Hub Link (NEW) */}
-                        <a href="parasitology_hub.html" className="group relative overflow-hidden bg-slate-800 border border-slate-700 rounded-2xl p-5 transition-all duration-300 hover:border-orange-500 hover:shadow-xl hover:shadow-orange-500/20 hover:-translate-y-1 flex flex-col">
+                        {/* Parasitology Hub Link */}
+                        <a href="#parasitology" className="group relative overflow-hidden bg-slate-800 border border-slate-700 rounded-2xl p-5 transition-all duration-300 hover:border-orange-500 hover:shadow-xl hover:shadow-orange-500/20 hover:-translate-y-1 flex flex-col">
                             <div className="relative z-10 flex flex-col h-full">
                                 <div className="w-12 h-12 bg-orange-600/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shrink-0">
                                     <Bug className="text-2xl text-orange-500" />
@@ -332,7 +335,150 @@
                                 </div>
                             </div>
                         </a>
+                    </div>
+                </div>
+            );
+        }
 
+        // New Special Sense Dashboard with Dynamic Subjects
+        function SpecialSenseDashboard({ onBack }) {
+            const [subjects, setSubjects] = useState([
+                { id: 'anatomy', title: 'Anatomy', desc: 'Master the structural complexities of the sensory organs, visual pathways, and auditory structures.', icon: 'Eye', colorClass: 'teal', link: 'special_sense_anatomy.html' }
+            ]);
+
+            const [isAdding, setIsAdding] = useState(false);
+            const [newTitle, setNewTitle] = useState('');
+            const [newDesc, setNewDesc] = useState('');
+
+            // Helper to render dynamic icon
+            const renderIcon = (iconName, className) => {
+                switch(iconName) {
+                    case 'Eye': return <Eye className={className} />;
+                    case 'EarListen': return <EarListen className={className} />;
+                    default: return <Flask className={className} />;
+                }
+            };
+
+            const handleDelete = (id, e) => {
+                e.preventDefault(); // Prevent navigating if wrapped in a link
+                setSubjects(subjects.filter(sub => sub.id !== id));
+            };
+
+            const handleAddSubmit = (e) => {
+                e.preventDefault();
+                if (!newTitle.trim()) return;
+
+                const newSubject = {
+                    id: Date.now().toString(),
+                    title: newTitle,
+                    desc: newDesc || 'Custom user-created module.',
+                    icon: 'Flask', // Default icon for custom modules
+                    colorClass: 'slate' // Default neutral color
+                };
+
+                setSubjects([...subjects, newSubject]);
+                setNewTitle('');
+                setNewDesc('');
+                setIsAdding(false);
+            };
+
+            return (
+                <div className="max-w-6xl mx-auto space-y-8">
+                    <header className="flex flex-col md:flex-row items-center justify-between gap-6 border-b border-slate-700 pb-6 pt-6">
+                        <div>
+                            <button onClick={onBack} className="text-slate-400 hover:text-white font-bold flex items-center gap-2 mb-2 transition-colors text-sm">
+                                <ArrowLeft /> Back to Systems
+                            </button>
+                            <h1 className="text-3xl md:text-4xl font-black text-white flex items-center gap-3">
+                                <Eye className="text-teal-500" /> Special Sense Module
+                            </h1>
+                            <p className="text-slate-400 mt-2 text-base">Manage and access sensory system subjects.</p>
+                        </div>
+                        <button 
+                            onClick={() => setIsAdding(true)}
+                            className="bg-teal-500/10 text-teal-500 border border-teal-500/50 hover:bg-teal-500 hover:text-white px-4 py-2 rounded-xl font-bold transition-all flex items-center gap-2"
+                        >
+                            <Plus /> Create Subject
+                        </button>
+                    </header>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 pb-16">
+                        
+                        {/* Dynamic List of Subjects */}
+                        {subjects.map((sub) => (
+                            <div key={sub.id} className={`group relative overflow-hidden bg-slate-800 border border-slate-700 rounded-2xl p-5 transition-all duration-300 hover:border-${sub.colorClass}-500 hover:shadow-xl hover:shadow-${sub.colorClass}-500/20 hover:-translate-y-1 flex flex-col`}>
+                                {/* Delete Button (Top Right) */}
+                                <button 
+                                    onClick={(e) => handleDelete(sub.id, e)}
+                                    className="absolute top-4 right-4 text-slate-500 hover:text-red-500 hover:bg-slate-700 p-2 rounded-lg transition-colors z-20"
+                                    title="Delete Subject"
+                                >
+                                    <Trash />
+                                </button>
+
+                                <div className="relative z-10 flex flex-col h-full cursor-pointer" onClick={() => sub.link ? window.location.href = sub.link : window.location.hash = `#${sub.id}`}>
+                                    <div className={`w-12 h-12 bg-${sub.colorClass}-600/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shrink-0`}>
+                                        {renderIcon(sub.icon, `text-2xl text-${sub.colorClass}-500`)}
+                                    </div>
+                                    <h2 className="text-lg font-bold mb-2 text-white pr-8">{sub.title}</h2>
+                                    <p className="text-slate-400 mb-4 text-xs leading-relaxed flex-1">
+                                        {sub.desc}
+                                    </p>
+                                    <div className={`flex items-center text-${sub.colorClass}-500 font-bold gap-2 text-sm mt-auto`}>
+                                        Enter {sub.title.split(' ')[0]} <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+
+                        {/* Add Subject Inline Form */}
+                        {isAdding ? (
+                            <form onSubmit={handleAddSubmit} className="bg-slate-800 border border-teal-500 rounded-2xl p-5 flex flex-col shadow-xl shadow-teal-500/10 animate-portal">
+                                <div className="flex justify-between items-start mb-4">
+                                    <h3 className="text-white font-bold">New Subject</h3>
+                                    <button type="button" onClick={() => setIsAdding(false)} className="text-slate-500 hover:text-white">
+                                        <Xmark />
+                                    </button>
+                                </div>
+                                
+                                <input 
+                                    type="text" 
+                                    placeholder="Subject Title (e.g. Audiology)" 
+                                    value={newTitle}
+                                    onChange={(e) => setNewTitle(e.target.value)}
+                                    className="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-teal-500 mb-3"
+                                    required
+                                    autoFocus
+                                />
+                                
+                                <textarea 
+                                    placeholder="Short description..." 
+                                    value={newDesc}
+                                    onChange={(e) => setNewDesc(e.target.value)}
+                                    className="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-teal-500 mb-4 resize-none h-20"
+                                />
+
+                                <div className="flex gap-2 mt-auto">
+                                    <button type="button" onClick={() => setIsAdding(false)} className="flex-1 bg-slate-700 hover:bg-slate-600 text-white py-2 rounded-lg text-sm font-bold transition-colors">
+                                        Cancel
+                                    </button>
+                                    <button type="submit" className="flex-1 bg-teal-600 hover:bg-teal-500 text-white py-2 rounded-lg text-sm font-bold transition-colors flex items-center justify-center gap-2">
+                                        <Save /> Save
+                                    </button>
+                                </div>
+                            </form>
+                        ) : (
+                            <button 
+                                onClick={() => setIsAdding(true)}
+                                className="border-2 border-dashed border-slate-700 hover:border-teal-500 bg-slate-800/50 hover:bg-slate-800 rounded-2xl p-5 flex flex-col items-center justify-center min-h-[220px] transition-all group text-slate-500 hover:text-teal-500"
+                            >
+                                <div className="w-12 h-12 bg-slate-700 group-hover:bg-teal-500/20 rounded-full flex items-center justify-center mb-3 transition-colors">
+                                    <Plus className="text-xl" />
+                                </div>
+                                <span className="font-bold">Add Subject</span>
+                            </button>
+                        )}
+                        
                     </div>
                 </div>
             );
